@@ -14,10 +14,20 @@ const SectionTitle = ({ title }: { title: string }) => (
   </div>
 );
 
-// --- مكون حقل الإدخال (لا تغيير) ---
-const FormInput = ({ id, label, type = 'text', value, onChange }: any) => (
+interface FormInputProps {
+  id: string;
+  label: string;
+  type?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+// --- مكون حقل الإدخال ---
+const FormInput = ({ id, label, type = 'text', value, onChange }: FormInputProps) => (
   <div className="w-full">
-    <label htmlFor={id} className="block text-sm font-medium text-black mb-1">{label}</label>
+    <label htmlFor={id} className="block text-sm font-medium text-black mb-1">
+      {label}
+    </label>
     <input
       type={type}
       id={id}

@@ -1,5 +1,6 @@
 // src/components/SkillsSection.tsx
 import React from 'react';
+import Image from "next/image";
 
 // --- مكون العنوان (لا تغيير) ---
 const SectionTitle = ({ title }: { title: string }) => (
@@ -22,7 +23,7 @@ const TornPaperDivider = ({ visualDirection, position }: { visualDirection: 'lef
 
   return (
     <div className={`absolute top-0 w-1/2 h-full pointer-events-none ${positionAndTransformClasses[position]}`}>
-      <img
+      <Image
         src="/torn-paper.png" // <-- تأكد من أن هذا الملف عالي الدقة
         alt="Torn paper background"
         className="w-full h-full object-cover"
