@@ -28,7 +28,7 @@ const TornPaperDivider = ({ visualDirection, position }: { visualDirection: 'lef
         alt="Torn paper background"
         className="w-full h-full object-cover"
         // --- التعديل هنا: إضافة لتحسين جودة عرض الصورة ---
-        style={{ imageRendering: 'high-quality' }} 
+        style={{ imageRendering: 'auto' }} 
       />
     </div>
   );
