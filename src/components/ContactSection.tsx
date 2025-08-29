@@ -17,7 +17,7 @@ const SectionTitle = ({ title }: { title: string }) => (
   </div>
 );
 
-// --- مكون حقل الإدخال (لا تغيير) ---
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const FormInput = ({ id, label, type = 'text', value, onChange }: any) => (
   <div className="w-full">
     <label htmlFor={id} className="block text-sm font-medium text-black mb-1">{label}</label>
