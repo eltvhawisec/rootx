@@ -1,32 +1,120 @@
 // src/components/AboutSection.tsx
 
-// --- مكون العنوان (تم تكبيره) ---
-const SectionTitle = ({ title }: { title: string }) => (
-  <div className="flex items-center gap-6 w-full"> {/* زيادة الفجوة */}
-    <div className="h-2 flex-grow bg-black"></div> {/* زيادة السماكة */}
-    <h2 className="font-custom-heading text-6xl md:text-7xl font-black tracking-wider shrink-0 text-black"> {/* زيادة حجم الخط */}
-      &#123;{title}&#125;
-    </h2>
-    <div className="h-2 flex-grow bg-black"></div> {/* زيادة السماكة */}
-  </div>
-);
+'use client';
 
-export default function AboutSection() {
+import { useLayoutEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
+// --- مكون العنوان (يبقى كما هو) ---
+const SectionTitle = ({ title }: { title: string }) => {
+  const titleRef = useRef<HTMLDivElement>(null);
+  const leftLineRef = useRef<HTMLDivElement>(null);
+  const rightLineRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLHeadingElement>(null);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.set(leftLineRef.current, { xPercent: -100 });
+      gsap.set(rightLineRef.current, { xPercent: 100 });
+      gsap.set(textRef.current, { y: 30, opacity: 0 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: titleRef.current,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+        defaults: { ease: 'power3.inOut', duration: 1.2 }
+      });
+
+      tl.to(leftLineRef.current, { xPercent: 0 })
+        .to(rightLineRef.current, { xPercent: 0 }, "<")
+        .to(textRef.current, { y: 0, opacity: 1, duration: 1 }, "-=0.8");
+
+    }, titleRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    // --- زيادة الهوامش العلوية والسفلية للقسم ---
-    <section id="about" className="w-full py-20 px-6 md:px-12 lg:px-24 bg-white">
+    <div ref={titleRef} className="flex items-center gap-6 w-full">
+      <div className="flex-grow overflow-hidden">
+        <div ref={leftLineRef} className="h-2 w-full bg-black"></div>
+      </div>
+      <h2 ref={textRef} className="font-custom-heading text-6xl md:text-7xl font-black tracking-wider shrink-0 text-black">
+        &#123;{title}&#125;
+      </h2>
+      <div className="flex-grow overflow-hidden">
+        <div ref={rightLineRef} className="h-2 w-full bg-black"></div>
+      </div>
+    </div>
+  );
+};
+
+
+// --- مكون AboutSection الرئيسي ---
+export default function AboutSection() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const mediaRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const text = textRef.current;
+    if (!text) return;
+    
+    const words = text.innerText.split(' ');
+    text.innerHTML = words.map(word => `<span class="word-span inline-block">${word}</span>`).join(' ');
+    
+    const wordSpans = text.querySelectorAll('.word-span');
+
+    const ctx = gsap.context(() => {
+      gsap.set(wordSpans, { y: 20, opacity: 0 });
+      gsap.set(mediaRef.current, { opacity: 0, x: 50 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: textRef.current,
+          start: "top 75%",
+          toggleActions: "play none none none",
+        },
+        defaults: { ease: 'power2.out' }
+      });
+
+      tl.to(wordSpans, {
+        y: 0,
+        opacity: 1,
+        stagger: 0.03,
+        duration: 0.8,
+      })
+      .to(mediaRef.current, {
+        opacity: 1,
+        x: 0,
+        duration: 1.2,
+      }, "-=0.6");
+
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section ref={sectionRef} id="about" className="w-full py-20 px-6 md:px-12 lg:px-24 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto flex flex-col">
         
-        {/* --- زيادة الهامش السفلي للعنوان --- */}
-        <div className="w-full md:max-w-xl mb-12"> {/* زيادة العرض الأقصى والهامش */}
+        <div className="w-full md:max-w-xl mb-12">
           <SectionTitle title="About" />
         </div>
 
-        <div className="w-full flex flex-col md:flex-row gap-20 lg:gap-32 justify-center items-start"> {/* زيادة الفجوة */}
+        <div className="w-full flex flex-col md:flex-row gap-20 lg:gap-32 justify-center items-start">
           
-          {/* --- عمود النص (تم تكبيره) --- */}
-          <div className="w-full md:max-w-2xl mt-6"> {/* زيادة العرض الأقصى والهامش */}
-            <p className="text-2xl md:text-3xl font-black leading-normal text-black"> {/* زيادة حجم الخط وسماكته */}
+          <div className="w-full md:max-w-2xl mt-6">
+            {/* ================================================================== */}
+            {/* --- تم تكبير حجم الخط هنا --- */}
+            {/* ================================================================== */}
+            <p ref={textRef} className="text-4xl md:text-4xl font-black leading-snug text-black">
               My name is eltuhami, a Full Stack Web Developer from Sudan with a strong 
               background in Cybersecurity. I specialize in building and securing modern web 
               applications, combining development skills with security expertise to deliver 
@@ -35,14 +123,17 @@ export default function AboutSection() {
             </p>
           </div>
 
-          {/* --- عمود الصورة (تم تكبيره) --- */}
-          {/* تم تغيير md:max-w-4xl إلى md:max-w-5xl لزيادة العرض */}
-          <div className="w-full md:max-w-7xl">
-            <img
-              src="/eltuhami.ico"
-              alt="eltuhami logo"
+          <div ref={mediaRef} className="w-full md:max-w-5xl">
+            <video
+              src="/eltuhami.MP4"
+              autoPlay
+              loop
+              muted
+              playsInline
               className="w-full aspect-square object-cover rounded-3xl [filter:drop-shadow(0_10px_15px_rgba(0,0,0,0.5))]"
-            />
+            >
+              Your browser does not support the video tag.
+            </video>
           </div>
 
         </div>
