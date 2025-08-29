@@ -1,19 +1,20 @@
 // src/components/SkillsSection.tsx
 import React from 'react';
-import Image from "next/image";
 
-// --- مكون العنوان (لا تغيير) ---
+// --- مكون العنوان (تم التعديل هنا) ---
 const SectionTitle = ({ title }: { title: string }) => (
   <div className="flex items-center gap-4 w-full">
     <div className="h-1.5 flex-grow bg-white"></div>
-    <h2 className="text-5xl font-extrabold tracking-wider shrink-0 text-white">
+    {/* --- التعديل هنا --- */}
+    {/* تمت إضافة فئة "font-custom-heading" لتطبيق خط العناوين */}
+    <h2 className="font-custom-heading text-5xl font-extrabold tracking-wider shrink-0 text-white">
       &#123;{title}&#125;
     </h2>
     <div className="h-1.5 flex-grow bg-white"></div>
   </div>
 );
 
-// --- مكون فاصل الورق الممزق (تم تعديله) ---
+// --- مكون فاصل الورق الممزق (لا تغيير) ---
 const TornPaperDivider = ({ visualDirection, position }: { visualDirection: 'left' | 'right', position: 'left' | 'right' }) => {
   const isFlipped = visualDirection === 'left';
   const positionAndTransformClasses = {
@@ -23,12 +24,11 @@ const TornPaperDivider = ({ visualDirection, position }: { visualDirection: 'lef
 
   return (
     <div className={`absolute top-0 w-1/2 h-full pointer-events-none ${positionAndTransformClasses[position]}`}>
-      <Image
-        src="/torn-paper.png" // <-- تأكد من أن هذا الملف عالي الدقة
+      <img
+        src="/torn-paper.png"
         alt="Torn paper background"
         className="w-full h-full object-cover"
-        // --- التعديل هنا: إضافة لتحسين جودة عرض الصورة ---
-        style={{ imageRendering: 'auto' }} 
+        style={{ imageRendering: 'high-quality' }} 
       />
     </div>
   );

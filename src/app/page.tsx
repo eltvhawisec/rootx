@@ -11,19 +11,25 @@ import TeamSection from '@/components/TeamSection';
 import SkillsSection from '@/components/SkillsSection';
 import ContactSection from '@/components/ContactSection';
 
+// لا حاجة لاستيراد الخطوط أو استخدام كائنات style
+
 export default function Home() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   return (
+    // body لديه بالفعل خط النصوص الافتراضي من globals.css
     <div className="bg-white">
 
       {/* ================================================================== */}
-      {/* HERO SECTION (FIRST SECTION) - Video moved up even more            */}
+      {/* HERO SECTION (FIRST SECTION)                                       */}
       {/* ================================================================== */}
       <div className="min-h-screen bg-black text-white relative overflow-hidden">
         {/* Header */}
         <header className="flex justify-between items-start p-6 relative z-10">
-          <div className="text-white font-bold text-4xl md:text-5xl lg:text-6xl tracking-wide font-oswald text-left">
+          {/* 
+            استخدام فئات Tailwind للتنسيق + فئتنا المخصصة للخط 
+          */}
+          <div className="font-custom-heading text-white font-bold text-4xl md:text-5xl lg:text-6xl tracking-wide text-left">
             eltuhami
           </div>
           
@@ -39,13 +45,10 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Sidebar Component */}
         <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-        {/* Main content area for the Hero Section */}
         <main className="absolute inset-0 flex items-center justify-center px-6">
           <div className="text-center max-w-4xl w-full">
-            {/* Centered Video - MOVED UP MORE using transform */}
             <div className="w-full max-w-xs mx-auto transform -translate-y-16">
               <VideoPlayer 
                 className="w-full h-48 sm:h-56 md:h-64"
@@ -56,34 +59,23 @@ export default function Home() {
           </div>
         </main>
 
-        {/* FT. AbabilSec text */}
+        {/* 
+          هذا النص سيستخدم خط النصوص الافتراضي (.font-custom-body) المطبق على <body>
+        */}
         <div className="absolute bottom-40 right-6 text-white font-bold text-4xl md:text-5xl lg:text-6xl z-10">
           FT. AbabilSec
         </div>
 
-        {/* Curved bottom section */}
-        <div className="absolute bottom-0 left-0 right-0 h-36 bg-white rounded-t-[50%]"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-26 bg-white rounded-t-[50%]"></div>
       </div>
 
       {/* ================================================================== */}
-      {/* ABOUT SECTION (SECOND SECTION)                                     */}
+      {/* باقي الأقسام سترث خط النصوص الافتراضي تلقائياً                 */}
       {/* ================================================================== */}
       <AboutSection />
-      {/* ================================================================== */}
-      {/* PROJECTS SECTION (THIRD SECTION)                                   */}
-      {/* ================================================================== */}
       <ProjectsSection />
-      {/* ================================================================== */}
-      {/* TEAM SECTION (FOURTH SECTION)                                     */}
-      {/* ================================================================== */}
       <TeamSection />
-      {/* ================================================================== */}
-      {/* SKILLS SECTION (FIFTH SECTION)                                    */}
-      {/* ================================================================== */}
       <SkillsSection />
-      {/* ================================================================== */}
-      {/* CONTACT SECTION (SIXTH SECTION)                                   */}
-      {/* ================================================================== */}
       <ContactSection />
     </div>
   );

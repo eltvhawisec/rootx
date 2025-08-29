@@ -1,41 +1,80 @@
+/* src/app/globals.css */
+
+/* ================================================================== */
+/* الخطوة 1: تعريف الخطوط أولاً وقبل أي شيء آخر                   */
+/* ================================================================== */
+@font-face {
+  font-family: 'HeadingFont';
+  src: url('/fonts/Oswald-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'BodyFont';
+  src: url('/fonts/Oswald-ExtraLight.ttf') format('truetype');
+  font-weight: normal; /* يمكنك استخدام 200 إذا كان الخط يدعمها */
+  font-style: normal;
+  font-display: swap;
+}
+
+
+/* ================================================================== */
+/* الخطوة 2: استيراد Tailwind CSS بعد تعريف الخطوط                  */
+/* ================================================================== */
 @import "tailwindcss";
 
-:root {
-  --background: #000000;
-  --foreground: #ffffff;
+
+/* ================================================================== */
+/* الخطوة 3: إضافة الأنماط المخصصة والفئات باستخدام @layer         */
+/* هذه هي الطريقة الموصى بها للتوافق مع Tailwind                  */
+/* ================================================================== */
+@layer base {
+  /* تطبيق الخط الأساسي على body */
+  body {
+    font-family: 'BodyFont', Arial, Helvetica, sans-serif;
+    background-color: #000000;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  html {
+    min-height: 100vh;
+  }
+
+  /* انتقال سلس لجميع العناصر */
+  * {
+    transition: all 0.3s ease;
+  }
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@layer utilities {
+  /* إنشاء فئات مساعدة للخطوط */
+  .font-custom-heading {
+    font-family: 'HeadingFont', sans-serif;
+  }
+  
+  .font-custom-body {
+    font-family: 'BodyFont', Arial, Helvetica, sans-serif;
+  }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
+@layer components {
+  /* أنماط مخصصة لمكونات معينة */
+  .video-container {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
 }
 
-/* Custom styles for the project */
-.arabic-text {
-  font-family: 'Arial', 'Tahoma', sans-serif;
-  direction: rtl;
-  text-align: center;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
 
-/* Smooth transitions */
-* {
-  transition: all 0.3s ease;
-}
-
-/* Custom scrollbar */
+/* ================================================================== */
+/* الخطوة 4: أنماط شريط التمرير (Scrollbar) - تبقى كما هي         */
+/* ================================================================== */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -53,16 +92,15 @@ body {
   background: #666;
 }
 
-/* Ensure full black background */
-html, body {
-  background-color: #000000;
-  min-height: 100vh;
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-/* Video container styling */
-.video-container {
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+.animate-spin-slow {
+  animation: spin-slow 10s linear infinite; /* 15 ثانية للدورة الواحدة، دوران خطي، تكرار لا نهائي */
 }
-

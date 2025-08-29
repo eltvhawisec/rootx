@@ -1,5 +1,6 @@
 // src/components/TornPaperDivider.tsx
 import React from 'react';
+import Image from 'next/image';
 
 interface TornPaperDividerProps {
   direction?: 'left' | 'right';
@@ -12,7 +13,7 @@ export default function TornPaperDivider({ direction = 'right' }: TornPaperDivid
   return (
     // الحاوية تأخذ العرض الكامل وتضمن أن الصورة بداخلها لا تسبب أي تجاوز
     <div className="w-full h-48 md:h-64 overflow-hidden relative">
-      <img
+      <Image 
         src="/wrg.jpg" // <-- تأكد من وضع الصورة في مجلد `public` بهذا الاسم
         alt="Torn paper divider"
         className={`absolute top-0 left-0 w-full h-full object-cover ${isFlipped ? 'transform -scale-x-100' : ''}`}

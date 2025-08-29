@@ -1,30 +1,32 @@
 // src/components/AboutSection.tsx
 
+// --- مكون العنوان (تم تكبيره) ---
 const SectionTitle = ({ title }: { title: string }) => (
-  <div className="flex items-center gap-4 w-full">
-    <div className="h-1.5 flex-grow bg-black"></div>
-    <h2 className="text-5xl font-extrabold tracking-wider shrink-0 text-black">
+  <div className="flex items-center gap-6 w-full"> {/* زيادة الفجوة */}
+    <div className="h-2 flex-grow bg-black"></div> {/* زيادة السماكة */}
+    <h2 className="font-custom-heading text-6xl md:text-7xl font-black tracking-wider shrink-0 text-black"> {/* زيادة حجم الخط */}
       &#123;{title}&#125;
     </h2>
-    <div className="h-1.5 flex-grow bg-black"></div>
+    <div className="h-2 flex-grow bg-black"></div> {/* زيادة السماكة */}
   </div>
 );
 
 export default function AboutSection() {
   return (
-    <section id="about" className="w-full py-10 px-6 md:px-12 lg:px-24 bg-white">
+    // --- زيادة الهوامش العلوية والسفلية للقسم ---
+    <section id="about" className="w-full py-20 px-6 md:px-12 lg:px-24 bg-white">
       <div className="max-w-7xl mx-auto flex flex-col">
         
-        <div className="w-full md:max-w-lg mb-8">
+        {/* --- زيادة الهامش السفلي للعنوان --- */}
+        <div className="w-full md:max-w-xl mb-12"> {/* زيادة العرض الأقصى والهامش */}
           <SectionTitle title="About" />
         </div>
 
-        <div className="w-full flex flex-col md:flex-row gap-16 lg:gap-24 justify-center items-start">
+        <div className="w-full flex flex-col md:flex-row gap-20 lg:gap-32 justify-center items-start"> {/* زيادة الفجوة */}
           
-          <div className="w-full md:max-w-lg mt-4">
-            {/* --- التعديل هنا --- */}
-            {/* تم توسيع النص وإضافة المزيد من التفاصيل */}
-            <p className="text-xl md:text-2xl font-extrabold leading-relaxed text-black">
+          {/* --- عمود النص (تم تكبيره) --- */}
+          <div className="w-full md:max-w-2xl mt-6"> {/* زيادة العرض الأقصى والهامش */}
+            <p className="text-2xl md:text-3xl font-black leading-normal text-black"> {/* زيادة حجم الخط وسماكته */}
               My name is eltuhami, a Full Stack Web Developer from Sudan with a strong 
               background in Cybersecurity. I specialize in building and securing modern web 
               applications, combining development skills with security expertise to deliver 
@@ -33,7 +35,9 @@ export default function AboutSection() {
             </p>
           </div>
 
-          <div className="w-full md:max-w-lg">
+          {/* --- عمود الصورة (تم تكبيره) --- */}
+          {/* تم تغيير md:max-w-4xl إلى md:max-w-5xl لزيادة العرض */}
+          <div className="w-full md:max-w-5xl">
             <img
               src="/eltuhami.ico"
               alt="eltuhami logo"
