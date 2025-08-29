@@ -10,6 +10,7 @@ import ProjectsSection from '@/components/ProjectsSection';
 import TeamSection from '@/components/TeamSection';
 import SkillsSection from '@/components/SkillsSection';
 import ContactSection from '@/components/ContactSection';
+import Footer from '@/components/Footer';
 
 export default function Home() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -153,6 +154,7 @@ export default function Home() {
       <TeamSection />
       <SkillsSection />
       <ContactSection />
+      <Footer />
     </div>
   );
 }
