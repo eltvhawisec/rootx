@@ -114,9 +114,9 @@ export default function ContactSection() {
         </form>
       </div>
 
-      <BackgroundVideoLink ref={video1Ref} href="#" src="/instagram-logo.mp4" className="top-[20%] left-[10%]" />
-      <BackgroundVideoLink ref={video2Ref} href="#" src="/tiktok-logo.mp4" className="top-[45%] right-[12%]" />
-      <BackgroundVideoLink ref={video3Ref} href="#" src="/telegram-logo.mp4" className="bottom-[15%] left-[20%]" />
+      <BackgroundVideoLink ref={video1Ref} href="#" src="/instagram-logo.MP4" className="top-[20%] left-[10%]" />
+      <BackgroundVideoLink ref={video2Ref} href="#" src="/tiktok-logo.MP4" className="top-[45%] right-[12%]" />
+      <BackgroundVideoLink ref={video3Ref} href="#" src="/telegram-logo.MP4" className="bottom-[15%] left-[20%]" />
     </section>
   );
 }

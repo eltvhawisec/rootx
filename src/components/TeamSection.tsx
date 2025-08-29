@@ -34,7 +34,7 @@ export default function TeamSection() {
         {/* --- العمود الأيمن: الفيديو (تم تكبيره) --- */}
         <div className="flex items-end justify-center h-full">
           <video 
-            src="/ababilsecV.mp4"
+            src="/ababilsecV.MP4"
             autoPlay 
             loop 
             muted 
