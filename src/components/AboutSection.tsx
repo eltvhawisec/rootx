@@ -37,7 +37,7 @@ export default function AboutSection() {
 
           {/* --- عمود الصورة (تم تكبيره) --- */}
           {/* تم تغيير md:max-w-4xl إلى md:max-w-5xl لزيادة العرض */}
-          <div className="w-full md:max-w-5xl">
+          <div className="w-full md:max-w-7xl">
             <img
               src="/eltuhami.ico"
               alt="eltuhami logo"
