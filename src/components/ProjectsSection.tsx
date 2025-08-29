@@ -114,8 +114,8 @@ export default function ProjectsSection() {
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // تحريك دخول بطاقات المشاريع
       const projectCards = gsap.utils.toArray('.project-card-container');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       projectCards.forEach((card: any) => {
         gsap.from(card, {
           opacity: 0,

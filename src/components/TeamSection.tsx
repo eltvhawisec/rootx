@@ -98,7 +98,7 @@ export default function TeamSection() {
           {/* --- تم تعديل النص هنا ليصبح أكثر فلسفة --- */}
           {/* ================================================================== */}
           <p className="text-3xl md:text-4xl font-black leading-normal">
-            At the heart of AbabilSec lies a philosophy: development is an art, and security is its fortress. We don't just build web applications; we craft digital experiences, all while deconstructing vulnerabilities to forge a more resilient and trusted web.
+            At the heart of AbabilSec lies a philosophy: development is an art, and security is its fortress. We don&apos;t just build web applications; we craft digital experiences, all while deconstructing vulnerabilities to forge a more resilient and trusted web.
           </p>
         </div>
 
