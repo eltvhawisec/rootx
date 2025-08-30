@@ -1,122 +1,246 @@
 // src/components/ContactSection.tsx
-"use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+'use client';
+
+import React, { useState, useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Github, Linkedin, Twitter, Instagram, Send } from 'lucide-react';
 
-// --- مكون العنوان (تم التعديل هنا) ---
-const SectionTitle = ({ title }: { title: string }) => (
-  <div className="flex items-center justify-center gap-4 w-full max-w-lg mx-auto">
-    <div className="h-1.5 flex-grow bg-white"></div>
-    {/* --- التعديل هنا --- */}
-    {/* تمت إضافة فئة "font-custom-heading" لتطبيق خط العناوين */}
-    <h2 className="font-custom-heading text-5xl font-extrabold tracking-wider shrink-0 text-white">
-      &#123;{title}&#125;
-    </h2>
-    <div className="h-1.5 flex-grow bg-white"></div>
-  </div>
+gsap.registerPlugin(ScrollTrigger);
+
+// --- مكون أيقونة التواصل (تم إضافة فئة للتحريك) ---
+const SocialNode = ({ href, icon: Icon, style }: { href: string; icon: React.ElementType; style: React.CSSProperties }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="social-node absolute flex items-center justify-center w-14 h-14 bg-black rounded-full shadow-lg z-20 transition-transform duration-300 hover:!scale-110"
+    style={style}
+  >
+    <Icon className="w-7 h-7 text-white" />
+  </a>
 );
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const FormInput = ({ id, label, type = 'text', value, onChange }: any) => (
-  <div className="w-full">
-    <label htmlFor={id} className="block text-sm font-medium text-black mb-1">{label}</label>
-    <input
-      type={type}
-      id={id}
-      value={value}
-      onChange={onChange}
-      className="w-full p-3 bg-black text-white rounded-full border-none focus:ring-2 focus:ring-gray-500 outline-none"
-    />
-  </div>
+// --- مكون حقل الإدخال (يبقى كما هو) ---
+const FormInput = ({ id, placeholder, type = 'text', value, onChange }: any) => (
+  <input
+    type={type}
+    id={id}
+    placeholder={placeholder}
+    value={value}
+    onChange={onChange}
+    className="w-full p-3 bg-gray-100 text-black rounded-md border-2 border-gray-200 focus:border-black focus:ring-0 outline-none transition-all"
+  />
 );
-
-// --- مكون الفيديو للخلفية (لا تغيير) ---
-const BackgroundVideoLink = React.forwardRef<HTMLAnchorElement, { href: string, src: string, className: string }>(
-  ({ href, src, className }, ref) => (
-    <a 
-      ref={ref}
-      href={href} 
-      target="_blank" 
-      rel="noopener noreferrer" 
-      className={`absolute transition-opacity duration-300 hover:opacity-100 z-20 ${className}`}
-    >
-      <video
-        src={src}
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="w-28 h-28 md:w-32 md:h-32 opacity-60"
-      />
-    </a>
-  )
-);
-BackgroundVideoLink.displayName = 'BackgroundVideoLink';
-
 
 export default function ContactSection() {
-  const [formData, setFormData] = useState({ gmail: '', name: '', message: '' });
-  
-  const video1Ref = useRef<HTMLAnchorElement>(null);
-  const video2Ref = useRef<HTMLAnchorElement>(null);
-  const video3Ref = useRef<HTMLAnchorElement>(null);
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const sectionRef = useRef<HTMLElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const constellationRef = useRef<HTMLDivElement>(null); // Ref للكوكبة بأكملها
 
-  useEffect(() => {
-    const videos = [video1Ref.current, video2Ref.current, video3Ref.current];
-
-    videos.forEach(video => {
-      if (video) {
-        const floatAnimation = (target: HTMLAnchorElement) => {
-          gsap.to(target, {
-            x: `random(-20, 20, 5)`,
-            y: `random(-20, 20, 5)`,
-            rotation: `random(-10, 10, 2)`,
-            duration: `random(3, 5)`,
-            ease: 'sine.inOut',
-            repeat: -1,
-            yoyo: true,
-          });
-        };
-        
-        floatAnimation(video);
+  const orbitRadius = 140;
+  const socialNodes = [
+    { href: "https://github.com/eltuhami249", icon: Github, angle: -45 },
+    { href: "https://www.linkedin.com/in/ahmed-eltuhami-532354380", icon: Linkedin, angle: 45 },
+    { href: "https://x.com/eltuhamisec?s=21", icon: Twitter, angle: 135 },
+    { href: "https://instagram.com/eltuhamisec", icon: Instagram, angle: 225 },
+  ].map(node => {
+    const angleRad = (node.angle * Math.PI ) / 180;
+    return {
+      ...node,
+      lineEnd: {
+        x: Math.cos(angleRad) * orbitRadius,
+        y: Math.sin(angleRad) * orbitRadius,
+      },
+      style: {
+        left: `calc(50% + ${Math.cos(angleRad) * orbitRadius}px)`,
+        top: `calc(50% + ${Math.sin(angleRad) * orbitRadius}px)`,
+        transform: `translate(-50%, -50%)`
       }
-    });
+    };
+  });
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      // --- إعداد الحالة الأولية المحسّنة ---
+      gsap.set(".planet", { scale: 0, opacity: 0 });
+      gsap.set(".social-node", { scale: 0, opacity: 0 });
+      gsap.set(".connection-line", { opacity: 0 });
+      gsap.set(formRef.current, { opacity: 0, y: 50 });
+
+      // --- الجدول الزمني للدخول المتقن ---
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 60%",
+          toggleActions: "play none none none",
+        }
+      });
+
+      tl.to(".planet", { scale: 1, opacity: 1, duration: 1.2, ease: 'back.out(1.7)' });
+      tl.to(".connection-line", {
+        opacity: 0.5, // شفافية خفيفة للخطوط
+        duration: 1,
+        ease: 'power3.inOut',
+        stagger: 0.1,
+      }, "-=0.8");
+      tl.to(".social-node", {
+        scale: 1,
+        opacity: 1,
+        duration: 1,
+        ease: 'back.out(1.7)',
+        stagger: 0.1,
+      }, "-=0.8");
+      tl.to(formRef.current, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, "-=1");
+
+      // --- 1. تأثير الاستجابة للفأرة (Parallax) ---
+      const parallax = (e: MouseEvent) => {
+        const { clientX, clientY } = e;
+        const { width, height, left, top } = sectionRef.current!.getBoundingClientRect();
+        const x = (clientX - left) / width - 0.5; // -0.5 to 0.5
+        const y = (clientY - top) / height - 0.5; // -0.5 to 0.5
+        
+        // تحريك الكوكبة بأكملها
+        gsap.to(constellationRef.current, {
+          x: -x * 30, // عكس الحركة بقوة 30px
+          y: -y * 30,
+          rotation: -x * 5, // دوران خفيف
+          duration: 0.8,
+          ease: 'power3.out',
+        });
+      };
+      
+      sectionRef.current?.addEventListener('mousemove', parallax);
+      
+      // إعادة الكوكبة لوضعها الطبيعي عند خروج الفأرة
+      sectionRef.current?.addEventListener('mouseleave', () => {
+        gsap.to(constellationRef.current, {
+          x: 0,
+          y: 0,
+          rotation: 0,
+          duration: 1,
+          ease: 'elastic.out(1, 0.5)',
+        });
+      });
+
+    }, sectionRef);
+
+    return () => ctx.revert();
   }, []);
 
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form Data Submitted:", formData);
-    alert("Message Sent!");
-  };
-
   return (
-    <section className="w-full py-20 px-6 md:px-12 lg:px-24 bg-black relative overflow-hidden">
-      <div className="max-w-7xl mx-auto flex flex-col items-center gap-12 relative z-10">
+    <section ref={sectionRef} className="w-full py-28 px-6 md:px-12 lg:px-24 bg-white text-black relative overflow-hidden">
+      <div className="max-w-7xl mx-auto flex flex-col items-center gap-24">
         <SectionTitle title="Contact" />
-        <form 
-          onSubmit={handleSubmit}
-          className="w-full max-w-md bg-white rounded-[40px] p-8 flex flex-col gap-6 shadow-2xl shadow-gray-700/20"
-        >
-          <FormInput id="gmail" label="Gmail" type="email" value={formData.gmail} onChange={handleChange} />
-          <FormInput id="name" label="Name" value={formData.name} onChange={handleChange} />
-          <div className="w-full">
-            <label htmlFor="message" className="block text-sm font-medium text-black mb-1">Message</label>
-            <textarea id="message" value={formData.message} onChange={handleChange} rows={5} className="w-full p-3 bg-black text-white rounded-3xl border-none focus:ring-2 focus:ring-gray-500 outline-none" />
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+        
+        <div className="flex justify-center items-center">
+          {/* --- 2. تم إضافة Ref هنا للكوكبة بأكملها --- */}
+          <div ref={constellationRef} className="relative w-[350px] h-[350px] flex justify-center items-center">
+            {/* --- 3. تم إضافة ظل متوهج هنا --- */}
+            <img
+              src="/eltuhamiW.ico"
+              alt="eltuhami"
+              className="planet w-32 h-32 rounded-full object-cover z-10 [filter:drop-shadow(0_0_15px_rgba(0,0,0,0.2))]"
+            />
+            
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-0 h-0 overflow-visible">
+              <svg width="0" height="0" className="overflow-visible">
+                {socialNodes.map((node, i) => (
+                  <line
+                    key={i}
+                    className="connection-line"
+                    x1="0"
+                    y1="0"
+                    x2={node.lineEnd.x}
+                    y2={node.lineEnd.y}
+                    stroke="black"
+                    strokeWidth="1.5" // خط أنحف قليلاً
+                  />
+                ))}
+              </svg>
+            </div>
+            
+            {socialNodes.map((node, i) => (
+              <SocialNode
+                key={i}
+                href={node.href}
+                icon={node.icon}
+                style={node.style}
+              />
+            ))}
           </div>
-          <button type="submit" className="w-full p-3 bg-black text-white text-lg font-bold rounded-full transition-transform hover:scale-105">Send</button>
-        </form>
-      </div>
+        </div>
 
-      <BackgroundVideoLink ref={video1Ref} href="#" src="/instagram-logo.MP4" className="top-[20%] left-[10%]" />
-      <BackgroundVideoLink ref={video2Ref} href="#" src="/tiktok-logo.MP4" className="top-[45%] right-[12%]" />
-      <BackgroundVideoLink ref={video3Ref} href="#" src="/telegram-logo.MP4" className="bottom-[15%] left-[20%]" />
+        <form ref={formRef} className="w-full flex flex-col gap-5">
+          <h2 className="font-custom-heading text-5xl font-bold mb-4">Get in Touch</h2>
+          <FormInput id="name" placeholder="Your Name" value={formData.name} onChange={() => {}} />
+          <FormInput id="email" placeholder="Your Email" type="email" value={formData.email} onChange={() => {}} />
+          <textarea
+            id="message"
+            placeholder="Your Message..."
+            rows={5}
+            className="w-full p-3 bg-gray-100 text-black rounded-md border-2 border-gray-200 focus:border-black focus:ring-0 outline-none transition-all"
+          />
+          <button type="submit" className="w-full p-3 bg-black text-white text-lg font-bold rounded-md transition-transform hover:scale-105 flex items-center justify-center gap-2">
+            Send <Send className="w-5 h-5" />
+          </button>
+        </form>
+        </div>
+      </div>
     </section>
   );
 }
+
+
+
+
+
+// --- مكون العنوان (تم تحديثه بالإصدار الذي يحتوي على تحريك) ---
+const SectionTitle = ({ title }: { title: string }) => {
+  const titleRef = useRef<HTMLDivElement>(null);
+  const leftLineRef = useRef<HTMLDivElement>(null);
+  const rightLineRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLHeadingElement>(null);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.set(leftLineRef.current, { xPercent: -100 });
+      gsap.set(rightLineRef.current, { xPercent: 100 });
+      gsap.set(textRef.current, { y: 30, opacity: 0 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: titleRef.current,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+        defaults: { ease: 'power3.inOut', duration: 1.2 }
+      });
+
+      tl.to(leftLineRef.current, { xPercent: 0 })
+        .to(rightLineRef.current, { xPercent: 0 }, "<")
+        .to(textRef.current, { y: 0, opacity: 1, duration: 1 }, "-=0.8");
+
+    }, titleRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <div ref={titleRef} className="flex items-center justify-center gap-6 w-full max-w-xl mx-auto">
+      <div className="flex-grow overflow-hidden">
+        <div ref={leftLineRef} className="h-2 w-full bg-black"></div>
+      </div>
+      <h2 ref={textRef} className="font-custom-heading text-6xl md:text-7xl font-black tracking-wider shrink-0 text-black">
+        &#123;{title}&#125;
+      </h2>
+      <div className="flex-grow overflow-hidden">
+        <div ref={rightLineRef} className="h-2 w-full bg-black"></div>
+      </div>
+    </div>
+  );
+};
+
