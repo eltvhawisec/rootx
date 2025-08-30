@@ -22,7 +22,7 @@ const SocialNode = ({ href, icon: Icon, style }: { href: string; icon: React.Ele
   </a>
 );
 
-// --- مكون حقل الإدخال (يبقى كما هو) ---
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const FormInput = ({ id, placeholder, type = 'text', value, onChange }: any) => (
   <input
     type={type}
@@ -143,7 +143,7 @@ export default function ContactSection() {
             <img
               src="/eltuhamiW.ico"
               alt="eltuhami"
-              className="planet w-32 h-32 rounded-full object-cover z-10 [filter:drop-shadow(0_0_15px_rgba(0,0,0,0.2))]"
+              className="planet w-32 h-32 rounded-full object-cover z-10"
             />
             
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-0 h-0 overflow-visible">
