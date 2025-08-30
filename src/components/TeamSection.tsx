@@ -58,30 +58,46 @@ const SectionTitle = ({ title }: { title: string }) => {
 export default function TeamSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const textContentRef = useRef<HTMLDivElement>(null);
-  const videoContentRef = useRef<HTMLDivElement>(null);
+  const paragraphRef = useRef<HTMLParagraphElement>(null); // Ref للفقرة
+  const videoRef = useRef<HTMLDivElement>(null); // Ref للفيديو
+  const videoMaskRef = useRef<HTMLDivElement>(null); // Ref لقناع الفيديو
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.set(textContentRef.current, { opacity: 0, x: -50 });
-      gsap.set(videoContentRef.current, { opacity: 0, x: 50 });
+    // --- تقسيم النص إلى كلمات ---
+    const text = paragraphRef.current;
+    if (!text) return;
+    const words = text.innerText.split(' ');
+    text.innerHTML = words.map(word => `<span class="word-span inline-block">${word}</span>`).join(' ');
+    const wordSpans = text.querySelectorAll('.word-span');
 
+    const ctx = gsap.context(() => {
+      // --- إعداد الحالة الأولية ---
+      gsap.set(wordSpans, { opacity: 0, y: 10 }); // النص مخفي
+      gsap.set(videoRef.current, { xPercent: 101 }); // الفيديو مزاح إلى اليمين
+
+      // --- إنشاء Timeline للتحريك السينمائي ---
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top 60%',
+          start: 'top 50%',
           toggleActions: 'play none none none',
         },
-        defaults: { duration: 1.2, ease: 'power3.out' }
+        defaults: { ease: 'power4.inOut' }
       });
 
-      tl.to(textContentRef.current, {
-        opacity: 1,
-        x: 0,
+      // 1. الفيديو يقتحم الشاشة من اليمين
+      tl.to(videoRef.current, {
+        xPercent: 0,
+        duration: 1.8,
       })
-      .to(videoContentRef.current, {
+      // 2. النص يظهر بعد استقرار الفيديو (نفس تأثير قسم About)
+      .to(wordSpans, {
         opacity: 1,
-        x: 0,
-      }, "-=0.8");
+        y: 0,
+        stagger: 0.02,
+        duration: 0.5,
+        ease: 'power2.out',
+      }, "-=0.5");
 
     }, sectionRef);
 
@@ -94,28 +110,24 @@ export default function TeamSection() {
         
         <div ref={textContentRef} className="flex flex-col gap-10">
           <SectionTitle title="Team" />
-          {/* ================================================================== */}
-          {/* --- تم تعديل النص هنا ليصبح أكثر فلسفة --- */}
-          {/* ================================================================== */}
-          <p className="text-3xl md:text-4xl font-black leading-normal">
+          <p ref={paragraphRef} className="font-custom-heading text-3xl md:text-4xl font-black leading-normal">
             At the heart of AbabilSec lies a philosophy: development is an art, and security is its fortress. We don&apos;t just build web applications; we craft digital experiences, all while deconstructing vulnerabilities to forge a more resilient and trusted web.
           </p>
         </div>
 
-        <div ref={videoContentRef} className="flex items-end justify-center h-full">
-          {/* ================================================================== */}
-          {/* --- تم تصغير الفيديو هنا --- */}
-          {/* ================================================================== */}
-          <video 
-            src="/ababilsecV.MP4"
-            autoPlay 
-            loop 
-            muted 
-            playsInline
-            className="w-full max-w-md rounded-2xl shadow-lg shadow-gray-500/20" // <-- تم التغيير إلى max-w-md
-          >
-            Your browser does not support the video tag.
-          </video>
+        <div ref={videoMaskRef} className="overflow-hidden rounded-2xl">
+          <div ref={videoRef}>
+            <video 
+              src="/ababilsecV.MP4"
+              autoPlay 
+              loop 
+              muted 
+              playsInline
+              className="w-full max-w-md shadow-lg shadow-gray-500/20"
+            >
+              Your browser does not support the video tag.
+            </video>
+          </div>
         </div>
       </div>
     </section>

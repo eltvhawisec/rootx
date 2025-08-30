@@ -59,7 +59,8 @@ const SectionTitle = ({ title }: { title: string }) => {
 export default function AboutSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLParagraphElement>(null);
-  const mediaRef = useRef<HTMLDivElement>(null);
+  const mediaRef = useRef<HTMLDivElement>(null); // Ref للفيديو نفسه
+  const mediaMaskRef = useRef<HTMLDivElement>(null); // Ref للقناع
 
   useLayoutEffect(() => {
     const text = textRef.current;
@@ -71,29 +72,35 @@ export default function AboutSection() {
     const wordSpans = text.querySelectorAll('.word-span');
 
     const ctx = gsap.context(() => {
-      gsap.set(wordSpans, { y: 20, opacity: 0 });
-      gsap.set(mediaRef.current, { opacity: 0, x: 50 });
+      // --- إعداد الحالة الأولية ---
+      // النص مخفي تمامًا
+      gsap.set(wordSpans, { opacity: 0 });
+      // الفيديو مزاح إلى اليمين خارج قناعه
+      gsap.set(mediaRef.current, { xPercent: 101 });
 
+      // --- إنشاء Timeline للتحريك السينمائي ---
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: textRef.current,
-          start: "top 75%",
+          trigger: sectionRef.current,
+          start: "top 50%", // يبدأ التحريك عندما يصل منتصف القسم إلى الشاشة
           toggleActions: "play none none none",
         },
-        defaults: { ease: 'power2.out' }
+        defaults: { ease: 'power4.inOut' } // حركة سينمائية فخمة
       });
 
-      tl.to(wordSpans, {
-        y: 0,
-        opacity: 1,
-        stagger: 0.03,
-        duration: 0.8,
+      // 1. الفيديو يقتحم الشاشة من اليمين
+      tl.to(mediaRef.current, {
+        xPercent: 0,
+        duration: 1.8, // مدة أطول لتعزيز الإحساس السينمائي
       })
-      .to(mediaRef.current, {
+      // 2. النص يظهر بعد استقرار الفيديو
+      .to(wordSpans, {
         opacity: 1,
-        x: 0,
-        duration: 1.2,
-      }, "-=0.6");
+        y: 0, // حركة صعود خفيفة
+        stagger: 0.02,
+        duration: 0.5,
+        ease: 'power2.out', // حركة أسرع وأكثر حيوية للنص
+      }, "-=0.5"); // يبدأ قبل نهاية حركة الفيديو بقليل لمزيد من السلاسة
 
     }, sectionRef);
 
@@ -112,9 +119,9 @@ export default function AboutSection() {
           
           <div className="w-full md:max-w-2xl mt-6">
             {/* ================================================================== */}
-            {/* --- تم تكبير حجم الخط هنا --- */}
+            {/* --- 1. تم تغيير الخط هنا --- */}
             {/* ================================================================== */}
-            <p ref={textRef} className="text-4xl md:text-4xl font-black leading-snug text-black">
+            <p ref={textRef} className="font-custom-heading text-4xl md:text-4xl font-black leading-snug text-black">
               My name is eltuhami, a Full Stack Web Developer from Sudan with a strong 
               background in Cybersecurity. I specialize in building and securing modern web 
               applications, combining development skills with security expertise to deliver 
@@ -123,17 +130,22 @@ export default function AboutSection() {
             </p>
           </div>
 
-          <div ref={mediaRef} className="w-full md:max-w-5xl">
-            <video
-              src="/eltuhami.MP4"
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full aspect-square object-cover rounded-3xl [filter:drop-shadow(0_10px_15px_rgba(0,0,0,0.5))]"
-            >
-              Your browser does not support the video tag.
-            </video>
+          {/* ================================================================== */}
+          {/* --- 2. تم تعديل بنية الفيديو هنا لإضافة القناع --- */}
+          {/* ================================================================== */}
+          <div ref={mediaMaskRef} className="w-full md:max-w-5xl overflow-hidden rounded-3xl">
+            <div ref={mediaRef}>
+              <video
+                src="/eltuhami.MP4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full aspect-square object-cover"
+              >
+                Your browser does not support the video tag.
+              </video>
+            </div>
           </div>
 
         </div>
