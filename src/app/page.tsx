@@ -1,9 +1,9 @@
-// src/app/page.tsx
-
 'use client';
 
 import { useState, useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+
+// --- استيراد المكونات ---
 import Sidebar from '@/components/Sidebar';
 import AboutSection from '@/components/AboutSection';
 import ProjectsSection from '@/components/ProjectsSection';
@@ -11,6 +11,9 @@ import TeamSection from '@/components/TeamSection';
 import SkillsSection from '@/components/SkillsSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
+import Llenis from '@/components/Llenis'; // <-- 1. استيراد مكون Llenis
+import MissionSection from '@/components/MissionSection';
+import ServiceSection from '@/components/ServiceSection';
 
 export default function Home() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -29,13 +32,10 @@ export default function Home() {
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
     if (section) {
-      // 1. أغلق الشريط الجانبي
       setSidebarOpen(false);
-      
-      // 2. انتظر قليلاً للسماح لأنيميشن الإغلاق بالبدء، ثم مرر بسلاسة
       setTimeout(() => {
         section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 300); // تأخير بسيط لتحسين التجربة
+      }, 300);
     }
   };
 
@@ -65,7 +65,8 @@ export default function Home() {
 
   return (
     <div className="bg-black">
-      {/* تمرير دالة onNavigate إلى الشريط الجانبي */}
+      <Llenis /> {/* <-- 2. إضافة المكون هنا */}
+      
       <Sidebar 
         isOpen={isSidebarOpen} 
         onClose={() => setSidebarOpen(false)}
@@ -109,8 +110,10 @@ export default function Home() {
           </div>
         </div>
       </div>
-
+      
       {/* --- الأقسام مع إضافة id لكل قسم --- */}
+      <div id="mission"><MissionSection /></div>
+      <div id="service"><ServiceSection /></div>
       <div id="about"><AboutSection /></div>
       <div id="projects"><ProjectsSection /></div>
       <div id="team"><TeamSection /></div>
