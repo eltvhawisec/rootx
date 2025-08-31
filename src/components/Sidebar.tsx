@@ -82,6 +82,8 @@ export default function Sidebar({ isOpen, onClose, onNavigate }: SidebarProps) {
                 <div className="absolute left-1/2 md:left-4 -translate-x-1/2 md:translate-x-0 top-0 bottom-0 w-0.5 bg-white/50"></div>
                 
                 {/* تمرير sectionId و onNavigate لكل زر */}
+                <NavItem label="Mission" sectionId="mission" onNavigate={onNavigate} />
+                <NavItem label="Service" sectionId="service" onNavigate={onNavigate} />
                 <NavItem label="About" sectionId="about" onNavigate={onNavigate} />
                 <NavItem label="Projects" sectionId="projects" onNavigate={onNavigate} />
                 <NavItem label="Team" sectionId="team" onNavigate={onNavigate} />

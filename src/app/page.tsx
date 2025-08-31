@@ -3,7 +3,6 @@
 import { useState, useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
-// --- استيراد المكونات ---
 import Sidebar from '@/components/Sidebar';
 import AboutSection from '@/components/AboutSection';
 import ProjectsSection from '@/components/ProjectsSection';
@@ -11,14 +10,13 @@ import TeamSection from '@/components/TeamSection';
 import SkillsSection from '@/components/SkillsSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
-import Llenis from '@/components/Llenis'; // <-- 1. استيراد مكون Llenis
+import Llenis from '@/components/Llenis';
 import MissionSection from '@/components/MissionSection';
 import ServiceSection from '@/components/ServiceSection';
 
 export default function Home() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
-  // --- Refs للتحريك ---
   const heroRef = useRef<HTMLDivElement>(null);
   const finalInterfaceRef = useRef<HTMLDivElement>(null);
   const leftPanelRef = useRef<HTMLDivElement>(null);
@@ -28,7 +26,6 @@ export default function Home() {
   const curveRef = useRef<HTMLDivElement>(null);
   const menuIconRef = useRef<HTMLDivElement>(null);
 
-  // --- دالة التمرير إلى القسم المحدد ---
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
     if (section) {
@@ -39,7 +36,6 @@ export default function Home() {
     }
   };
 
-  // --- GSAP Animation ---
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       gsap.set([textContainerRef.current, menuIconRef.current], { opacity: 0, y: -30 });
@@ -65,7 +61,7 @@ export default function Home() {
 
   return (
     <div className="bg-black">
-      <Llenis /> {/* <-- 2. إضافة المكون هنا */}
+      <Llenis />
       
       <Sidebar 
         isOpen={isSidebarOpen} 
@@ -73,7 +69,6 @@ export default function Home() {
         onNavigate={scrollToSection} 
       />
 
-      {/* --- قسم الهيرو --- */}
       <div ref={heroRef} className="min-h-screen bg-white text-black relative overflow-hidden">
         <div ref={finalInterfaceRef} className="w-full h-full absolute inset-0">
           <div ref={textContainerRef} className="absolute top-12 left-0 p-4 md:p-8 z-10">
@@ -111,7 +106,6 @@ export default function Home() {
         </div>
       </div>
       
-      {/* --- الأقسام مع إضافة id لكل قسم --- */}
       <div id="mission"><MissionSection /></div>
       <div id="service"><ServiceSection /></div>
       <div id="about"><AboutSection /></div>
