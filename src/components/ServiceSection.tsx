@@ -1,15 +1,13 @@
-// src/components/ServiceSection.tsx
-
 'use client';
 
 import { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { FiCode, FiPenTool, FiShield, FiTrendingUp } from 'react-icons/fi';
+import { FiCode, FiPenTool, FiShield, FiTrendingUp, FiArrowRight } from 'react-icons/fi';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- مكون العنوان (يفضل استيراده من ملف مشترك) ---
+// --- SectionTitle Component (remains unchanged) ---
 const SectionTitle = ({ title }: { title: string }) => {
   const titleRef = useRef<HTMLDivElement>(null);
   const leftLineRef = useRef<HTMLDivElement>(null);
@@ -54,7 +52,8 @@ const SectionTitle = ({ title }: { title: string }) => {
   );
 };
 
-// --- مكون ServiceSection الرئيسي (عمود واحد كبير) ---
+
+// --- Main ServiceSection Component (Expanded) ---
 export default function ServiceSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -64,7 +63,7 @@ export default function ServiceSection() {
     if (!listItems) return;
 
     const ctx = gsap.context(() => {
-      gsap.set(listItems, { opacity: 0, y: 40 }); // زيادة الإزاحة الأولية للأسفل
+      gsap.set(listItems, { opacity: 0, y: 50 });
 
       gsap.to(listItems, {
         scrollTrigger: {
@@ -74,9 +73,9 @@ export default function ServiceSection() {
         },
         opacity: 1,
         y: 0,
-        stagger: 0.25, // زيادة الفاصل الزمني بين ظهور كل عنصر
-        duration: 1.2, // زيادة مدة التحريك
-        ease: 'power3.out',
+        stagger: 0.3,
+        duration: 1.2,
+        ease: 'power4.out',
       });
 
     }, sectionRef);
@@ -84,33 +83,62 @@ export default function ServiceSection() {
     return () => ctx.revert();
   }, []);
 
+  // --- Expanded service data ---
   const services = [
-    { title: "Web Development", description: "Building robust, scalable, and high-performance websites and applications." },
-    { title: "UI/UX Design", description: "Crafting intuitive and beautiful user interfaces that captivate and convert." },
-    { title: "SEO Optimization", description: "Enhancing your digital presence to rank higher and attract organic traffic." },
-    { title: "Cybersecurity", description: "Protecting your digital assets with proactive security measures and protocols." },
+    {
+      icon: FiCode,
+      title: "Web Development",
+      description: "We build robust, scalable, and high-performance websites and applications using modern technologies like React and Next.js, ensuring a fast and seamless user experience that meets your business goals."
+    },
+    {
+      icon: FiPenTool,
+      title: "UI/UX Design",
+      description: "We craft intuitive and beautiful user interfaces that captivate your audience and drive conversions. Our focus is on creating seamless user journeys and visually appealing designs that reflect your brand identity."
+    },
+    {
+      icon: FiTrendingUp,
+      title: "SEO Optimization",
+      description: "Enhance your digital presence to rank higher in search results and attract organic traffic. Our strategies include keyword research, technical SEO, on-page optimization, and quality link building."
+    },
+    {
+      icon: FiShield,
+      title: "Cybersecurity",
+      description: "Protect your digital assets with proactive security measures and protocols. Our services include vulnerability assessments, network security, and data protection to ensure your business operates securely."
+    },
   ];
 
   return (
-    <section ref={sectionRef} id="service" className="w-full py-20 px-6 md:px-12 lg:px-24 bg-white overflow-hidden">
+    <section ref={sectionRef} id="service" className="w-full py-24 px-6 md:px-12 lg:px-24 bg-gray-50 overflow-hidden">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
         
-        <div className="w-full md:max-w-xl mb-20">
+        <div className="w-full md:max-w-xl mb-24">
           <SectionTitle title="Services" />
         </div>
 
         {/* ================================================================== */}
-        {/* --- تم التعديل هنا --- */}
+        {/* --- Content and layout have been enhanced here --- */}
         {/* ================================================================== */}
-        <div ref={listRef} className="w-full max-w-4xl flex flex-col gap-20"> {/* عمود واحد مع مسافة كبيرة */}
-          {services.map((service, index) => (
-            <div key={index} className="flex flex-col sm:flex-row items-start text-center sm:text-left gap-8">
-              <div className="w-full">
-                <h3 className="font-custom-heading text-5xl font-bold text-black">{service.title}</h3>
-                <p className="text-gray-600 text-xl mt-4">{service.description}</p>
+        <div ref={listRef} className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-16">
+          {services.map((service, index) => {
+            const Icon = service.icon;
+            return (
+              <div key={index} className="flex flex-col p-8 bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                <div className="flex items-center mb-6">
+                  <div className="p-4 bg-black rounded-full mr-5">
+                    <Icon className="text-white text-3xl" />
+                  </div>
+                  <h3 className="font-custom-heading text-3xl font-bold text-black">{service.title}</h3>
+                </div>
+                <p className="text-gray-600 text-lg leading-relaxed mb-6 flex-grow">
+                  {service.description}
+                </p>
+                <a href="#" className="group text-black font-semibold text-lg mt-auto flex items-center">
+                  Learn More
+                  <FiArrowRight className="ml-2 transition-transform duration-300 group-hover:translate-x-2" />
+                </a>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
       </div>

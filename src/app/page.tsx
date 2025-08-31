@@ -108,10 +108,10 @@ export default function Home() {
       
       <div id="mission"><MissionSection /></div>
       <div id="service"><ServiceSection /></div>
-      <div id="about"><AboutSection /></div>
       <div id="projects"><ProjectsSection /></div>
-      <div id="team"><TeamSection /></div>
+      <div id="about"><AboutSection /></div>
       <div id="skills"><SkillsSection /></div>
+      <div id="team"><TeamSection /></div>
       <div id="contact"><ContactSection /></div>
       
       <Footer />
