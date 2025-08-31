@@ -92,7 +92,7 @@ export default function Home() {
             </div>
           </div>
           <div ref={imageContainerRef} className="absolute top-1/3 -translate-y-1/2 right-1/2 translate-x-1/2 md:right-[20%] md:translate-x-0 md:top-1/4 w-full max-w-[180px] md:max-w-[240px] z-0 opacity-90">
-            <img src="./favicon.ico" alt="eltuhami logo" className="w-full h-auto rounded-2xl" />
+            <img src="/eltuhami.jpg" alt="eltuhami logo" className="w-full h-auto rounded-2xl" />
           </div>
           <div ref={curveRef} className="absolute bottom-0 left-0 right-0 h-20 md:h-24 bg-black rounded-t-[50%] z-20"></div>
         </div>

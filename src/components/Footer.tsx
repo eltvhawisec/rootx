@@ -71,7 +71,7 @@ export default function Footer() {
         <div className="flex items-center gap-8"> {/* زيادة الفجوة لتناسب الحجم الجديد */}
           {/* صورتك الشخصية (أصغر) */}
           <img
-            src="/favicon.ico"
+            src="/eltuhamiW.ico"
             alt="eltuhami"
             // إزالة الظل
             className="footer-image w-24 h-24 object-cover rounded-2xl"
