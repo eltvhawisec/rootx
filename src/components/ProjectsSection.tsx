@@ -129,7 +129,7 @@ const ProjectCard = ({ number, direction = 'left', imageUrl }: { number: number;
           <ConnectorLine />
           <div className={contentClasses}>
             <ImageDisplay />
-            <a href="#" className={buttonClasses}>
+            <a href="https://fashion-ababilsec.vercel.app/" className={buttonClasses}>
               View project
             </a>
           </div>
@@ -198,7 +198,7 @@ export default function ProjectsSection() {
 
         <div className={spacingClasses}>
           <div className="project-card-container flex justify-end">
-            <ProjectCard number={1} direction="right" imageUrl="/project1.jpg" />
+            <ProjectCard number={1} direction="right" imageUrl="/fashion.png" />
           </div>
           <div className="project-card-container flex justify-start">
             <ProjectCard number={2} direction="left" imageUrl="/project2.png" />
