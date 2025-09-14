@@ -6,7 +6,7 @@ import React, { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Link from 'next/link';
-import Image from 'next/image'; // استيراد مكون Image من Next.js
+import Image from 'next/image';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -64,7 +64,7 @@ const NumberedStar = ({ number }: { number: number }) => {
   );
 };
 
-// --- بطاقة المشروع (تم تعديلها لاستخدام next/image) ---
+// --- بطاقة المشروع (بدون تغيير) ---
 const ProjectCard = ({ number, direction = 'left', imageUrl, projectUrl }: { number: number; direction: 'left' | 'right'; imageUrl: string; projectUrl: string; }) => {
   const isRight = direction === 'right';
   
@@ -111,12 +111,10 @@ const ProjectCard = ({ number, direction = 'left', imageUrl, projectUrl }: { num
   );
 };
 
-// --- بيانات المشاريع ---
+// --- بيانات المشاريع (بدون تغيير) ---
 const allProjects = [
   { id: 1, direction: 'right' as const, imageUrl: '/fashion.png', projectUrl: 'https://fashion-ababilsec.vercel.app/' },
   { id: 2, direction: 'left' as const, imageUrl: '/ababil.png', projectUrl: 'https://ababilsec.vercel.app/' },
-  { id: 3, direction: 'right' as const, imageUrl: '/nova.png', projectUrl: 'https://nova-ababilsec.vercel.app/' },
-  // { id: 4, direction: 'left' as const, imageUrl: '/project4.png', projectUrl: 'https://example.com/4' },
 ];
 
 // --- المكون الرئيسي للقسم (تم تعديله ) ---
@@ -130,10 +128,13 @@ export default function ProjectsSection({ showAll = false }: { showAll?: boolean
     if (!isMounted) return;
     
     const ctx = gsap.context(() => {
-      const projectCards = gsap.utils.toArray('.project-card-container');
+      // -- التعديل هنا --
+      // تم تحديد النوع الذي ستعيده الدالة toArray
+      const projectCards = gsap.utils.toArray<Element>('.project-card-container');
       
-      // تم إصلاح الخطأ هنا: استبدال 'any' بـ 'Element'
-      projectCards.forEach((card: Element) => {
+      // الآن TypeScript يعرف أن projectCards هي مصفوفة من العناصر (Element[])
+      // ولم نعد بحاجة لتحديد نوع 'card' داخل forEach
+      projectCards.forEach((card) => {
         gsap.from(card, {
           opacity: 0, y: 50, duration: 1, ease: 'power3.out',
           scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none none' }
