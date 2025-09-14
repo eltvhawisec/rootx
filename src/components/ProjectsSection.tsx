@@ -115,6 +115,8 @@ const ProjectCard = ({ number, direction = 'left', imageUrl, projectUrl }: { num
 const allProjects = [
   { id: 1, direction: 'right' as const, imageUrl: '/fashion.png', projectUrl: 'https://fashion-ababilsec.vercel.app/' },
   { id: 2, direction: 'left' as const, imageUrl: '/ababil.png', projectUrl: 'https://ababilsec.vercel.app/' },
+  { id: 3, direction: 'right' as const, imageUrl: '/nova.png', projectUrl: 'https://nova-ababilsec.vercel.app/' },
+
 ];
 
 // --- المكون الرئيسي للقسم (تم تعديله ) ---
