@@ -42,10 +42,10 @@ export default function ContactSection() {
 
   const orbitRadius = 140;
   const socialNodes = [
-    { href: "https://github.com/eltuhami249", icon: Github, angle: -45 },
+    { href: "https://github.com/eltuhamisec", icon: Github, angle: -45 },
     { href: "https://www.linkedin.com/in/ahmed-eltuhami-532354380", icon: Linkedin, angle: 45 },
     { href: "https://x.com/eltuhamisec?s=21", icon: Twitter, angle: 135 },
-    { href: "https://instagram.com/eltuhamisec", icon: Instagram, angle: 225 },
+    { href: "https://instagram.com/eltuhamidev", icon: Instagram, angle: 225 },
   ].map(node => {
     const angleRad = (node.angle * Math.PI ) / 180;
     return {
