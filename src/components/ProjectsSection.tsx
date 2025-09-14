@@ -118,8 +118,7 @@ const allProjects = [
   { id: 3, direction: 'right' as const, imageUrl: '/nova.png', projectUrl: 'https://nova-ababilsec.vercel.app/' },
   { id: 4, direction: 'left' as const, imageUrl: '/shawerma.png', projectUrl: 'https://shawarma-simple-ababil.vercel.app/' },
   { id: 5, direction: 'right' as const, imageUrl: '/Sweet.png', projectUrl: 'https://shop-ababil.vercel.app/' },
-
-
+  { id: 6, direction: 'left' as const, imageUrl: '/dental-clinic.png', projectUrl: 'https://dental-clinic-ababil.vercel.app/' },
 ];
 
 // --- المكون الرئيسي للقسم (تم تعديله ) ---
