@@ -116,8 +116,8 @@ const allProjects = [
   { id: 1, direction: 'right' as const, imageUrl: '/fashion.png', projectUrl: 'https://fashion-ababilsec.vercel.app/' },
   { id: 2, direction: 'left' as const, imageUrl: '/ababil.png', projectUrl: 'https://ababilsec.vercel.app/' },
   { id: 3, direction: 'right' as const, imageUrl: '/nova.png', projectUrl: 'https://nova-ababilsec.vercel.app/' },
-  { id: 3, direction: 'left' as const, imageUrl: '/shawerma.png', projectUrl: 'https://shawarma-simple-ababil.vercel.app/' },
-  { id: 3, direction: 'right' as const, imageUrl: '/Sweet.png', projectUrl: 'https://shop-ababil.vercel.app/' },
+  { id: 4, direction: 'left' as const, imageUrl: '/shawerma.png', projectUrl: 'https://shawarma-simple-ababil.vercel.app/' },
+  { id: 5, direction: 'right' as const, imageUrl: '/Sweet.png', projectUrl: 'https://shop-ababil.vercel.app/' },
 
 
 ];
