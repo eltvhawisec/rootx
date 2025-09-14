@@ -5,7 +5,8 @@
 import React, { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Link from 'next/link'; // استيراد Link
+import Link from 'next/link';
+import Image from 'next/image'; // استيراد مكون Image من Next.js
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -63,14 +64,23 @@ const NumberedStar = ({ number }: { number: number }) => {
   );
 };
 
-// --- بطاقة المشروع (بدون تغيير) ---
+// --- بطاقة المشروع (تم تعديلها لاستخدام next/image) ---
 const ProjectCard = ({ number, direction = 'left', imageUrl, projectUrl }: { number: number; direction: 'left' | 'right'; imageUrl: string; projectUrl: string; }) => {
   const isRight = direction === 'right';
+  
   const ImageDisplay = () => (
-    <div className="w-72 md:w-[450px] h-48 md:h-64 rounded-2xl shadow-lg overflow-hidden group">
-      <img src={imageUrl} alt={`Project ${number}`} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+    <div className="w-72 md:w-[450px] h-48 md:h-64 rounded-2xl shadow-lg overflow-hidden group relative">
+      <Image 
+        src={imageUrl} 
+        alt={`Project ${number}`}
+        fill
+        style={{ objectFit: 'cover' }}
+        className="transition-transform duration-500 group-hover:scale-110"
+        sizes="(max-width: 768px) 288px, 450px"
+      />
     </div>
   );
+
   const ConnectorLine = () => <div className="w-16 md:w-32 h-1 md:h-1.5 bg-black hidden md:block"></div>;
   const containerClasses = "flex flex-col md:flex-row items-center gap-4 md:gap-8";
   const contentClasses = "flex flex-col items-center gap-4 md:gap-6";
@@ -106,6 +116,7 @@ const allProjects = [
   { id: 1, direction: 'right' as const, imageUrl: '/fashion.png', projectUrl: 'https://fashion-ababilsec.vercel.app/' },
   { id: 2, direction: 'left' as const, imageUrl: '/ababil.png', projectUrl: 'https://ababilsec.vercel.app/' },
   { id: 3, direction: 'right' as const, imageUrl: '/nova.png', projectUrl: 'https://nova-ababilsec.vercel.app/' },
+  // { id: 4, direction: 'left' as const, imageUrl: '/project4.png', projectUrl: 'https://example.com/4' },
 ];
 
 // --- المكون الرئيسي للقسم (تم تعديله ) ---
@@ -117,19 +128,23 @@ export default function ProjectsSection({ showAll = false }: { showAll?: boolean
 
   useLayoutEffect(() => {
     if (!isMounted) return;
+    
     const ctx = gsap.context(() => {
       const projectCards = gsap.utils.toArray('.project-card-container');
-      projectCards.forEach((card: any) => {
+      
+      // تم إصلاح الخطأ هنا: استبدال 'any' بـ 'Element'
+      projectCards.forEach((card: Element) => {
         gsap.from(card, {
           opacity: 0, y: 50, duration: 1, ease: 'power3.out',
           scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none none' }
         });
       });
     }, sectionRef);
+
     return () => ctx.revert();
   }, [isMounted]);
 
-  const projectsToShow = showAll ? allProjects : allProjects.slice(0, 2); // عرض أول مشروعين فقط في الرئيسية
+  const projectsToShow = showAll ? allProjects : allProjects.slice(0, 2);
 
   const sectionClasses = "w-full py-16 md:py-28 px-4 md:px-6 lg:px-12 xl:px-24 bg-white overflow-hidden";
   const containerClasses = "max-w-7xl mx-auto flex flex-col items-center gap-16 md:gap-24";
