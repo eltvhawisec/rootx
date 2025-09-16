@@ -2,6 +2,7 @@
 import ProjectsSection from '@/components/ProjectsSection';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import Llenis from '@/components/Llenis';
 
 // أيقونة سهم احترافية
 const ArrowLeftIcon = () => (
@@ -20,7 +21,7 @@ const ArrowLeftIcon = () => (
 export default function ProjectsPage() {
   return (
     <div className="bg-black">
-      {/* شريط تنقل احترافي */}
+      <Llenis />
       <header className="bg-black/50 backdrop-blur-sm sticky top-0 z-50">
         <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
           

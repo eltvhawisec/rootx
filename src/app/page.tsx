@@ -7,12 +7,14 @@ import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import MissionSection from '@/components/MissionSection';
 import ServiceSection from '@/components/ServiceSection';
+import Llenis from '@/components/Llenis';
 
 export default function Home() {
   return (
     <div className="bg-black">
       <Hero />
-      
+      <Llenis />
+
       <div id="mission"><MissionSection /></div>
       <div id="service"><ServiceSection /></div>
       <div id="projects"><ProjectsSection /></div>

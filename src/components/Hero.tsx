@@ -3,7 +3,6 @@
 import { useState, useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import Sidebar from '@/components/Sidebar';
-import Llenis from '@/components/Llenis';
 
 export default function Hero() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -52,7 +51,6 @@ export default function Hero() {
 
   return (
     <>
-      <Llenis />
       
       <Sidebar 
         isOpen={isSidebarOpen} 
