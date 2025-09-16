@@ -115,7 +115,7 @@ const ProjectCard = ({ number, direction = 'left', imageUrl, projectUrl }: { num
 const allProjects = [
   { id: 1, direction: 'right' as const, imageUrl: '/fashion.png', projectUrl: 'https://fashion-ababilsec.vercel.app/' },
   { id: 2, direction: 'left' as const, imageUrl: '/ababil.png', projectUrl: 'https://ababilsec.vercel.app/' },
-  { id: 3, direction: 'right' as const, imageUrl: '/nova.png', projectUrl: 'https://nova-ababilsec.vercel.app/' },
+  { id: 3, direction: 'right' as const, imageUrl: '/svnty.png', projectUrl: 'https://svnty.vercel.app/' },
   { id: 4, direction: 'left' as const, imageUrl: '/shawerma.png', projectUrl: 'https://shawarma-simple-ababil.vercel.app/' },
   { id: 5, direction: 'right' as const, imageUrl: '/Sweet.png', projectUrl: 'https://shop-ababil.vercel.app/' },
   { id: 6, direction: 'left' as const, imageUrl: '/dental-clinic.png', projectUrl: 'https://dental-clinic-ababil.vercel.app/' },
