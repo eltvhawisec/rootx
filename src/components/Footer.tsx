@@ -90,10 +90,10 @@ export default function Footer() {
         </h2>
 
         <div className="flex items-center gap-5 mt-2">
-          <SocialIcon href="https://github.com/eltuhami249" icon={Github} />
+          <SocialIcon href="https://github.com/eltvhawisec" icon={Github} />
           <SocialIcon href="https://www.linkedin.com/in/ahmed-eltuhami-532354380" icon={Linkedin} />
-          <SocialIcon href="https://x.com/eltuhamisec?s=21" icon={Twitter} />
-          <SocialIcon href="https://instagram.com/eltuhamisec" icon={Instagram} />
+          <SocialIcon href="https://x.com/eltvhawisec" icon={Twitter} />
+          <SocialIcon href="https://instagram.com/eltvhawisec" icon={Instagram} />
         </div>
 
         <div className="copyright-text border-t border-gray-200 w-full max-w-md mt-8 pt-8 text-center">

@@ -10,7 +10,6 @@ import Image from 'next/image';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- مكون العنوان (بدون تغيير) ---
 const SectionTitle = ({ title }: { title: string }) => {
   const titleRef = useRef<HTMLDivElement>(null);
   const leftLineRef = useRef<HTMLDivElement>(null);
@@ -50,7 +49,6 @@ const SectionTitle = ({ title }: { title: string }) => {
   );
 };
 
-// --- أيقونة النجمة المرقمة (بدون تغيير) ---
 const NumberedStar = ({ number }: { number: number }) => {
   const containerClasses = "relative w-20 md:w-28 h-20 md:h-28 flex items-center justify-center";
   const textClasses = "text-2xl md:text-4xl font-bold text-black z-10";
@@ -111,7 +109,6 @@ const ProjectCard = ({ number, direction = 'left', imageUrl, projectUrl }: { num
   );
 };
 
-// --- بيانات المشاريع (بدون تغيير) ---
 const allProjects = [
   { id: 1, direction: 'right' as const, imageUrl: '/fashion.png', projectUrl: 'https://fashion-ababilsec.vercel.app/' },
   { id: 2, direction: 'left' as const, imageUrl: '/ababil.png', projectUrl: 'https://ababilsec.vercel.app/' },
@@ -121,7 +118,6 @@ const allProjects = [
   { id: 6, direction: 'left' as const, imageUrl: '/dental-clinic.png', projectUrl: 'https://dental-clinic-ababil.vercel.app/' },
 ];
 
-// --- المكون الرئيسي للقسم (تم تعديله ) ---
 export default function ProjectsSection({ showAll = false }: { showAll?: boolean }) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isMounted, setIsMounted] = useState(false);
@@ -132,12 +128,8 @@ export default function ProjectsSection({ showAll = false }: { showAll?: boolean
     if (!isMounted) return;
     
     const ctx = gsap.context(() => {
-      // -- التعديل هنا --
-      // تم تحديد النوع الذي ستعيده الدالة toArray
       const projectCards = gsap.utils.toArray<Element>('.project-card-container');
       
-      // الآن TypeScript يعرف أن projectCards هي مصفوفة من العناصر (Element[])
-      // ولم نعد بحاجة لتحديد نوع 'card' داخل forEach
       projectCards.forEach((card) => {
         gsap.from(card, {
           opacity: 0, y: 50, duration: 1, ease: 'power3.out',

@@ -9,7 +9,6 @@ import { Github, Linkedin, Twitter, Instagram, Send } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- مكون أيقونة التواصل (تم إضافة فئة للتحريك) ---
 const SocialNode = ({ href, icon: Icon, style }: { href: string; icon: React.ElementType; style: React.CSSProperties }) => (
   <a
     href={href}
@@ -38,14 +37,14 @@ export default function ContactSection() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const sectionRef = useRef<HTMLElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const constellationRef = useRef<HTMLDivElement>(null); // Ref للكوكبة بأكملها
+  const constellationRef = useRef<HTMLDivElement>(null); 
 
   const orbitRadius = 140;
   const socialNodes = [
-    { href: "https://github.com/eltuhamisec", icon: Github, angle: -45 },
+    { href: "https://github.com/eltvhawisec", icon: Github, angle: -45 },
     { href: "https://www.linkedin.com/in/ahmed-eltuhami-532354380", icon: Linkedin, angle: 45 },
-    { href: "https://x.com/eltuhamisec?s=21", icon: Twitter, angle: 135 },
-    { href: "https://instagram.com/eltuhamidev", icon: Instagram, angle: 225 },
+    { href: "https://x.com/eltvhawisec", icon: Twitter, angle: 135 },
+    { href: "https://instagram.com/eltvhawisec", icon: Instagram, angle: 225 },
   ].map(node => {
     const angleRad = (node.angle * Math.PI ) / 180;
     return {
@@ -64,13 +63,11 @@ export default function ContactSection() {
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // --- إعداد الحالة الأولية المحسّنة ---
       gsap.set(".planet", { scale: 0, opacity: 0 });
       gsap.set(".social-node", { scale: 0, opacity: 0 });
       gsap.set(".connection-line", { opacity: 0 });
       gsap.set(formRef.current, { opacity: 0, y: 50 });
 
-      // --- الجدول الزمني للدخول المتقن ---
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -81,7 +78,7 @@ export default function ContactSection() {
 
       tl.to(".planet", { scale: 1, opacity: 1, duration: 1.2, ease: 'back.out(1.7)' });
       tl.to(".connection-line", {
-        opacity: 0.5, // شفافية خفيفة للخطوط
+        opacity: 0.5, 
         duration: 1,
         ease: 'power3.inOut',
         stagger: 0.1,
@@ -95,18 +92,16 @@ export default function ContactSection() {
       }, "-=0.8");
       tl.to(formRef.current, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, "-=1");
 
-      // --- 1. تأثير الاستجابة للفأرة (Parallax) ---
       const parallax = (e: MouseEvent) => {
         const { clientX, clientY } = e;
         const { width, height, left, top } = sectionRef.current!.getBoundingClientRect();
         const x = (clientX - left) / width - 0.5; // -0.5 to 0.5
         const y = (clientY - top) / height - 0.5; // -0.5 to 0.5
         
-        // تحريك الكوكبة بأكملها
         gsap.to(constellationRef.current, {
-          x: -x * 30, // عكس الحركة بقوة 30px
+          x: -x * 30, 
           y: -y * 30,
-          rotation: -x * 5, // دوران خفيف
+          rotation: -x * 5, 
           duration: 0.8,
           ease: 'power3.out',
         });
@@ -114,7 +109,6 @@ export default function ContactSection() {
       
       sectionRef.current?.addEventListener('mousemove', parallax);
       
-      // إعادة الكوكبة لوضعها الطبيعي عند خروج الفأرة
       sectionRef.current?.addEventListener('mouseleave', () => {
         gsap.to(constellationRef.current, {
           x: 0,
@@ -137,9 +131,7 @@ export default function ContactSection() {
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
         
         <div className="flex justify-center items-center">
-          {/* --- 2. تم إضافة Ref هنا للكوكبة بأكملها --- */}
           <div ref={constellationRef} className="relative w-[350px] h-[350px] flex justify-center items-center">
-            {/* --- 3. تم إضافة ظل متوهج هنا --- */}
             <img
               src="/eltuhamiW.ico"
               alt="eltuhami"
@@ -198,7 +190,6 @@ export default function ContactSection() {
 
 
 
-// --- مكون العنوان (تم تحديثه بالإصدار الذي يحتوي على تحريك) ---
 const SectionTitle = ({ title }: { title: string }) => {
   const titleRef = useRef<HTMLDivElement>(null);
   const leftLineRef = useRef<HTMLDivElement>(null);

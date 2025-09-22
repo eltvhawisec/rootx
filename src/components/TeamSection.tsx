@@ -8,7 +8,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- مكون العنوان (يبقى كما هو) ---
 const SectionTitle = ({ title }: { title: string }) => {
   const titleRef = useRef<HTMLDivElement>(null);
   const leftLineRef = useRef<HTMLDivElement>(null);
@@ -54,16 +53,14 @@ const SectionTitle = ({ title }: { title: string }) => {
   );
 };
 
-// --- المكون الرئيسي للقسم ---
 export default function TeamSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const textContentRef = useRef<HTMLDivElement>(null);
-  const paragraphRef = useRef<HTMLParagraphElement>(null); // Ref للفقرة
-  const videoRef = useRef<HTMLDivElement>(null); // Ref للفيديو
-  const videoMaskRef = useRef<HTMLDivElement>(null); // Ref لقناع الفيديو
+  const paragraphRef = useRef<HTMLParagraphElement>(null); 
+  const videoRef = useRef<HTMLDivElement>(null); 
+  const videoMaskRef = useRef<HTMLDivElement>(null); 
 
   useLayoutEffect(() => {
-    // --- تقسيم النص إلى كلمات ---
     const text = paragraphRef.current;
     if (!text) return;
     const words = text.innerText.split(' ');
@@ -71,11 +68,9 @@ export default function TeamSection() {
     const wordSpans = text.querySelectorAll('.word-span');
 
     const ctx = gsap.context(() => {
-      // --- إعداد الحالة الأولية ---
-      gsap.set(wordSpans, { opacity: 0, y: 10 }); // النص مخفي
-      gsap.set(videoRef.current, { xPercent: 101 }); // الفيديو مزاح إلى اليمين
+      gsap.set(wordSpans, { opacity: 0, y: 10 }); 
+      gsap.set(videoRef.current, { xPercent: 101 }); 
 
-      // --- إنشاء Timeline للتحريك السينمائي ---
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -85,12 +80,10 @@ export default function TeamSection() {
         defaults: { ease: 'power4.inOut' }
       });
 
-      // 1. الفيديو يقتحم الشاشة من اليمين
       tl.to(videoRef.current, {
         xPercent: 0,
         duration: 1.8,
       })
-      // 2. النص يظهر بعد استقرار الفيديو (نفس تأثير قسم About)
       .to(wordSpans, {
         opacity: 1,
         y: 0,

@@ -8,7 +8,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- مكون العنوان (يفضل استيراده من ملف مشترك) ---
 const SectionTitle = ({ title }: { title: string }) => {
   const titleRef = useRef<HTMLDivElement>(null);
   const leftLineRef = useRef<HTMLDivElement>(null);
@@ -53,7 +52,6 @@ const SectionTitle = ({ title }: { title: string }) => {
   );
 };
 
-// --- مكون MissionSection الرئيسي (بدون صورة) ---
 export default function MissionSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLParagraphElement>(null);
@@ -73,7 +71,7 @@ export default function MissionSection() {
       gsap.to(wordSpans, {
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 60%", // يبدأ التحريك أبكر قليلاً لأن لا يوجد صورة ننتظرها
+          start: "top 60%", 
           toggleActions: "play none none none",
         },
         opacity: 1,
@@ -90,13 +88,13 @@ export default function MissionSection() {
 
   return (
     <section ref={sectionRef} id="mission" className="w-full py-20 px-6 md:px-12 lg:px-24 bg-black overflow-hidden">
-      <div className="max-w-7xl mx-auto flex flex-col items-center"> {/* توسيط المحتوى */}
+      <div className="max-w-7xl mx-auto flex flex-col items-center">
         
         <div className="w-full md:max-w-xl mb-16">
           <SectionTitle title="Mission" />
         </div>
 
-        <div className="w-full max-w-5xl text-center"> {/* توسيط النص */}
+        <div className="w-full max-w-5xl text-center">
           <p ref={textRef} className="font-custom-heading text-4xl md:text-5xl font-black leading-tight text-white">
             To build exceptional digital experiences that are not only beautifully designed and highly visible, but also fundamentally secure. We merge creative UI/UX with robust web development, strategic SEO, and ironclad cybersecurity to deliver solutions that perform, captivate, and protect.
           </p>

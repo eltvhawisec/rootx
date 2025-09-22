@@ -1,9 +1,8 @@
-import Hero from '@/components/Hero'; // تأكد من صحة المسار
+import Hero from '@/components/Hero'; 
 import AboutSection from '@/components/AboutSection';
 import ProjectsSection from '@/components/ProjectsSection';
 import TeamSection from '@/components/TeamSection';
 import SkillsSection from '@/components/SkillsSection';
-import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import MissionSection from '@/components/MissionSection';
 import ServiceSection from '@/components/ServiceSection';
@@ -21,7 +20,6 @@ export default function Home() {
       <div id="about"><AboutSection /></div>
       <div id="skills"><SkillsSection /></div>
       <div id="team"><TeamSection /></div>
-      <div id="contact"><ContactSection /></div>
       
       <Footer />
     </div>

@@ -8,7 +8,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- مكون العنوان (يبقى كما هو) ---
 const SectionTitle = ({ title }: { title: string }) => {
   const titleRef = useRef<HTMLDivElement>(null);
   const leftLineRef = useRef<HTMLDivElement>(null);
@@ -55,12 +54,11 @@ const SectionTitle = ({ title }: { title: string }) => {
 };
 
 
-// --- مكون AboutSection الرئيسي ---
 export default function AboutSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLParagraphElement>(null);
-  const mediaRef = useRef<HTMLDivElement>(null); // Ref للفيديو نفسه
-  const mediaMaskRef = useRef<HTMLDivElement>(null); // Ref للقناع
+  const mediaRef = useRef<HTMLDivElement>(null);
+  const mediaMaskRef = useRef<HTMLDivElement>(null); 
 
   useLayoutEffect(() => {
     const text = textRef.current;
@@ -72,35 +70,29 @@ export default function AboutSection() {
     const wordSpans = text.querySelectorAll('.word-span');
 
     const ctx = gsap.context(() => {
-      // --- إعداد الحالة الأولية ---
-      // النص مخفي تمامًا
       gsap.set(wordSpans, { opacity: 0 });
-      // الفيديو مزاح إلى اليمين خارج قناعه
       gsap.set(mediaRef.current, { xPercent: 101 });
 
-      // --- إنشاء Timeline للتحريك السينمائي ---
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 50%", // يبدأ التحريك عندما يصل منتصف القسم إلى الشاشة
+          start: "top 50%", 
           toggleActions: "play none none none",
         },
-        defaults: { ease: 'power4.inOut' } // حركة سينمائية فخمة
+        defaults: { ease: 'power4.inOut' } 
       });
 
-      // 1. الفيديو يقتحم الشاشة من اليمين
       tl.to(mediaRef.current, {
         xPercent: 0,
-        duration: 1.8, // مدة أطول لتعزيز الإحساس السينمائي
+        duration: 1.8, 
       })
-      // 2. النص يظهر بعد استقرار الفيديو
       .to(wordSpans, {
         opacity: 1,
-        y: 0, // حركة صعود خفيفة
+        y: 0, 
         stagger: 0.02,
         duration: 0.5,
-        ease: 'power2.out', // حركة أسرع وأكثر حيوية للنص
-      }, "-=0.5"); // يبدأ قبل نهاية حركة الفيديو بقليل لمزيد من السلاسة
+        ease: 'power2.out', 
+      }, "-=0.5"); 
 
     }, sectionRef);
 
@@ -118,9 +110,6 @@ export default function AboutSection() {
         <div className="w-full flex flex-col md:flex-row gap-20 lg:gap-32 justify-center items-start">
           
           <div className="w-full md:max-w-2xl mt-6">
-            {/* ================================================================== */}
-            {/* --- 1. تم تغيير الخط هنا --- */}
-            {/* ================================================================== */}
             <p ref={textRef} className="font-custom-heading text-4xl md:text-4xl font-black leading-snug text-black">
               My name is eltuhami, a Full Stack Web Developer from Sudan with a strong 
               background in Cybersecurity. I specialize in building and securing modern web 
@@ -130,9 +119,6 @@ export default function AboutSection() {
             </p>
           </div>
 
-          {/* ================================================================== */}
-          {/* --- 2. تم تعديل بنية الفيديو هنا لإضافة القناع --- */}
-          {/* ================================================================== */}
           <div ref={mediaMaskRef} className="w-full md:max-w-5xl overflow-hidden rounded-3xl">
             <div ref={mediaRef}>
               <video
