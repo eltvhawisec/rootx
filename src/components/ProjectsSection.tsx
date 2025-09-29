@@ -115,7 +115,7 @@ const allProjects = [
   { id: 3, direction: 'right' as const, imageUrl: '/Sweet.png', projectUrl: 'https://shop-ababil.vercel.app/' },
   { id: 4, direction: 'left' as const, imageUrl: '/svntechno.png', projectUrl: 'https://svntechno.vercel.app/' },
   { id: 5, direction: 'right' as const, imageUrl: '/zeniths.png', projectUrl: 'https://zeniths.vercel.app/' },
-  { id: 6, direction: 'left' as const, imageUrl: '/vatanen.png', projectUrl: 'https://vatanen.vercel.app/' },
+  { id: 6, direction: 'left' as const, imageUrl: '/elite-fitness.png', projectUrl: 'https://elite-fitnes.vercel.app/' },
 ];
 
 export default function ProjectsSection({ showAll = false }: { showAll?: boolean }) {
