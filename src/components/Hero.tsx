@@ -61,9 +61,9 @@ export default function Hero() {
       <div ref={heroRef} className="min-h-screen bg-white text-black relative overflow-hidden">
         <div ref={finalInterfaceRef} className="w-full h-full absolute inset-0">
           <div ref={textContainerRef} className="absolute top-12 left-0 p-4 md:p-8 z-10">
-            <h1 className="font-custom-heading text-black font-bold text-7xl md:text-8xl lg:text-[140px] tracking-wide leading-none">
+            <h1 className="font-custom-pencerio text-black font-bold text-7xl md:text-8xl lg:text-[140px] tracking-wide leading-none">
               eltuhami
-              <sup className="text-3xl md:text-4xl text-gray-800 -top-6 md:-top-8 lg:-top-0 m1-1">
+              <sup className="font-custom-heading text-3xl md:text-4xl text-gray-800 -top-6 md:-top-8 lg:-top-0 m1-1">
                 sec
               </sup>
             </h1>
