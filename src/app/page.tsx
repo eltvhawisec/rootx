@@ -11,7 +11,7 @@ import Llenis from '@/components/Llenis';
 
 export default function Home() {
   return (
-    <div className="bg-black">
+    <>
       <Hero />
       <Llenis />
 
@@ -24,6 +24,6 @@ export default function Home() {
       <div id="contact"><ContactSection /></div>
       
       <Footer />
-    </div>
+    </>
   );
 }

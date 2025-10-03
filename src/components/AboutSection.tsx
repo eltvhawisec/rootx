@@ -8,6 +8,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// --- مكون العنوان (لا تغيير) ---
 const SectionTitle = ({ title }: { title: string }) => {
   const titleRef = useRef<HTMLDivElement>(null);
   const leftLineRef = useRef<HTMLDivElement>(null);
@@ -119,18 +120,15 @@ export default function AboutSection() {
             </p>
           </div>
 
+          {/* --- التعديل الرئيسي هنا --- */}
           <div ref={mediaMaskRef} className="w-full md:max-w-5xl overflow-hidden rounded-3xl">
             <div ref={mediaRef}>
-              <video
-                src="/eltuhami.MP4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full aspect-square object-cover"
-              >
-                Your browser does not support the video tag.
-              </video>
+              {/* تم استبدال الفيديو بالصورة */}
+              <img
+                src="/eltuhami2.png" // <-- غيّر هذا المسار إلى مسار صورتك
+                alt="Eltuhami - Full Stack Developer" // <-- نص بديل وصفي للصورة
+                className="w-full aspect-square object-cover" // نفس الفئات للحفاظ على التنسيق
+              />
             </div>
           </div>
 

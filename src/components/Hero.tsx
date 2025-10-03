@@ -87,10 +87,10 @@ export default function Hero() {
         </div>
         <div className="absolute inset-0 flex z-30 pointer-events-none">
           <div ref={leftPanelRef} className="w-1/2 h-full bg-white flex items-center justify-center">
-            <h2 className="font-custom-heading text-black text-5xl md:text-9xl font-extrabold">eltuhami</h2>
+            <h2 className="font-custom-pencerio font-custom-heading text-black text-5xl md:text-9xl font-extrabold">eltuhami</h2>
           </div>
           <div ref={rightPanelRef} className="w-1/2 h-full bg-white flex items-center justify-center">
-            <h2 className="font-custom-heading text-black text-5xl md:text-9xl font-extrabold">AbabilSec</h2>
+            <h2 className="font-custom-pencerio font-custom-heading text-black text-5xl md:text-9xl font-extrabold">AbabilSec</h2>
           </div>
         </div>
       </div>

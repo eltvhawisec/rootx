@@ -1,12 +1,12 @@
 // src/components/SkillsSection.tsx
-import React from 'react';
 
-// --- مكون العنوان (تم التعديل هنا) ---
+import React from 'react';
+import Image from 'next/image'; // --- الخطوة 1: استيراد مكون Image
+
+// --- مكون العنوان (لا تغيير) ---
 const SectionTitle = ({ title }: { title: string }) => (
   <div className="flex items-center gap-4 w-full">
     <div className="h-1.5 flex-grow bg-white"></div>
-    {/* --- التعديل هنا --- */}
-    {/* تمت إضافة فئة "font-custom-heading" لتطبيق خط العناوين */}
     <h2 className="font-custom-heading text-5xl font-extrabold tracking-wider shrink-0 text-white">
       &#123;{title}&#125;
     </h2>
@@ -14,28 +14,8 @@ const SectionTitle = ({ title }: { title: string }) => (
   </div>
 );
 
-// --- مكون فاصل الورق الممزق (لا تغيير) ---
-const TornPaperDivider = ({ visualDirection, position }: { visualDirection: 'left' | 'right', position: 'left' | 'right' }) => {
-  const isFlipped = visualDirection === 'left';
-  const positionAndTransformClasses = {
-    left: `left-0 ${isFlipped ? 'transform -scale-x-100 -translate-x-1/4' : 'transform -translate-x-1/4'}`,
-    right: `right-0 ${isFlipped ? 'transform -scale-x-100 translate-x-1/4' : 'transform translate-x-1/4'}`
-  };
-
-  return (
-    <div className={`absolute top-0 w-1/2 h-full pointer-events-none ${positionAndTransformClasses[position]}`}>
-      <img
-        src="/torn-paper.png"
-        alt="Torn paper background"
-        className="w-full h-full object-cover"
-        style={{ imageRendering: 'high-quality' as React.CSSProperties['imageRendering'] }} 
-      />
-    </div>
-  );
-};
-
 // --- مكون لعرض فئة المهارات (لا تغيير) ---
-const SkillCategory = ({ title, skills }: { title:string; skills: string[] }) => (
+const SkillCategory = ({ title, skills }: { title: string; skills: string[] }) => (
   <div className="w-full text-center py-12">
     <h3 className="text-3xl font-bold text-white mb-6">{title}</h3>
     <div className="flex flex-wrap justify-center gap-x-4 gap-y-3">
@@ -49,17 +29,31 @@ const SkillCategory = ({ title, skills }: { title:string; skills: string[] }) =>
 );
 
 export default function SkillsSection() {
-  const frontendSkills = ["React", "Next.js", "TypeScript", "Tailwind CSS", "GSAP"];
-  const backendSkills = ["Node.js", "Express.js", "REST APIs", "GraphQL"];
-  const securityAndDbSkills = ["Cybersecurity", "Vulnerability Assessment", "MongoDB", "SQL"];
+  const frontendSkills = ["React", "Next.js", "TypeScript", "Tailwind CSS", "GSAP", "Vite.js"];
+  const backendSkills = ["Node.js", "Express.js", "REST APIs", "GraphQL", "Vercel"];
+  const securityAndDbSkills = ["Cybersecurity", "Vulnerability Assessment", "PostgerSQL", "SQL", "MongoDB", "Firebase", "Supabase"];
 
   return (
-    <section className="w-full py-20 bg-black text-white relative overflow-hidden">
+    // --- الخطوة 2: تعديل العنصر الرئيسي ---
+    // أزلنا style و bg-cover. أضفنا 'relative' ليكون مرجعًا للصورة.
+    <section className="w-full py-20 text-white relative overflow-hidden">
       
-      <TornPaperDivider visualDirection="right" position="left" /> 
-      <TornPaperDivider visualDirection="left" position="right" />
+      {/* --- الخطوة 3: إضافة الصورة كعنصر منفصل في الخلفية --- */}
+      <Image
+        src="/revn.jpg" // تأكد أن الصورة في مجلد 'public'
+        alt="Abstract background image for skills section"
+        layout="fill" // تملأ العنصر الأب
+        objectFit="cover" // تعمل مثل bg-cover
+        quality={80} // جودة الصورة (اختياري)
+        className="-z-10" // تضع الصورة في الخلفية (z-index: -1)
+      />
 
-      <div className="max-w-4xl mx-auto flex flex-col items-center gap-8 relative z-10">
+      {/* طبقة لونية لتحسين وضوح النص */}
+      {/* لاحظ أننا أزلنا z-index منها لأن الصورة الآن هي التي في الخلف */}
+      <div className="absolute inset-0 bg-black bg-opacity-75"></div>
+
+      {/* المحتوى يجب أن يكون 'relative' ليظهر فوق الطبقة اللونية */}
+      <div className="max-w-4xl mx-auto flex flex-col items-center gap-8 relative">
         <div className="w-full md:max-w-lg mb-8">
           <SectionTitle title="Skills" />
         </div>
