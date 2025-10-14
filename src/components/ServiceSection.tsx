@@ -7,140 +7,136 @@ import { FiCode, FiPenTool, FiShield, FiTrendingUp, FiArrowRight } from 'react-i
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- SectionTitle Component (remains unchanged) ---
+// --- مكون العنوان (يبقى كما هو للتناسق) ---
 const SectionTitle = ({ title }: { title: string }) => {
-  const titleRef = useRef<HTMLDivElement>(null);
-  const leftLineRef = useRef<HTMLDivElement>(null);
-  const rightLineRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLHeadingElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
 
   useLayoutEffect(() => {
+    if (!titleRef.current) return;
     const ctx = gsap.context(() => {
-      gsap.set(leftLineRef.current, { xPercent: -100 });
-      gsap.set(rightLineRef.current, { xPercent: 100 });
-      gsap.set(textRef.current, { y: 30, opacity: 0 });
-
-      const tl = gsap.timeline({
+      gsap.set(titleRef.current, { opacity: 0, y: 40 });
+      gsap.to(titleRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 1.2,
+        ease: 'power3.out',
         scrollTrigger: {
           trigger: titleRef.current,
           start: "top 85%",
           toggleActions: "play none none none",
         },
-        defaults: { ease: 'power3.inOut', duration: 1.2 }
       });
-
-      tl.to(leftLineRef.current, { xPercent: 0 })
-        .to(rightLineRef.current, { xPercent: 0 }, "<")
-        .to(textRef.current, { y: 0, opacity: 1, duration: 1 }, "-=0.8");
-    }, titleRef);
-
+    });
     return () => ctx.revert();
   }, []);
 
   return (
-    <div ref={titleRef} className="flex items-center gap-6 w-full">
-      <div className="flex-grow overflow-hidden">
-        <div ref={leftLineRef} className="h-2 w-full bg-black"></div>
-      </div>
-      <h2 ref={textRef} className="font-custom-heading text-6xl md:text-7xl font-black tracking-wider shrink-0 text-black">
-        &#123;{title}&#125;
+    <div className="relative">
+      <h2 ref={titleRef} className="font-custom-pencerio text-5xl md:text-6xl font-bold text-black tracking-wide">
+        {title}
       </h2>
-      <div className="flex-grow overflow-hidden">
-        <div ref={rightLineRef} className="h-2 w-full bg-black"></div>
+    </div>
+  );
+};
+
+// --- 1. مكون بطاقة الخدمة بالتصميم الشبكي الجديد ---
+const ServiceCard = ({ icon: Icon, title, description, index }: { icon: React.ElementType, title: string, description: string, index: number }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (!cardRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.from(cardRef.current, {
+        opacity: 0,
+        y: 50,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: cardRef.current,
+          start: "top 90%",
+          toggleActions: "play none none none",
+        },
+      });
+    }, cardRef);
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <div
+      ref={cardRef}
+      className="group relative p-8 bg-white border border-gray-200 rounded-lg overflow-hidden transition-colors duration-300 hover:bg-black"
+    >
+      {/* الرقم الكبير في الخلفية */}
+      <span className="absolute top-0 right-8 text-[120px] font-black text-gray-100 transition-colors duration-300 group-hover:text-gray-800 z-0">
+        {String(index + 1).padStart(2, '0')}
+      </span>
+      
+      <div className="relative z-10 flex flex-col h-full">
+        <Icon className="w-10 h-10 text-black mb-6 transition-colors duration-300 group-hover:text-white" />
+        
+        <h3 className="font-custom-heading text-2xl font-bold text-black mb-3 transition-colors duration-300 group-hover:text-white">
+          {title}
+        </h3>
+        
+        <p className="text-gray-600 text-base leading-relaxed mb-6 flex-grow transition-colors duration-300 group-hover:text-gray-300">
+          {description}
+        </p>
+
+        {/* السهم الذي يظهر عند المرور */}
+        <FiArrowRight className="w-8 h-8 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 self-end" />
       </div>
     </div>
   );
 };
 
-
-// --- Main ServiceSection Component (Expanded) ---
+// --- المكون الرئيسي للقسم ---
 export default function ServiceSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(() => {
-    const listItems = listRef.current?.children;
-    if (!listItems) return;
-
-    const ctx = gsap.context(() => {
-      gsap.set(listItems, { opacity: 0, y: 50 });
-
-      gsap.to(listItems, {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 60%",
-          toggleActions: "play none none none",
-        },
-        opacity: 1,
-        y: 0,
-        stagger: 0.3,
-        duration: 1.2,
-        ease: 'power4.out',
-      });
-
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  // --- Expanded service data ---
   const services = [
     {
       icon: FiCode,
       title: "Web Development",
-      description: "We build robust, scalable, and high-performance websites and applications using modern technologies like React and Next.js, ensuring a fast and seamless user experience that meets your business goals."
+      description: "Building robust, scalable, and high-performance websites using modern technologies for a seamless user experience."
     },
     {
       icon: FiPenTool,
       title: "UI/UX Design",
-      description: "We craft intuitive and beautiful user interfaces that captivate your audience and drive conversions. Our focus is on creating seamless user journeys and visually appealing designs that reflect your brand identity."
+      description: "Crafting intuitive and beautiful user interfaces that captivate your audience and reflect your brand identity."
     },
     {
       icon: FiTrendingUp,
       title: "SEO Optimization",
-      description: "Enhance your digital presence to rank higher in search results and attract organic traffic. Our strategies include keyword research, technical SEO, on-page optimization, and quality link building."
+      description: "Enhancing your digital presence to rank higher in search results and attract valuable organic traffic."
     },
     {
       icon: FiShield,
       title: "Cybersecurity",
-      description: "Protect your digital assets with proactive security measures and protocols. Our services include vulnerability assessments, network security, and data protection to ensure your business operates securely."
+      description: "Protecting your digital assets with proactive security measures, vulnerability assessments, and data protection."
     },
   ];
 
   return (
-    <section ref={sectionRef} id="service" className="w-full py-24 px-6 md:px-12 lg:px-24 bg-gray-50 overflow-hidden">
-      <div className="max-w-7xl mx-auto flex flex-col items-center">
+    <section ref={sectionRef} id="service" className="w-full py-24 md:py-32 px-6 md:px-12 lg:px-24 bg-gray-50">
+      <div className="max-w-7xl mx-auto">
         
-        <div className="w-full md:max-w-xl mb-24">
+        {/* العنوان في الأعلى */}
+        <div className="mb-16 md:mb-24 text-center">
           <SectionTitle title="Services" />
         </div>
 
-        {/* ================================================================== */}
-        {/* --- Content and layout have been enhanced here --- */}
-        {/* ================================================================== */}
-        <div ref={listRef} className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-16">
-          {services.map((service, index) => {
-            const Icon = service.icon;
-            return (
-              <div key={index} className="flex flex-col p-8 bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
-                <div className="flex items-center mb-6">
-                  <div className="p-4 bg-black rounded-full mr-5">
-                    <Icon className="text-white text-3xl" />
-                  </div>
-                  <h3 className="font-custom-heading text-3xl font-bold text-black">{service.title}</h3>
-                </div>
-                <p className="text-gray-600 text-lg leading-relaxed mb-6 flex-grow">
-                  {service.description}
-                </p>
-                <a href="#" className="group text-black font-semibold text-lg mt-auto flex items-center">
-                  Learn More
-                  <FiArrowRight className="ml-2 transition-transform duration-300 group-hover:translate-x-2" />
-                </a>
-              </div>
-            );
-          })}
+        {/* الشبكة الجديدة للخدمات */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {services.map((service, index) => (
+            <ServiceCard
+              key={index}
+              index={index}
+              icon={service.icon}
+              title={service.title}
+              description={service.description}
+            />
+          ))}
         </div>
-
       </div>
     </section>
   );

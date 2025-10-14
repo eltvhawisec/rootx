@@ -86,7 +86,6 @@ export default function Sidebar({ isOpen, onClose, onNavigate }: SidebarProps) {
                 <NavItem label="About" sectionId="about" onNavigate={onNavigate} />
                 <NavItem label="Skills" sectionId="skills" onNavigate={onNavigate} />
                 <NavItem label="Team" sectionId="team" onNavigate={onNavigate} />
-                <NavItem label="Contact" sectionId="contact" onNavigate={onNavigate} />
               </div>
             </nav>
             

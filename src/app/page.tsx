@@ -21,7 +21,6 @@ export default function Home() {
       <div id="about"><AboutSection /></div>
       <div id="skills"><SkillsSection /></div>
       <div id="team"><TeamSection /></div>
-      <div id="contact"><ContactSection /></div>
       
       <Footer />
     </>
