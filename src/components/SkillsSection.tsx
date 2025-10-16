@@ -1,65 +1,106 @@
-// src/components/SkillsSection.tsx
+'use client';
 
-import React from 'react';
-import Image from 'next/image'; // --- الخطوة 1: استيراد مكون Image
+import { useLayoutEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// --- مكون العنوان (لا تغيير) ---
-const SectionTitle = ({ title }: { title: string }) => (
-  <div className="flex items-center gap-4 w-full">
-    <div className="h-1.5 flex-grow bg-white"></div>
-    <h2 className="font-custom-heading text-5xl font-extrabold tracking-wider shrink-0 text-white">
-      &#123;{title}&#125;
-    </h2>
-    <div className="h-1.5 flex-grow bg-white"></div>
-  </div>
-);
+gsap.registerPlugin(ScrollTrigger);
 
-// --- مكون لعرض فئة المهارات (لا تغيير) ---
-const SkillCategory = ({ title, skills }: { title: string; skills: string[] }) => (
-  <div className="w-full text-center py-12">
-    <h3 className="text-3xl font-bold text-white mb-6">{title}</h3>
-    <div className="flex flex-wrap justify-center gap-x-4 gap-y-3">
-      {skills.map((skill, index) => (
-        <span key={index} className="text-lg font-semibold text-black bg-gray-200 px-5 py-2 rounded-full shadow-md">
-          {skill}
-        </span>
-      ))}
-    </div>
-  </div>
-);
+// --- مكون العنوان (تم توحيده مع بقية الأقسام) ---
+const SectionTitle = ({ title }: { title: string }) => {
+  const titleRef = useRef<HTMLHeadingElement>(null);
 
-export default function SkillsSection() {
-  const frontendSkills = ["React", "Next.js", "TypeScript", "Tailwind CSS", "GSAP", "Vite.js"];
-  const backendSkills = ["Node.js", "Express.js", "REST APIs", "GraphQL", "Vercel"];
-  const securityAndDbSkills = ["Cybersecurity", "Vulnerability Assessment", "PostgerSQL", "SQL", "MongoDB", "Firebase", "Supabase"];
+  useLayoutEffect(() => {
+    if (!titleRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.from(titleRef.current, {
+        opacity: 0,
+        y: 40,
+        duration: 1.2,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: titleRef.current,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      });
+    });
+    return () => ctx.revert();
+  }, []);
 
   return (
-    // --- الخطوة 2: تعديل العنصر الرئيسي ---
-    // أزلنا style و bg-cover. أضفنا 'relative' ليكون مرجعًا للصورة.
-    <section className="w-full py-20 text-white relative overflow-hidden">
+    <div className="relative mb-16 md:mb-24 text-center">
+      <h2 ref={titleRef} className="font-custom-pencerio text-5xl md:text-6xl font-bold text-white tracking-wide">
+        {title}
+      </h2>
+    </div>
+  );
+};
+
+// --- مكون شريط المهارات المتحرك ---
+const SkillsMarquee = ({ skills, direction = 'left' }: { skills: string[]; direction?: 'left' | 'right' }) => {
+  const marqueeRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (!marqueeRef.current) return;
+
+    // مضاعفة المحتوى لتوفير مساحة للحركة المستمرة
+    const content = marqueeRef.current.querySelector('.marquee-content');
+    if (content) {
+      content.innerHTML += content.innerHTML;
+    }
+
+    const ctx = gsap.context(() => {
+      const distance = direction === 'left' ? -content.scrollWidth / 2 : 0;
+      const startX = direction === 'left' ? 0 : -content.scrollWidth / 2;
       
-      {/* --- الخطوة 3: إضافة الصورة كعنصر منفصل في الخلفية --- */}
-      <Image
-        src="/revn.jpg" // تأكد أن الصورة في مجلد 'public'
-        alt="Abstract background image for skills section"
-        layout="fill" // تملأ العنصر الأب
-        objectFit="cover" // تعمل مثل bg-cover
-        quality={80} // جودة الصورة (اختياري)
-        className="-z-10" // تضع الصورة في الخلفية (z-index: -1)
-      />
+      const tl = gsap.to(content, {
+        x: distance,
+        duration: 40, // مدة الحركة (يمكن تعديلها للتحكم بالسرعة)
+        ease: 'none',
+        repeat: -1, // تكرار لا نهائي
+      });
+      
+      gsap.set(content, { x: startX });
 
-      {/* طبقة لونية لتحسين وضوح النص */}
-      {/* لاحظ أننا أزلنا z-index منها لأن الصورة الآن هي التي في الخلف */}
-      <div className="absolute inset-0 bg-black bg-opacity-75"></div>
+      // إيقاف الحركة عند مرور الماوس
+      marqueeRef.current?.addEventListener('mouseenter', () => tl.pause());
+      marqueeRef.current?.addEventListener('mouseleave', () => tl.play());
 
-      {/* المحتوى يجب أن يكون 'relative' ليظهر فوق الطبقة اللونية */}
-      <div className="max-w-4xl mx-auto flex flex-col items-center gap-8 relative">
-        <div className="w-full md:max-w-lg mb-8">
-          <SectionTitle title="Skills" />
+    }, marqueeRef);
+
+    return () => ctx.revert();
+  }, [direction]);
+
+  return (
+    <div ref={marqueeRef} className="w-full overflow-hidden py-4 border-y border-gray-800">
+      <div className="marquee-content flex whitespace-nowrap">
+        {skills.map((skill, index) => (
+          <span key={index} className="text-3xl md:text-5xl font-bold text-gray-400 mx-8">
+            {skill}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// --- المكون الرئيسي للقسم ---
+export default function SkillsSection() {
+  const frontendSkills = ["React", "Next.js", "TypeScript", "Tailwind CSS", "GSAP", "Vite.js"];
+  const backendSkills = ["Node.js", "Express.js", "REST APIs", "GraphQL", "Vercel", "Prisma", "Sequelize", "Git", "GitHub"];
+  const securityAndDbSkills = ["Cybersecurity", "Vulnerability Assessment", "PostgreSQL", "SQL", "MongoDB", "Firebase", "Supabase"];
+
+  return (
+    <section id="skills" className="w-full py-24 md:py-32 bg-black overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <SectionTitle title="My Toolkit" />
+        
+        <div className="flex flex-col gap-8">
+          <SkillsMarquee skills={frontendSkills} direction="left" />
+          <SkillsMarquee skills={backendSkills} direction="right" />
+          <SkillsMarquee skills={securityAndDbSkills} direction="left" />
         </div>
-        <SkillCategory title="Front-end" skills={frontendSkills} />
-        <SkillCategory title="Back-end" skills={backendSkills} />
-        <SkillCategory title="Security & Databases" skills={securityAndDbSkills} />
       </div>
     </section>
   );

@@ -14,10 +14,9 @@ const SectionTitle = ({ title }: { title: string }) => {
   useLayoutEffect(() => {
     if (!titleRef.current) return;
     const ctx = gsap.context(() => {
-      gsap.set(titleRef.current, { opacity: 0, y: 40 });
-      gsap.to(titleRef.current, {
-        opacity: 1,
-        y: 0,
+      gsap.from(titleRef.current, {
+        opacity: 0,
+        y: 40,
         duration: 1.2,
         ease: 'power3.out',
         scrollTrigger: {
@@ -39,17 +38,18 @@ const SectionTitle = ({ title }: { title: string }) => {
   );
 };
 
-// --- 1. مكون بطاقة الخدمة بالتصميم الشبكي الجديد ---
-const ServiceCard = ({ icon: Icon, title, description, index }: { icon: React.ElementType, title: string, description: string, index: number }) => {
+// --- 1. مكون بطاقة الخدمة بالتصميم الأحادي اللون الجديد ---
+const ServiceCard = ({ icon: Icon, title, description, isLast }: { icon: React.ElementType, title: string, description: string, isLast: boolean }) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     if (!cardRef.current) return;
     const ctx = gsap.context(() => {
+      // تأثير ظهور بسيط وأنيق
       gsap.from(cardRef.current, {
         opacity: 0,
         y: 50,
-        duration: 0.8,
+        duration: 1,
         ease: 'power3.out',
         scrollTrigger: {
           trigger: cardRef.current,
@@ -62,28 +62,24 @@ const ServiceCard = ({ icon: Icon, title, description, index }: { icon: React.El
   }, []);
 
   return (
+    // الحاوية الرئيسية مع تأثير التفاعل
     <div
       ref={cardRef}
-      className="group relative p-8 bg-white border border-gray-200 rounded-lg overflow-hidden transition-colors duration-300 hover:bg-black"
+      className={`group w-full p-8 md:p-10 border-t border-black transition-colors duration-500 ease-in-out hover:bg-black ${isLast ? 'border-b' : ''}`}
     >
-      {/* الرقم الكبير في الخلفية */}
-      <span className="absolute top-0 right-8 text-[120px] font-black text-gray-100 transition-colors duration-300 group-hover:text-gray-800 z-0">
-        {String(index + 1).padStart(2, '0')}
-      </span>
-      
-      <div className="relative z-10 flex flex-col h-full">
-        <Icon className="w-10 h-10 text-black mb-6 transition-colors duration-300 group-hover:text-white" />
+      <div className="flex justify-between items-center">
+        {/* الجزء الأيسر: الأيقونة والعنوان */}
+        <div className="flex items-center gap-6 md:gap-8">
+          <Icon className="w-9 h-9 md:w-12 md:h-12 text-black transition-colors duration-500 ease-in-out group-hover:text-white shrink-0" />
+          <h3 className="font-custom-pencerio text-3xl md:text-5xl font-bold text-black transition-colors duration-500 ease-in-out group-hover:text-white">
+            {title}
+          </h3>
+        </div>
         
-        <h3 className="font-custom-heading text-2xl font-bold text-black mb-3 transition-colors duration-300 group-hover:text-white">
-          {title}
-        </h3>
-        
-        <p className="text-gray-600 text-base leading-relaxed mb-6 flex-grow transition-colors duration-300 group-hover:text-gray-300">
-          {description}
-        </p>
-
-        {/* السهم الذي يظهر عند المرور */}
-        <FiArrowRight className="w-8 h-8 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 self-end" />
+        {/* الجزء الأيمن: السهم */}
+        <div className="shrink-0">
+          <FiArrowRight className="w-8 h-8 md:w-10 md:h-10 text-black transition-all duration-500 ease-in-out group-hover:text-white group-hover:scale-110 group-hover:rotate-[-45deg]" />
+        </div>
       </div>
     </div>
   );
@@ -117,23 +113,23 @@ export default function ServiceSection() {
   ];
 
   return (
-    <section ref={sectionRef} id="service" className="w-full py-24 md:py-32 px-6 md:px-12 lg:px-24 bg-gray-50">
+    // تم تغيير الخلفية إلى الأبيض الصريح
+    <section ref={sectionRef} id="service" className="w-full py-24 md:py-32 px-6 md:px-12 lg:px-24 bg-white">
       <div className="max-w-7xl mx-auto">
         
-        {/* العنوان في الأعلى */}
         <div className="mb-16 md:mb-24 text-center">
           <SectionTitle title="Services" />
         </div>
 
-        {/* الشبكة الجديدة للخدمات */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* قائمة الخدمات العمودية */}
+        <div className="flex flex-col">
           {services.map((service, index) => (
             <ServiceCard
               key={index}
-              index={index}
               icon={service.icon}
               title={service.title}
-              description={service.description}
+              description={service.description} // الوصف لم يعد يظهر مباشرة، لكن يمكن إضافته عند النقر
+              isLast={index === services.length - 1} // لتحديد العنصر الأخير وإضافة حد سفلي له
             />
           ))}
         </div>
