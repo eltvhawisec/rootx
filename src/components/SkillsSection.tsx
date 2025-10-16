@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- مكون العنوان (تم توحيده مع بقية الأقسام) ---
+// --- مكون العنوان (لا تغيير) ---
 const SectionTitle = ({ title }: { title: string }) => {
   const titleRef = useRef<HTMLHeadingElement>(null);
 
@@ -37,18 +37,21 @@ const SectionTitle = ({ title }: { title: string }) => {
   );
 };
 
-// --- مكون شريط المهارات المتحرك ---
+// --- مكون شريط المهارات المتحرك (مع التصحيح) ---
 const SkillsMarquee = ({ skills, direction = 'left' }: { skills: string[]; direction?: 'left' | 'right' }) => {
   const marqueeRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     if (!marqueeRef.current) return;
 
-    // مضاعفة المحتوى لتوفير مساحة للحركة المستمرة
     const content = marqueeRef.current.querySelector('.marquee-content');
-    if (content) {
-      content.innerHTML += content.innerHTML;
-    }
+    
+    // --- هذا هو الحل ---
+    // إذا لم يتم العثور على عنصر المحتوى، أوقف التنفيذ لتجنب الأخطاء.
+    if (!content) return;
+
+    // الآن TypeScript متأكد من أن 'content' ليس 'null' في بقية الكود.
+    content.innerHTML += content.innerHTML;
 
     const ctx = gsap.context(() => {
       const distance = direction === 'left' ? -content.scrollWidth / 2 : 0;
@@ -56,14 +59,13 @@ const SkillsMarquee = ({ skills, direction = 'left' }: { skills: string[]; direc
       
       const tl = gsap.to(content, {
         x: distance,
-        duration: 40, // مدة الحركة (يمكن تعديلها للتحكم بالسرعة)
+        duration: 40,
         ease: 'none',
-        repeat: -1, // تكرار لا نهائي
+        repeat: -1,
       });
       
       gsap.set(content, { x: startX });
 
-      // إيقاف الحركة عند مرور الماوس
       marqueeRef.current?.addEventListener('mouseenter', () => tl.pause());
       marqueeRef.current?.addEventListener('mouseleave', () => tl.play());
 
@@ -85,7 +87,7 @@ const SkillsMarquee = ({ skills, direction = 'left' }: { skills: string[]; direc
   );
 };
 
-// --- المكون الرئيسي للقسم ---
+// --- المكون الرئيسي للقسم (لا تغيير هنا) ---
 export default function SkillsSection() {
   const frontendSkills = ["React", "Next.js", "TypeScript", "Tailwind CSS", "GSAP", "Vite.js"];
   const backendSkills = ["Node.js", "Express.js", "REST APIs", "GraphQL", "Vercel", "Prisma", "Sequelize", "Git", "GitHub"];
