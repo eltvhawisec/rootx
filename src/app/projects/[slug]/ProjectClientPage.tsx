@@ -1,15 +1,16 @@
 // src/app/projects/[slug]/ProjectClientPage.tsx
 'use client';
 
-import { FiArrowUpRight } from 'react-icons/fi'; // استيراد أيقونة للسهم
+import { FiArrowUpRight } from 'react-icons/fi';
+import Link from 'next/link'; // --- 1. استيراد مكون Link
 
-// --- 1. تحديث واجهة الأنواع ---
+// تعريف واجهة الأنواع للمشروع
 interface Project {
   title: string;
   category: string;
   description: string;
   images: string[];
-  liveUrl: string; // إضافة رابط الموقع المباشر
+  liveUrl: string;
 }
 
 interface ProjectClientPageProps {
@@ -33,9 +34,8 @@ export default function ProjectClientPage({ project }: ProjectClientPageProps) {
               {project.description}
             </p>
             
-            {/* --- 2. إضافة مجموعة الأزرار --- */}
             <div className="flex items-center gap-6 mt-12">
-              {/* زر زيارة الموقع */}
+              {/* زر زيارة الموقع (يبقى <a> لأنه رابط خارجي) */}
               <a 
                 href={project.liveUrl} 
                 target="_blank" 
@@ -46,15 +46,16 @@ export default function ProjectClientPage({ project }: ProjectClientPageProps) {
                 <FiArrowUpRight className="transition-transform duration-300 group-hover:rotate-45" />
               </a>
               
+              {/* --- 2. استبدال <a> بـ <Link> --- */}
               {/* زر العودة */}
-              <a href="/" className="text-lg font-semibold text-gray-400 hover:text-white transition-colors">
+              <Link href="/" className="text-lg font-semibold text-gray-400 hover:text-white transition-colors">
                 &larr; Back
-              </a>
+              </Link>
             </div>
           </div>
         </div>
 
-        {/* الجانب الأيمن: معرض الصور (لا تغيير هنا) */}
+        {/* الجانب الأيمن: معرض الصور */}
         <div className="w-full md:w-3/5 p-4 md:p-8">
           <div className="flex flex-col gap-8">
             {project.images.map((image, index) => (
@@ -63,6 +64,7 @@ export default function ProjectClientPage({ project }: ProjectClientPageProps) {
                 className="rounded-lg overflow-hidden shadow-2xl shadow-gray-900/50 animate-fade-in-up"
                 style={{ animationDelay: `${index * 150}ms` }}
               >
+                {/* ملاحظة: يجب إصلاح هذا أيضًا إذا لم تكن قد فعلت ذلك بالفعل */}
                 <img 
                   src={image} 
                   alt={`${project.title} - Screenshot ${index + 1}`}
