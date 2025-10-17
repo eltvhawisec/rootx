@@ -4,7 +4,7 @@ import React, { useEffect, useLayoutEffect, useMemo, useRef, useState, useCallba
 import { gsap } from 'gsap';
 import { FiArrowUpRight } from 'react-icons/fi';
 
-// --- الخطاف المخصص useMedia (لا تغيير) ---
+// --- الخطاف المخصص useMedia ---
 const useMedia = (queries: string[], values: number[], defaultValue: number): number => {
   const isBrowser = typeof window !== 'undefined';
   const get = useCallback(() => {
@@ -27,7 +27,7 @@ const useMedia = (queries: string[], values: number[], defaultValue: number): nu
   return value;
 };
 
-// --- الخطاف المخصص useMeasure (لا تغيير) ---
+// --- الخطاف المخصص useMeasure ---
 const useMeasure = <T extends HTMLElement>() => {
   const ref = useRef<T | null>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
@@ -45,7 +45,7 @@ const useMeasure = <T extends HTMLElement>() => {
   return [ref, size] as const;
 };
 
-// --- دالة التحميل المسبق للصور (لا تغيير) ---
+// --- دالة التحميل المسبق للصور ---
 const preloadImages = async (urls: string[]): Promise<void> => {
   await Promise.all(
     urls.map(src => new Promise<void>(resolve => {
@@ -56,14 +56,14 @@ const preloadImages = async (urls: string[]): Promise<void> => {
   );
 };
 
-// --- واجهات الأنواع (Interfaces) (لا تغيير) ---
+// --- واجهات الأنواع (Interfaces) ---
 interface Item {
   id: string;
   img: string;
-  url: string;
   height: number;
   title: string;
   category: string;
+  slug: string; // حقل الـ slug مطلوب للتنقل
 }
 
 interface GridItem extends Item {
@@ -76,10 +76,11 @@ interface GridItem extends Item {
 interface MasonryProps {
   items: Item[];
   startAnimation?: boolean;
+  onItemClick: (slug: string) => void; // دالة لمعالجة النقر
 }
 
-// --- المكون الرئيسي Masonry (مع التصحيح) ---
-const Masonry: React.FC<MasonryProps> = ({ items, startAnimation = false }) => {
+// --- المكون الرئيسي Masonry ---
+const Masonry: React.FC<MasonryProps> = ({ items, startAnimation = false, onItemClick }) => {
   const columns = useMedia(
     ['(min-width:1500px)', '(min-width:1000px)', '(min-width:600px)'],
     [4, 3, 2],
@@ -88,7 +89,7 @@ const Masonry: React.FC<MasonryProps> = ({ items, startAnimation = false }) => {
 
   const [containerRef, { width }] = useMeasure<HTMLDivElement>();
   const [imagesReady, setImagesReady] = useState(false);
-  const hasAnimated = useRef(false); // 1. متغير لتتبع ما إذا كان التحريك قد حدث
+  const hasAnimated = useRef(false);
 
   useEffect(() => {
     preloadImages(items.map(i => i.img)).then(() => setImagesReady(true));
@@ -103,14 +104,13 @@ const Masonry: React.FC<MasonryProps> = ({ items, startAnimation = false }) => {
     return items.map(child => {
       const col = colHeights.indexOf(Math.min(...colHeights));
       const x = col * (columnWidth + gap);
-      const height = (child.height / 2);
+      const height = (child.height / 2); // يمكنك تعديل هذا المعامل لتغيير ارتفاع الصور
       const y = colHeights[col];
       colHeights[col] += height + gap;
       return { ...child, x, y, w: columnWidth, h: height };
     });
   }, [columns, items, width]);
 
-  // 2. دمج كل منطق GSAP في useLayoutEffect واحد
   useLayoutEffect(() => {
     if (!imagesReady || !grid.length) return;
 
@@ -118,7 +118,6 @@ const Masonry: React.FC<MasonryProps> = ({ items, startAnimation = false }) => {
       const el = document.querySelector(`[data-key="${item.id}"]`);
       if (!el) return;
 
-      // إذا كان التحريك مطلوبًا ولم يحدث بعد
       if (startAnimation && !hasAnimated.current) {
         gsap.fromTo(
           el,
@@ -132,7 +131,7 @@ const Masonry: React.FC<MasonryProps> = ({ items, startAnimation = false }) => {
             delay: index * 0.06,
           }
         );
-      } else { // إذا كان التحريك قد حدث بالفعل أو غير مطلوب (فقط تحديث الأبعاد)
+      } else {
         gsap.to(el, {
           x: item.x,
           y: item.y,
@@ -144,12 +143,10 @@ const Masonry: React.FC<MasonryProps> = ({ items, startAnimation = false }) => {
       }
     });
 
-    // 3. تحديث حالة التحريك بعد تشغيله
     if (startAnimation) {
       hasAnimated.current = true;
     }
   }, [grid, imagesReady, startAnimation]);
-
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
     const el = e.currentTarget;
@@ -181,7 +178,7 @@ const Masonry: React.FC<MasonryProps> = ({ items, startAnimation = false }) => {
           data-key={item.id}
           className="absolute cursor-pointer"
           style={{ willChange: 'transform, opacity' }}
-          onClick={() => window.open(item.url, '_blank', 'noopener')}
+          onClick={() => onItemClick(item.slug)} // استدعاء الدالة الممررة مع slug
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >

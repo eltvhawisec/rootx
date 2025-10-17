@@ -96,7 +96,7 @@ export default function SkillsSection() {
   return (
     <section id="skills" className="w-full py-24 md:py-32 bg-black overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <SectionTitle title="My Toolkit" />
+        <SectionTitle title="Skills" />
         
         <div className="flex flex-col gap-8">
           <SkillsMarquee skills={frontendSkills} direction="left" />

@@ -4,17 +4,18 @@ import React, { useRef, useLayoutEffect, useState } from 'react';
 import Masonry from './Masonry'; // تأكد من أن المسار صحيح
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useRouter } from 'next/navigation'; // --- 1. استيراد useRouter
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- بيانات المشاريع (لا تغيير هنا) ---
+// --- 2. بيانات المشاريع مع إضافة حقل 'slug' ---
 const allProjects = [
-    { id: '1', img: '/fashion.png', url: 'https://fashion-ababilsec.vercel.app/', height: 400, title: 'Fashion Store', category: 'E-commerce' },
-    { id: '2', img: '/svnty.png', url: 'https://svnty.vercel.app/', height: 550, title: 'SVNTY', category: 'Portfolio' },
-    { id: '3', img: '/svntechno.png', url: 'https://svntechno.vercel.app/', height: 450, title: 'SVN Techno', category: 'Agency' },
-    { id: '4', img: '/zeniths.png', url: 'https://zeniths.vercel.app/', height: 500, title: 'Zeniths', category: 'Landing Page' },
-    { id: '5', img: '/elite-fitness.png', url: 'https://elite-fitnes.vercel.app/', height: 420, title: 'Elite Fitness', category: 'Health' },
-    { id: '6', img: '/1.png', url: '#', height: 480, title: 'Project Six', category: 'Creative' },
+    { id: '1', img: '/fashion.png', url: '#', height: 400, title: 'Fashion Store', category: 'E-commerce', slug: 'fashion-store' },
+    { id: '2', img: '/svnty.png', url: '#', height: 550, title: 'SVNTY', category: 'Portfolio', slug: 'svnty' },
+    { id: '3', img: '/svntechno.png', url: '#', height: 450, title: 'SVN Techno', category: 'Agency', slug: 'svn-techno' },
+    { id: '4', img: '/zeniths.png', url: '#', height: 500, title: 'Zeniths', category: 'Landing Page', slug: 'zeniths' },
+    { id: '5', img: '/elite-fitness.png', url: '#', height: 420, title: 'Elite Fitness', category: 'Health', slug: 'elite-fitness' },
+    { id: '6', img: '/1.png', url: '#', height: 480, title: 'Project Six', category: 'Creative', slug: 'project-six' },
 ];
 
 // --- مكون عنوان القسم (لا تغيير هنا ) ---
@@ -26,32 +27,34 @@ const SectionTitle = ({ title }: { title: string }) => (
   </div>
 );
 
-// --- المكون الرئيسي لقسم المشاريع (مع تعديل الأنيميشن) ---
+// --- المكون الرئيسي لقسم المشاريع ---
 export default function ProjectsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const masonryContainerRef = useRef<HTMLDivElement>(null);
   const [startAnimation, setStartAnimation] = useState(false);
+  const router = useRouter(); // --- 3. تهيئة useRouter
+
+  // --- 4. دالة لمعالجة النقر على المشروع ---
+  const handleProjectClick = (slug: string) => {
+    router.push(`/projects/${slug}`);
+  };
 
   useLayoutEffect(() => {
     if (!masonryContainerRef.current) return;
-
     const ctx = gsap.context(() => {
-      // --- هذا هو الجزء الذي تم تعديله ---
-      // بدلاً من clipPath، سنستخدم scale و opacity
       gsap.from(masonryContainerRef.current, {
-        scale: 0.3,      // ابدأ من حجم أصغر (80%)
-        opacity: 1,      // ابدأ شفافًا تمامًا
-        duration: 1.5,   // مدة التحريك
-        ease: 'power3.out', // نوع حركة ناعم
+        scale: 0.8,
+        opacity: 0,
+        duration: 1.5,
+        ease: 'power3.out',
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 60%", // ابدأ التحريك عندما يصل 60% من القسم إلى أعلى الشاشة
+          start: "top 60%",
           toggleActions: "play none none none",
-          onEnter: () => setStartAnimation(true), // شغل تحريك Masonry عند بدء التوسع
+          onEnter: () => setStartAnimation(true),
         }
       });
     }, sectionRef);
-
     return () => ctx.revert();
   }, []);
 
@@ -60,12 +63,12 @@ export default function ProjectsSection() {
       <div className="max-w-7xl mx-auto font-custom-pencerio">
         <SectionTitle title="Our Projects" />
         
-        {/* حاوية Masonry التي سيتم تطبيق التوسع عليها */}
         <div ref={masonryContainerRef} className="bg-black rounded-3xl p-2 sm:p-4 shadow-2xl">
           <div style={{ minHeight: '1000px' }}>
             <Masonry
               items={allProjects}
               startAnimation={startAnimation}
+              onItemClick={handleProjectClick} // --- 5. تمرير الدالة إلى Masonry
             />
           </div>
         </div>

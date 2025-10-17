@@ -85,7 +85,7 @@ export default function Footer() {
           />
         </div>
 
-        <h2 className="footer-heading font-custom-heading text-5xl md:text-7xl font-black text-center">
+        <h2 className="footer-heading font-custom-pencerio text-5xl md:text-7xl font-black text-center">
           Let&apos;s build the future, <span className="text-gray-500">together.</span>
         </h2>
 
