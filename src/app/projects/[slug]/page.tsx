@@ -9,7 +9,7 @@ const allProjects = [
         title: 'Fashion Store', 
         category: 'E-commerce', 
         description: 'A full-featured e-commerce platform for a modern fashion brand, focusing on a clean user interface, fast performance, and a secure checkout process. Built with Next.js and Stripe.',
-        images: ['/fashion.png', '/fashion-2.png', '/fashion-3.png'],
+        images: ['/fashion.png'],
         liveUrl: 'https://fashion-ababilsec.vercel.app/' // رابط الموقع المباشر
     },
     { 
@@ -18,7 +18,7 @@ const allProjects = [
         title: 'SVNTY', 
         category: 'Portfolio', 
         description: 'A creative portfolio website for a digital artist, featuring a minimalist design, smooth page transitions, and a masonry-style gallery to showcase artwork effectively.',
-        images: ['/svnty.png', '/svnty-2.png'],
+        images: ['/svnty.png'],
         liveUrl: 'https://svnty.vercel.app/'
     },
     { 
@@ -31,9 +31,33 @@ const allProjects = [
         liveUrl: 'https://svntechno.vercel.app/'
     },
     // ... أكمل بقية المشاريع بنفس الطريقة
-    { id: '4', slug: 'zeniths', title: 'Zeniths', category: 'Landing Page', description: 'A stunning landing page for a new product launch.', images: ['/zeniths.png'], liveUrl: 'https://zeniths.vercel.app/' },
-    { id: '5', slug: 'elite-fitness', title: 'Elite Fitness', category: 'Health', description: 'A web application for a fitness center to manage members and classes.', images: ['/elite-fitness.png'], liveUrl: 'https://elite-fitnes.vercel.app/' },
-    { id: '6', slug: 'project-six', title: 'Project Six', category: 'Creative', description: 'An experimental creative coding project.', images: ['/1.png'], liveUrl: '#' },
+    { 
+        id: '4', 
+        slug: 'zeniths', 
+        title: 'Zeniths', 
+        category: 'Landing Page', 
+        description: 'A stunning landing page for a new product launch.', 
+        images: ['/zeniths.png'], 
+        liveUrl: 'https://zeniths.vercel.app/'
+    },
+    { 
+        id: '5', 
+        slug: 'elite-fitness', 
+        title: 'Elite Fitness', 
+        category: 'Health', 
+        description: 'A web application for a fitness center to manage members and classes.', 
+        images: ['/elite-fitness.png'], 
+        liveUrl: 'https://elite-fitnes.vercel.app/'
+    },
+    { 
+        id: '6', 
+        slug: 'project-six', 
+        title: 'Project Six', 
+        category: 'Creative', 
+        description: 'An experimental creative coding project.', 
+        images: ['/1.png', '/2.png', '/5.png'],
+        liveUrl: ''
+    },
 ];
 
 interface PageProps {

@@ -3,12 +3,12 @@ import AboutSection from '@/components/AboutSection';
 import ProjectsSection from '@/components/ProjectsSection';
 import TeamSection from '@/components/TeamSection';
 import SkillsSection from '@/components/SkillsSection';
-import ContactSection from '@/components/ContactSection';
 import FaqSection from '@/components/FaqSection'; 
 import Footer from '@/components/Footer';
 import MissionSection from '@/components/MissionSection';
 import ServiceSection from '@/components/ServiceSection';
 import PackagesSection from '@/components/PackagesSection'; 
+import TestimonialsSection from '@/components/TestimonialsSection';
 import Llenis from '@/components/Llenis';
 
 export default function Home() {

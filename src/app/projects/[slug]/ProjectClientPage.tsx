@@ -48,7 +48,7 @@ export default function ProjectClientPage({ project }: ProjectClientPageProps) {
               
               {/* --- 2. استبدال <a> بـ <Link> --- */}
               {/* زر العودة */}
-              <Link href="/" className="text-lg font-semibold text-gray-400 hover:text-white transition-colors">
+              <Link href="/#projects" className="text-lg font-semibold text-gray-400 hover:text-white transition-colors">
                 &larr; Back
               </Link>
             </div>
@@ -64,7 +64,6 @@ export default function ProjectClientPage({ project }: ProjectClientPageProps) {
                 className="rounded-lg overflow-hidden shadow-2xl shadow-gray-900/50 animate-fade-in-up"
                 style={{ animationDelay: `${index * 150}ms` }}
               >
-                {/* ملاحظة: يجب إصلاح هذا أيضًا إذا لم تكن قد فعلت ذلك بالفعل */}
                 <img 
                   src={image} 
                   alt={`${project.title} - Screenshot ${index + 1}`}

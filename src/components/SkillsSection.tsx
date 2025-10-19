@@ -89,10 +89,11 @@ const SkillsMarquee = ({ skills, direction = 'left' }: { skills: string[]; direc
 
 // --- المكون الرئيسي للقسم (لا تغيير هنا) ---
 export default function SkillsSection() {
-  const frontendSkills = ["React", "Next.js", "TypeScript", "Tailwind CSS", "GSAP", "Vite.js"];
+  const frontendSkills = ["React", "Next.js", "TypeScript", "Tailwind CSS", "GSAP", "Vite.js", "HTML5", "CSS3", "JavaScript", "NextAuth.js"];
   const backendSkills = ["Node.js", "Express.js", "REST APIs", "GraphQL", "Vercel", "Prisma", "Sequelize", "Git", "GitHub"];
-  const securityAndDbSkills = ["Cybersecurity", "Vulnerability Assessment", "PostgreSQL", "SQL", "MongoDB", "Firebase", "Supabase"];
-
+  const securityAndDbSkills = ["PostgreSQL", "SQL", "MongoDB", "Firebase", "Supabase"];
+  const cybersecurity = ["Cybersecurity", "Vulnerability Assessment", "Network Security", "Ethical Hacking", "Penetration Testing"];
+  
   return (
     <section id="skills" className="w-full py-24 md:py-32 bg-black overflow-hidden">
       <div className="max-w-7xl mx-auto">
@@ -102,6 +103,7 @@ export default function SkillsSection() {
           <SkillsMarquee skills={frontendSkills} direction="left" />
           <SkillsMarquee skills={backendSkills} direction="right" />
           <SkillsMarquee skills={securityAndDbSkills} direction="left" />
+          <SkillsMarquee skills={cybersecurity} direction="right" />
         </div>
       </div>
     </section>
