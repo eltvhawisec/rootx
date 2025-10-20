@@ -18,8 +18,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: 'Server configuration error.' }, { status: 500 });
   }
 
-  // --- هذا هو التنسيق المدمج والنهائي ---
-  // استخدام HTML لتنسيق الرسالة مع الأيقونات
   const text = `
 📬 <b>New Contact Form Submission</b>
 
