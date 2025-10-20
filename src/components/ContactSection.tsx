@@ -8,7 +8,6 @@ import { FaTiktok } from 'react-icons/fa';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// مكون عنوان القسم (لا تغيير)
 const SectionTitle = ({ title, subtitle }: { title: string; subtitle: string }) => {
     const titleRef = useRef<HTMLDivElement>(null);
     useLayoutEffect(() => {
