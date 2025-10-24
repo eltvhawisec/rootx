@@ -10,7 +10,9 @@ export default function AboutSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const imageWrapperRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const paragraphsRef = useRef<(HTMLParagraphElement | null)[]>([]);
+  
+  // 1. تصحيح النوع: المرجع يجب أن يكون لعناصر <div> وليس <p>
+  const paragraphsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -20,21 +22,19 @@ export default function AboutSection() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: 'top 50%', // تبدأ الحركة عندما يصل منتصف الشاشة إلى أعلى القسم
-          end: 'bottom bottom', // تستمر الحركة حتى نهاية القسم
-          scrub: 1.2, // يجعل الحركة سلسة ومرتبطة بالتمرير
+          start: 'top 50%',
+          end: 'bottom bottom',
+          scrub: 1.2,
         },
       });
 
-      // 1. حركة الصورة: تكبير بطيء وتغيير في الشفافية أثناء التمرير
       tl.fromTo(
         imageWrapperRef.current,
         { scale: 1.1, yPercent: -5 },
         { scale: 1, yPercent: 5, ease: 'none' },
-        0 // ابدأ عند الثانية 0 من التايم لاين
+        0
       );
 
-      // 2. حركة العنوان: يظهر ثم يتحرك للأعلى ليختفي تدريجياً
       gsap.from(titleRef.current, {
         y: 100,
         opacity: 0,
@@ -47,16 +47,17 @@ export default function AboutSection() {
         },
       });
 
-      // 3. حركة الفقرات: تظهر كل فقرة على حدة بتأثير "كشف"
-      paragraphsRef.current.forEach((p, index) => {
-        if (!p) return;
-        gsap.from(p.querySelector('.text-content'), {
+      // 2. تصحيح النوع: GSAP يستهدف الفقرة داخل الـ div
+      paragraphsRef.current.forEach((div, index) => {
+        if (!div) return;
+        // استهداف العنصر بـ .text-content داخل الـ div المرجعي
+        gsap.from(div.querySelector('.text-content'), {
           yPercent: 100,
           duration: 1,
           ease: 'expo.out',
           delay: 0.3 + index * 0.1,
           scrollTrigger: {
-            trigger: p,
+            trigger: div, // المشغل هو الـ div نفسه
             start: 'top 85%',
             toggleActions: 'play none none none',
           },
@@ -75,7 +76,6 @@ export default function AboutSection() {
     >
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-6 md:grid-cols-2 md:px-8">
         
-        {/* --- الجزء الأيسر: النص --- */}
         <div className="z-10 flex flex-col justify-center">
           <h2 
             ref={titleRef} 
@@ -84,23 +84,24 @@ export default function AboutSection() {
             The Digital Vanguard.
           </h2>
           <div className="mt-8 space-y-6 text-lg leading-relaxed text-gray-400 md:text-xl">
-            {/* تم تغليف كل نص في حاوية لإتاحة تأثير الكشف */}
-            <div ref={(el) => (paragraphsRef.current[0] = el)} className="overflow-hidden">
+            
+            {/* ----- 3. تم التصحيح هنا: إضافة الأقواس المعقوفة {} ----- */}
+            <div ref={(el) => { paragraphsRef.current[0] = el; }} className="overflow-hidden">
               <p className="text-content">
                 <strong className="text-purple-400">rootx</strong> is not merely a company; we are a doctrine. Born from the crucible of digital warfare, we are a collective of elite cybersecurity architects and ethical hackers dedicated to one singular purpose: forging digital invulnerability.
               </p>
             </div>
-            <div ref={(el) => (paragraphsRef.current[1] = el)} className="overflow-hidden">
+            <div ref={(el) => { paragraphsRef.current[1] = el; }} className="overflow-hidden">
               <p className="text-content">
                 We dissect threats before they materialize, reverse-engineer adversary tactics, and construct multi-layered defensive systems. Our methodology transforms your digital assets from passive targets into <strong className="font-semibold text-white">proactive, self-defending fortresses</strong>.
               </p>
             </div>
+            {/* -------------------------------------------------------- */}
+
           </div>
         </div>
         
-        {/* --- الجزء الأيمن: الصورة --- */}
         <div className="relative h-[60vh] md:h-screen md:absolute md:top-0 md:right-0 md:w-1/2">
-          {/* طبقة التدرج اللوني لتعتيم الحواف */}
           <div className="absolute inset-0 z-10 bg-gradient-to-r from-black via-transparent to-transparent md:bg-gradient-to-l"></div>
           
           <div 
