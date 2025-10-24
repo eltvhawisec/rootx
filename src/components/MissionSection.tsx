@@ -41,7 +41,7 @@ const SectionTitle = ({ title }: { title: string }) => {
   );
 };
 
-// --- المكون الرئيسي للقسم (مع التصحيح) ---
+// --- المكون الرئيسي للقسم (مع التصحيح النهائي) ---
 export default function MissionSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const textElementsRef = useRef<(HTMLParagraphElement | null)[]>([]);
@@ -85,19 +85,20 @@ export default function MissionSection() {
         <div className="md:col-span-2">
           <div className="flex flex-col gap-10 text-xl font-light leading-relaxed text-gray-300 md:text-2xl">
             
-            {/* ----- تم التصحيح هنا ----- */}
-            <p ref={(el) => (textElementsRef.current[0] = el)}>
+            {/* ----- تم التصحيح هنا: إضافة الأقواس المعقوفة {} ----- */}
+            <p ref={(el) => { textElementsRef.current[0] = el; }}>
               In a world of escalating digital threats, our mandate is absolute: to engineer <strong className="font-semibold text-purple-400">impenetrable digital fortresses</strong>. We don&apos;t just build applications; we forge shields in the digital realm.
             </p>
-            {/* ------------------------- */}
             
-            <p ref={(el) => (textElementsRef.current[1] = el)}>
+            <p ref={(el) => { textElementsRef.current[1] = el; }}>
               Our approach is a synthesis of <strong className="font-semibold text-white">proactive threat intelligence</strong> and bespoke security architecture. We anticipate vulnerabilities before they are exploited, transforming your digital presence from a potential liability into a resilient, secure asset.
             </p>
 
-            <p ref={(el) => (textElementsRef.current[2] = el)}>
+            <p ref={(el) => { textElementsRef.current[2] = el; }}>
               We empower our clients to operate with confidence, knowing their digital infrastructure is not only innovative and performant, but <strong className="font-semibold text-purple-400">uncompromisingly secure</strong>.
             </p>
+            {/* -------------------------------------------------------- */}
+
           </div>
         </div>
 
