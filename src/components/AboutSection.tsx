@@ -8,78 +8,110 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function AboutSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
-  const textWrapperRef = useRef<HTMLDivElement>(null);
+  const imageWrapperRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const paragraphsRef = useRef<(HTMLParagraphElement | null)[]>([]);
 
   useLayoutEffect(() => {
-    if (!sectionRef.current || !imageRef.current || !textWrapperRef.current) return;
+    const section = sectionRef.current;
+    if (!section) return;
 
     const ctx = gsap.context(() => {
-      // إعداد الحالة الأولية
-      gsap.set(imageRef.current, { xPercent: -100, autoAlpha: 0 });
-      gsap.set(textWrapperRef.current, { xPercent: 100, autoAlpha: 0 });
-
-      // إنشاء الجدول الزمني للتحريك
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 60%',
+          trigger: section,
+          start: 'top 50%', // تبدأ الحركة عندما يصل منتصف الشاشة إلى أعلى القسم
+          end: 'bottom bottom', // تستمر الحركة حتى نهاية القسم
+          scrub: 1.2, // يجعل الحركة سلسة ومرتبطة بالتمرير
+        },
+      });
+
+      // 1. حركة الصورة: تكبير بطيء وتغيير في الشفافية أثناء التمرير
+      tl.fromTo(
+        imageWrapperRef.current,
+        { scale: 1.1, yPercent: -5 },
+        { scale: 1, yPercent: 5, ease: 'none' },
+        0 // ابدأ عند الثانية 0 من التايم لاين
+      );
+
+      // 2. حركة العنوان: يظهر ثم يتحرك للأعلى ليختفي تدريجياً
+      gsap.from(titleRef.current, {
+        y: 100,
+        opacity: 0,
+        duration: 1.5,
+        ease: 'expo.out',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 70%',
           toggleActions: 'play none none none',
         },
       });
 
-      // حركة انزلاق الصورة والنص إلى مكانهما
-      tl.to(imageRef.current, {
-        xPercent: 0,
-        autoAlpha: 1,
-        duration: 1.5,
-        ease: 'power4.out',
-      }).to(
-        textWrapperRef.current,
-        {
-          xPercent: 0,
-          autoAlpha: 1,
-          duration: 1.5,
-          ease: 'power4.out',
-        },
-        '<0.2' // ابدأ هذه الحركة بعد 0.2 ثانية من بدء حركة الصورة
-      );
+      // 3. حركة الفقرات: تظهر كل فقرة على حدة بتأثير "كشف"
+      paragraphsRef.current.forEach((p, index) => {
+        if (!p) return;
+        gsap.from(p.querySelector('.text-content'), {
+          yPercent: 100,
+          duration: 1,
+          ease: 'expo.out',
+          delay: 0.3 + index * 0.1,
+          scrollTrigger: {
+            trigger: p,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+        });
+      });
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} id="about" className="w-full py-24 md:py-40 bg-white overflow-hidden">
-      <div className="relative max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+    <section 
+      ref={sectionRef} 
+      id="about" 
+      className="relative w-full overflow-hidden bg-black py-24 md:py-40"
+    >
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-6 md:grid-cols-2 md:px-8">
         
-        {/* --- الجزء الأيسر: الصورة --- */}
-        {/* يأخذ 5 أعمدة من 12 */}
-        <div ref={imageRef} className="md:col-span-5 h-[70vh] md:h-[90vh]">
-          <img
-            src="/eltuhami2.png"
-            alt="Eltuhami - Full Stack Developer & Cybersecurity Specialist"
-            className="w-full h-full object-cover rounded-lg"
-          />
-        </div>
-
-        {/* --- الجزء الأيمن: النص --- */}
-        {/* يأخذ 7 أعمدة من 12 */}
-        <div ref={textWrapperRef} className="md:col-span-7 md:pl-12 lg:pl-24">
-          <h2 className="font-custom-pencerio text-7xl md:text-8xl lg:text-9xl font-bold text-black mb-8 leading-none">
-            About Me
+        {/* --- الجزء الأيسر: النص --- */}
+        <div className="z-10 flex flex-col justify-center">
+          <h2 
+            ref={titleRef} 
+            className="font-custom-pencerio text-6xl font-bold leading-tight text-white md:text-7xl lg:text-8xl"
+          >
+            The Digital Vanguard.
           </h2>
-          <div className="space-y-5 text-lg md:text-xl font-light leading-relaxed text-gray-700 max-w-xl">
-            <p>
-              My name is Eltuhami, a Full Stack Web Developer from Sudan with a strong 
-              background in Cybersecurity. I specialize in building and securing modern web 
-              applications, combining development skills with security expertise to deliver 
-              reliable digital solutions.
-            </p>
-            <p>
-              My passion lies in creating robust back-end systems 
-              with Node.js and crafting seamless user experiences with React and Next.js.
-            </p>
+          <div className="mt-8 space-y-6 text-lg leading-relaxed text-gray-400 md:text-xl">
+            {/* تم تغليف كل نص في حاوية لإتاحة تأثير الكشف */}
+            <div ref={(el) => (paragraphsRef.current[0] = el)} className="overflow-hidden">
+              <p className="text-content">
+                <strong className="text-purple-400">rootx</strong> is not merely a company; we are a doctrine. Born from the crucible of digital warfare, we are a collective of elite cybersecurity architects and ethical hackers dedicated to one singular purpose: forging digital invulnerability.
+              </p>
+            </div>
+            <div ref={(el) => (paragraphsRef.current[1] = el)} className="overflow-hidden">
+              <p className="text-content">
+                We dissect threats before they materialize, reverse-engineer adversary tactics, and construct multi-layered defensive systems. Our methodology transforms your digital assets from passive targets into <strong className="font-semibold text-white">proactive, self-defending fortresses</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        {/* --- الجزء الأيمن: الصورة --- */}
+        <div className="relative h-[60vh] md:h-screen md:absolute md:top-0 md:right-0 md:w-1/2">
+          {/* طبقة التدرج اللوني لتعتيم الحواف */}
+          <div className="absolute inset-0 z-10 bg-gradient-to-r from-black via-transparent to-transparent md:bg-gradient-to-l"></div>
+          
+          <div 
+            ref={imageWrapperRef} 
+            className="h-full w-full"
+          >
+            <img
+              src="/rootx.jpg"
+              alt="Digital fortress abstract visualization"
+              className="h-full w-full object-cover"
+            />
           </div>
         </div>
 

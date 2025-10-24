@@ -6,79 +6,60 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- مكون العنوان (لا تغيير) ---
-const SectionTitle = ({ title }: { title: string }) => {
-  const titleRef = useRef<HTMLHeadingElement>(null);
+// --- مكون فئة المهارات (بتصميم جديد تمامًا) ---
+const SkillCategory = ({ title, skills, index }: { title: string; skills: string[]; index: number }) => {
+  const categoryRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
-    if (!titleRef.current) return;
+    if (!categoryRef.current) return;
+
     const ctx = gsap.context(() => {
-      gsap.from(titleRef.current, {
+      // حركة ظهور الحاوية بأكملها
+      gsap.from(categoryRef.current, {
         opacity: 0,
-        y: 40,
+        y: 60,
         duration: 1.2,
         ease: 'power3.out',
         scrollTrigger: {
-          trigger: titleRef.current,
-          start: "top 85%",
-          toggleActions: "play none none none",
+          trigger: categoryRef.current,
+          start: 'top 85%',
+          toggleActions: 'play none none none',
         },
       });
-    });
+
+      // حركة ظهور المهارات داخل الحاوية بشكل متتابع
+      gsap.from(categoryRef.current.querySelectorAll('.skill-item'), {
+        opacity: 0,
+        x: -20,
+        stagger: 0.05,
+        delay: 0.4, // ابدأ بعد ظهور الحاوية
+        duration: 0.8,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: categoryRef.current,
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        },
+      });
+    }, categoryRef);
+
     return () => ctx.revert();
   }, []);
 
   return (
-    <div className="relative mb-16 md:mb-24 text-center">
-      <h2 ref={titleRef} className="font-custom-pencerio text-5xl md:text-6xl font-bold text-white tracking-wide">
+    <div
+      ref={categoryRef}
+      className="group relative rounded-lg border border-gray-800 bg-gray-900/30 p-6 backdrop-blur-sm transition-all duration-300 hover:border-purple-500/50 hover:bg-gray-900/50"
+    >
+      {/* عنوان الفئة */}
+      <h3 className="mb-4 text-lg font-semibold tracking-wider text-purple-400">
         {title}
-      </h2>
-    </div>
-  );
-};
-
-// --- مكون شريط المهارات المتحرك (مع التصحيح) ---
-const SkillsMarquee = ({ skills, direction = 'left' }: { skills: string[]; direction?: 'left' | 'right' }) => {
-  const marqueeRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    if (!marqueeRef.current) return;
-
-    const content = marqueeRef.current.querySelector('.marquee-content');
-    
-    // --- هذا هو الحل ---
-    // إذا لم يتم العثور على عنصر المحتوى، أوقف التنفيذ لتجنب الأخطاء.
-    if (!content) return;
-
-    // الآن TypeScript متأكد من أن 'content' ليس 'null' في بقية الكود.
-    content.innerHTML += content.innerHTML;
-
-    const ctx = gsap.context(() => {
-      const distance = direction === 'left' ? -content.scrollWidth / 2 : 0;
-      const startX = direction === 'left' ? 0 : -content.scrollWidth / 2;
+      </h3>
       
-      const tl = gsap.to(content, {
-        x: distance,
-        duration: 40,
-        ease: 'none',
-        repeat: -1,
-      });
-      
-      gsap.set(content, { x: startX });
-
-      marqueeRef.current?.addEventListener('mouseenter', () => tl.pause());
-      marqueeRef.current?.addEventListener('mouseleave', () => tl.play());
-
-    }, marqueeRef);
-
-    return () => ctx.revert();
-  }, [direction]);
-
-  return (
-    <div ref={marqueeRef} className="w-full overflow-hidden py-4 border-y border-gray-800">
-      <div className="marquee-content flex whitespace-nowrap">
-        {skills.map((skill, index) => (
-          <span key={index} className="text-3xl md:text-5xl font-bold text-gray-400 mx-8">
+      {/* قائمة المهارات */}
+      <div className="flex flex-wrap gap-x-4 gap-y-3">
+        {skills.map((skill, i) => (
+          <span key={i} className="skill-item text-base font-light text-gray-300 transition-colors duration-300 group-hover:text-white">
             {skill}
           </span>
         ))}
@@ -87,23 +68,72 @@ const SkillsMarquee = ({ skills, direction = 'left' }: { skills: string[]; direc
   );
 };
 
-// --- المكون الرئيسي للقسم (لا تغيير هنا) ---
+// --- المكون الرئيسي للقسم (بتصميم مختلف تمامًا) ---
 export default function SkillsSection() {
-  const frontendSkills = ["React", "Next.js", "TypeScript", "Tailwind CSS", "GSAP", "Vite.js", "HTML5", "CSS3", "JavaScript", "NextAuth.js"];
-  const backendSkills = ["Node.js", "Express.js", "REST APIs", "GraphQL", "Vercel", "Prisma", "Sequelize", "Git", "GitHub"];
-  const securityAndDbSkills = ["PostgreSQL", "SQL", "MongoDB", "Firebase", "Supabase"];
-  const cybersecurity = ["Cybersecurity", "Vulnerability Assessment", "Network Security", "Ethical Hacking", "Penetration Testing"];
+  const titleRef = useRef<HTMLHeadingElement>(null);
   
+  // تنظيم المهارات في فئات واضحة
+  const skillCategories = [
+    {
+      title: 'Offensive Security',
+      skills: ['Penetration Testing', 'Ethical Hacking', 'Vulnerability Assessment', 'Social Engineering', 'Red Teaming'],
+    },
+    {
+      title: 'Defensive & Infrastructure',
+      skills: ['Network Security', 'Threat Modeling', 'CI/CD Security', 'Docker', 'Kubernetes', 'AWS', 'Cloud Security'],
+    },
+    {
+      title: 'Secure Development',
+      skills: ['Next.js', 'TypeScript', 'Node.js', 'Rust', 'Go', 'GraphQL', 'PostgreSQL', 'Secure SDLC'],
+    },
+    {
+      title: 'Tooling & Frameworks',
+      skills: ['GSAP', 'Tailwind CSS', 'Prisma', 'Git', 'Vercel', 'React', 'Metasploit', 'Burp Suite'],
+    },
+  ];
+
+  useLayoutEffect(() => {
+    if (!titleRef.current) return;
+    gsap.from(titleRef.current, {
+      opacity: 0,
+      y: 50,
+      duration: 1.2,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: titleRef.current,
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      },
+    });
+  }, []);
+
   return (
-    <section id="skills" className="w-full py-24 md:py-32 bg-black overflow-hidden">
-      <div className="max-w-7xl mx-auto">
-        <SectionTitle title="Skills" />
+    <section id="skills" className="relative w-full overflow-hidden bg-black py-24 md:py-32">
+      {/* تأثير إضاءة خلفي */}
+      <div 
+        className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 h-1/2 w-1/2 rounded-full"
+        style={{
+          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, rgba(168, 85, 247, 0) 70%)'
+        }}
+      ></div>
+
+      <div className="relative z-10 mx-auto max-w-5xl px-6">
+        <h2
+          ref={titleRef}
+          className="mb-16 text-center font-custom-pencerio text-6xl font-bold tracking-wider text-white md:text-7xl"
+        >
+          Core Capabilities
+        </h2>
         
-        <div className="flex flex-col gap-8">
-          <SkillsMarquee skills={frontendSkills} direction="left" />
-          <SkillsMarquee skills={backendSkills} direction="right" />
-          <SkillsMarquee skills={securityAndDbSkills} direction="left" />
-          <SkillsMarquee skills={cybersecurity} direction="right" />
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {skillCategories.map((category, index) => (
+            <SkillCategory
+              key={index}
+              title={category.title}
+              skills={category.skills}
+              index={index}
+            />
+          ))}
         </div>
       </div>
     </section>

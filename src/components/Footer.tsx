@@ -5,13 +5,19 @@
 import { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Github, Linkedin, Twitter, Instagram, Send } from 'lucide-react';
+import { FiGithub, FiLinkedin, FiTwitter } from 'react-icons/fi';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const SocialIcon = ({ href, icon: Icon }: { href: string; icon: React.ElementType }) => (
-  <a href={href} target="_blank" rel="noopener noreferrer" className="social-icon p-2 rounded-full bg-gray-100 hover:bg-black group transition-colors duration-300">
-    <Icon className="w-6 h-6 text-gray-600 group-hover:text-white transition-colors duration-300" />
+// --- مكون أيقونة التواصل الاجتماعي (بتصميم جديد) ---
+const SocialLink = ({ href, icon: Icon }: { href: string; icon: React.ElementType }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="social-link text-gray-600 transition-colors duration-300 hover:text-purple-400"
+  >
+    <Icon className="h-6 w-6" />
   </a>
 );
 
@@ -19,90 +25,75 @@ export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.set(".footer-image", { y: 30, opacity: 0 });
-      gsap.set(".footer-heading", { y: 30, opacity: 0 });
-      gsap.set(".social-icon", { y: 20, opacity: 0 });
-      gsap.set(".copyright-text", { opacity: 0 });
+    const footer = footerRef.current;
+    if (!footer) return;
 
-      const tl = gsap.timeline({
+    const ctx = gsap.context(() => {
+      // حركة ظهور الخط الفاصل
+      gsap.from(footer.querySelector('.divider'), {
+        scaleX: 0,
+        duration: 1.5,
+        ease: 'power3.out',
         scrollTrigger: {
-          trigger: footerRef.current,
-          start: "top 85%",
-          toggleActions: "play none none none",
+          trigger: footer,
+          start: 'top 95%',
+          toggleActions: 'play none none none',
         },
-        defaults: { ease: 'power3.out' }
       });
 
-      tl.to(".footer-image", {
-        y: 0,
-        opacity: 1,
-        stagger: 0.2,
+      // حركة ظهور العناصر الأخرى
+      const elements = [
+        footer.querySelector('.logo-text'),
+        footer.querySelector('.social-links'),
+        footer.querySelector('.copyright'),
+      ];
+      gsap.from(elements, {
+        opacity: 0,
+        y: 20,
+        stagger: 0.15,
+        delay: 0.4,
         duration: 1,
-      })
-      .to(".footer-heading", {
-        y: 0,
-        opacity: 1,
-        duration: 1,
-      }, "-=0.7")
-      .to(".social-icon", {
-        y: 0,
-        opacity: 1,
-        stagger: 0.1,
-        duration: 0.8,
-      }, "-=0.6")
-      .to(".copyright-text", {
-        opacity: 1,
-        duration: 1,
-      }, "-=0.5");
-
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: footer,
+          start: 'top 95%',
+          toggleActions: 'play none none none',
+        },
+      });
     }, footerRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <footer ref={footerRef} className="w-full bg-white text-black py-16 px-6 md:px-12 overflow-hidden">
-      <div className="max-w-7xl mx-auto flex flex-col items-center gap-8">
-        
-        {/* ================================================================== */}
-        {/* --- تم تعديل الصور هنا --- */}
-        {/* ================================================================== */}
-        <div className="flex items-center gap-8"> {/* زيادة الفجوة لتناسب الحجم الجديد */}
-          {/* صورتك الشخصية (أصغر) */}
-          <img
-            src="/eltuhamiW.ico"
-            alt="eltuhami"
-            // إزالة الظل
-            className="footer-image w-24 h-24 object-cover rounded-2xl"
-          />
-          {/* صورة الفريق (أكبر) */}
-          <img
-            src="/ababil.jpg"
-            alt="AbabilSec Team"
-            // إزالة الظل وتكبير الحجم
-            className="footer-image w-32 h-32 object-cover rounded-2xl"
-          />
+    <footer ref={footerRef} className="w-full bg-black px-6 py-8 md:px-12">
+      <div className="mx-auto max-w-7xl">
+        {/* الخط الفاصل العلوي */}
+        <div className="divider h-px w-full origin-left bg-gray-800"></div>
+
+        <div className="flex flex-col items-center justify-between gap-6 pt-8 sm:flex-row">
+          {/* الشعار أو الاسم */}
+          <div className="logo-text text-center sm:text-left">
+            <h3 className="text-xl font-bold text-white">
+              rootx<span className="text-purple-500">.</span>
+            </h3>
+          </div>
+
+          {/* حقوق النشر */}
+          <div className="copyright order-last text-center sm:order-none">
+            <p className="text-sm text-gray-500">
+              &copy; {new Date().getFullYear()} rootx. All Rights Reserved. Forging Digital Security.
+            </p>
+          </div>
+
+          {/* روابط التواصل الاجتماعي */}
+          <div className="social-links flex items-center gap-6">
+            <SocialLink href="https://github.com/rootx" icon={FiGithub} />
+            <SocialLink href="https://linkedin.com/company/rootx" icon={FiLinkedin} />
+            <SocialLink href="https://twitter.com/rootx" icon={FiTwitter} />
+          </div>
         </div>
-
-        <h2 className="footer-heading font-custom-pencerio text-5xl md:text-7xl font-black text-center">
-          Let&apos;s build the future, <span className="text-gray-500">together.</span>
-        </h2>
-
-        <div className="flex items-center gap-5 mt-2">
-          <SocialIcon href="https://github.com/eltvhawisec" icon={Github} />
-          <SocialIcon href="https://www.linkedin.com/in/ahmed-eltuhami-532354380" icon={Linkedin} />
-          <SocialIcon href="https://x.com/eltvhawisec" icon={Twitter} />
-          <SocialIcon href="https://instagram.com/eltvhawisec" icon={Instagram} />
-        </div>
-
-        <div className="copyright-text border-t border-gray-200 w-full max-w-md mt-8 pt-8 text-center">
-          <p className="text-gray-500 text-sm">
-            &copy; {new Date( ).getFullYear()} eltuhami. All Rights Reserved.
-          </p>
-        </div>
-
       </div>
     </footer>
-  );
+   );
 }

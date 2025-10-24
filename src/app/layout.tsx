@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "eltuhami - FT. AbabilSec",
-  description: "eltuhami featuring AbabilSec",
+  title: "Rootx - protfolio",
+  description: "Rootx portfolio website",
 };
 
 export default function RootLayout({
