@@ -9,54 +9,47 @@ import { FiGithub, FiLinkedin, FiTwitter } from 'react-icons/fi';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- مكون أيقونة التواصل الاجتماعي (بتصميم جديد) ---
-const SocialLink = ({ href, icon: Icon }: { href: string; icon: React.ElementType }) => (
+// --- مكون رابط التواصل الاجتماعي (لا تغيير هنا) ---
+const SocialLink = ({ href, icon: Icon, name }: { href: string; icon: React.ElementType; name: string }) => (
   <a
     href={href}
     target="_blank"
     rel="noopener noreferrer"
-    className="social-link text-gray-600 transition-colors duration-300 hover:text-purple-400"
+    className="social-link group flex items-center gap-2 text-gray-500 transition-colors duration-300 hover:text-white"
+    aria-label={`Follow on ${name}`}
   >
-    <Icon className="h-6 w-6" />
+    <Icon className="h-5 w-5" />
+    <span className="text-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100">{name}</span>
   </a>
 );
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
+  
+  // --- 1. الإصلاح الرئيسي: استخدام مصفوفة من المراجع ---
+  const footerItemsRef = useRef<(HTMLElement | null)[]>([]);
 
   useLayoutEffect(() => {
     const footer = footerRef.current;
     if (!footer) return;
 
+    // --- 2. فلترة العناصر للتأكد من عدم وجود قيم null ---
+    const elementsToAnimate = footerItemsRef.current.filter(el => el !== null);
+
+    // تأكد من وجود عناصر للتحريك
+    if (elementsToAnimate.length === 0) return;
+
     const ctx = gsap.context(() => {
-      // حركة ظهور الخط الفاصل
-      gsap.from(footer.querySelector('.divider'), {
-        scaleX: 0,
-        duration: 1.5,
+      // --- 3. استهداف مصفوفة المراجع مباشرة ---
+      gsap.from(elementsToAnimate, {
+        opacity: 0,
+        y: 30,
+        stagger: 0.1,
+        duration: 1,
         ease: 'power3.out',
         scrollTrigger: {
           trigger: footer,
-          start: 'top 95%',
-          toggleActions: 'play none none none',
-        },
-      });
-
-      // حركة ظهور العناصر الأخرى
-      const elements = [
-        footer.querySelector('.logo-text'),
-        footer.querySelector('.social-links'),
-        footer.querySelector('.copyright'),
-      ];
-      gsap.from(elements, {
-        opacity: 0,
-        y: 20,
-        stagger: 0.15,
-        delay: 0.4,
-        duration: 1,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: footer,
-          start: 'top 95%',
+          start: 'top 95%', // تم تعديل نقطة البداية قليلاً لضمان التشغيل
           toggleActions: 'play none none none',
         },
       });
@@ -66,33 +59,48 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer ref={footerRef} className="w-full bg-black px-6 py-8 md:px-12">
-      <div className="mx-auto max-w-7xl">
-        {/* الخط الفاصل العلوي */}
-        <div className="divider h-px w-full origin-left bg-gray-800"></div>
-
-        <div className="flex flex-col items-center justify-between gap-6 pt-8 sm:flex-row">
-          {/* الشعار أو الاسم */}
-          <div className="logo-text text-center sm:text-left">
-            <h3 className="text-xl font-bold text-white">
-              rootx<span className="text-purple-500">.</span>
-            </h3>
-          </div>
-
-          {/* حقوق النشر */}
-          <div className="copyright order-last text-center sm:order-none">
-            <p className="text-sm text-gray-500">
-              &copy; {new Date().getFullYear()} rootx. All Rights Reserved. Forging Digital Security.
-            </p>
-          </div>
-
-          {/* روابط التواصل الاجتماعي */}
-          <div className="social-links flex items-center gap-6">
-            <SocialLink href="https://github.com/rootx" icon={FiGithub} />
-            <SocialLink href="https://linkedin.com/company/rootx" icon={FiLinkedin} />
-            <SocialLink href="https://twitter.com/rootx" icon={FiTwitter} />
-          </div>
+    <footer ref={footerRef} className="w-full overflow-hidden bg-black px-6 py-16 md:px-12">
+      <div className="mx-auto flex max-w-7xl flex-col items-center text-center">
+        
+        {/* --- 4. إضافة المراجع (refs) إلى العناصر المستهدفة --- */}
+        <h2 
+          ref={(el) => { footerItemsRef.current[0] = el; }} 
+          className="font-custom-pencerio text-5xl font-bold leading-tight text-white md:text-6xl"
+        >
+          Secure. Resilient. Ready.
+        </h2>
+        
+        <div ref={(el) => { footerItemsRef.current[1] = el; }} className="mt-8">
+          <a href="#" aria-label="Back to top" className="text-2xl font-bold text-white transition-colors hover:text-gray-300">
+            rootx<span className="text-purple-500">.</span>
+          </a>
         </div>
+
+        <div ref={(el) => { footerItemsRef.current[2] = el; }} className="mt-8 flex items-center gap-6">
+          <SocialLink href="https://github.com/rootx" icon={FiGithub} name="GitHub" />
+          <SocialLink href="https://linkedin.com/company/rootx" icon={FiLinkedin} name="LinkedIn" />
+          <SocialLink href="https://twitter.com/rootx" icon={FiTwitter} name="Twitter" />
+        </div>
+        
+        <div ref={(el ) => { footerItemsRef.current[3] = el; }} className="mt-12 w-full max-w-lg border-t border-gray-800 pt-8">
+          <p className="text-sm text-gray-600">
+            &copy; {new Date().getFullYear()} rootx Industries. All rights reserved.
+          </p>
+          
+          <p className="mt-4 text-xs text-gray-700">
+            Designed & Developed by{' '}
+            <a 
+              href="https://eltvhawi.vercel.app" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="font-semibold text-gray-500 underline decoration-dotted underline-offset-2 transition-colors hover:text-purple-400"
+            >
+              eltvhawi
+            </a>
+            .
+          </p>
+        </div>
+
       </div>
     </footer>
    );

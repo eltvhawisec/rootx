@@ -6,141 +6,143 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- مكون فئة المهارات (مع التصحيح) ---
-const SkillCategory = ({ title, skills, index }: { title: string; skills: string[]; index: number }) => {
-  const categoryRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    // --- 1. الإصلاح الرئيسي: قم بتخزين المرجع في متغير محلي ---
-    const categoryElement = categoryRef.current;
-
-    // --- 2. استخدم هذا المتغير للفحص. الآن TypeScript يعرف أن categoryElement ليس null بعد هذا السطر ---
-    if (!categoryElement) return;
-
-    const ctx = gsap.context(() => {
-      // حركة ظهور الحاوية بأكملها
-      gsap.from(categoryElement, { // استخدم المتغير الآمن
-        opacity: 0,
-        y: 60,
-        duration: 1.2,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: categoryElement, // استخدم المتغير الآمن
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        },
-      });
-
-      // حركة ظهور المهارات داخل الحاوية بشكل متتابع
-      // --- 3. استخدم المتغير الآمن هنا أيضًا ---
-      gsap.from(categoryElement.querySelectorAll('.skill-item'), {
-        opacity: 0,
-        x: -20,
-        stagger: 0.05,
-        delay: 0.4,
-        duration: 0.8,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: categoryElement, // استخدم المتغير الآمن
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        },
-      });
-    }, categoryRef); // يمكنك الاستمرار في استخدام categoryRef هنا لسياق GSAP
-
-    return () => ctx.revert();
-  }, []);
-
-  return (
-    <div
-      ref={categoryRef}
-      className="group relative rounded-lg border border-gray-800 bg-gray-900/30 p-6 backdrop-blur-sm transition-all duration-300 hover:border-purple-500/50 hover:bg-gray-900/50"
-    >
-      <h3 className="mb-4 text-lg font-semibold tracking-wider text-purple-400">
-        {title}
-      </h3>
-      
-      <div className="flex flex-wrap gap-x-4 gap-y-3">
-        {skills.map((skill, i) => (
-          <span key={i} className="skill-item text-base font-light text-gray-300 transition-colors duration-300 group-hover:text-white">
-            {skill}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// --- المكون الرئيسي للقسم (لا تغيير هنا) ---
-export default function SkillsSection() {
+// --- مكون العنوان (مع تعديل ليتناسب مع الهوية) ---
+const SectionTitle = ({ title }: { title: string }) => {
   const titleRef = useRef<HTMLHeadingElement>(null);
-  
-  const skillCategories = [
-    {
-      title: 'Offensive Security',
-      skills: ['Penetration Testing', 'Ethical Hacking', 'Vulnerability Assessment', 'Social Engineering', 'Red Teaming'],
-    },
-    {
-      title: 'Defensive & Infrastructure',
-      skills: ['Network Security', 'Threat Modeling', 'CI/CD Security', 'Docker', 'Kubernetes', 'AWS', 'Cloud Security'],
-    },
-    {
-      title: 'Secure Development',
-      skills: ['Next.js', 'TypeScript', 'Node.js', 'Rust', 'Go', 'GraphQL', 'PostgreSQL', 'Secure SDLC'],
-    },
-    {
-      title: 'Tooling & Frameworks',
-      skills: ['GSAP', 'Tailwind CSS', 'Prisma', 'Git', 'Vercel', 'React', 'Metasploit', 'Burp Suite'],
-    },
-  ];
 
   useLayoutEffect(() => {
-    const titleElement = titleRef.current;
-    if (!titleElement) return;
-
+    if (!titleRef.current) return;
     const ctx = gsap.context(() => {
-      gsap.from(titleElement, {
+      gsap.from(titleRef.current, {
         opacity: 0,
         y: 50,
         duration: 1.2,
         ease: 'power3.out',
         scrollTrigger: {
-          trigger: titleElement,
+          trigger: titleRef.current,
           start: 'top 85%',
           toggleActions: 'play none none none',
         },
       });
-    }, titleRef);
-
+    });
     return () => ctx.revert();
   }, []);
 
   return (
-    <section id="skills" className="relative w-full overflow-hidden bg-black py-24 md:py-32">
-      <div 
-        className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 h-1/2 w-1/2 rounded-full"
-        style={{
-          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, rgba(168, 85, 247, 0) 70%)'
-        }}
-      ></div>
+    <div className="relative mb-16 text-center md:mb-20">
+      <h2
+        ref={titleRef}
+        className="font-custom-pencerio text-6xl font-bold tracking-wider text-white md:text-7xl"
+      >
+        {title}
+      </h2>
+    </div>
+  );
+};
 
-      <div className="relative z-10 mx-auto max-w-5xl px-6">
-        <h2
-          ref={titleRef}
-          className="mb-16 text-center font-custom-pencerio text-6xl font-bold tracking-wider text-white md:text-7xl"
-        >
-          Core Capabilities
-        </h2>
-        
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          {skillCategories.map((category, index) => (
-            <SkillCategory
-              key={index}
-              title={category.title}
-              skills={category.skills}
-              index={index}
-            />
-          ))}
+// --- مكون شريط المهارات (بتصميم وحركة جديدين) ---
+const SkillRow = ({
+  skills,
+  direction = 'left',
+  className = '',
+}: {
+  skills: string[];
+  direction?: 'left' | 'right';
+  className?: string;
+}) => {
+  const marqueeRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (!marqueeRef.current) return;
+
+    const content = marqueeRef.current.querySelector('.marquee-content') as HTMLElement;
+    if (!content) return;
+
+    // مضاعفة المحتوى لتوفير مساحة للحركة اللانهائية
+    content.innerHTML += content.innerHTML;
+
+    const ctx = gsap.context(() => {
+      let distance = -content.offsetWidth / 2;
+      let startX = 0;
+
+      if (direction === 'right') {
+        distance = 0;
+        startX = -content.offsetWidth / 2;
+      }
+
+      const tl = gsap.to(content, {
+        x: distance,
+        duration: 60, // تم إبطاء الحركة لتكون أكثر أناقة
+        ease: 'none',
+        repeat: -1,
+      });
+
+      gsap.set(content, { x: startX });
+
+      // إبطاء الحركة عند مرور الفأرة بدلاً من إيقافها تماماً
+      const handleMouseEnter = () => gsap.to(tl, { timeScale: 0.2, duration: 0.5 });
+      const handleMouseLeave = () => gsap.to(tl, { timeScale: 1, duration: 0.5 });
+
+      marqueeRef.current?.addEventListener('mouseenter', handleMouseEnter);
+      marqueeRef.current?.addEventListener('mouseleave', handleMouseLeave);
+      
+      return () => { // Cleanup
+        marqueeRef.current?.removeEventListener('mouseenter', handleMouseEnter);
+        marqueeRef.current?.removeEventListener('mouseleave', handleMouseLeave);
+      };
+    }, marqueeRef);
+
+    return () => ctx.revert();
+  }, [direction]);
+
+  return (
+    <div ref={marqueeRef} className={`w-full overflow-hidden ${className}`}>
+      <div className="marquee-content flex items-center whitespace-nowrap">
+        {skills.map((skill, index) => (
+          <div key={index} className="flex items-center">
+            <span className="mx-6 text-2xl font-light text-gray-400 md:text-4xl">
+              {skill}
+            </span>
+            {/* إضافة أيقونة فاصلة */}
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="fill-current text-purple-500"
+            >
+              <path d="M12 0L14.6942 9.30584L24 12L14.6942 14.6942L12 24L9.30584 14.6942L0 12L9.30584 9.30584L12 0Z" />
+            </svg>
+          </div>
+         ))}
+      </div>
+    </div>
+  );
+};
+
+// --- المكون الرئيسي للقسم (بتصميم جديد) ---
+export default function SkillsSection() {
+  // تم إعادة تنظيم المهارات لتكون أكثر تركيزًا
+  const coreTech = ['React', 'Next.js', 'TypeScript', 'Node.js', 'PostgreSQL', 'Tailwind CSS', 'GSAP'];
+  const securityOps = ['Ethical Hacking', 'Penetration Testing', 'Threat Modeling', 'Network Security', 'Vulnerability Assessment'];
+  const infrastructure = ['Docker', 'Kubernetes', 'AWS', 'Vercel', 'Git', 'CI/CD', 'Prisma'];
+  const devTools = ['GraphQL', 'REST APIs', 'Firebase', 'MongoDB', 'Supabase', 'NextAuth.js'];
+
+  return (
+    <section id="skills" className="w-full overflow-hidden bg-black py-24 md:py-32">
+      <div className="mx-auto max-w-screen-2xl">
+        <SectionTitle title="Arsenal" /> {/* تغيير العنوان ليعكس القوة */}
+
+        <div className="relative flex flex-col gap-6">
+          {/* طبقة التدرج اللوني لإخفاء الحواف */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-1/4 bg-gradient-to-r from-black to-transparent"></div>
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-1/4 bg-gradient-to-l from-black to-transparent"></div>
+
+          <SkillRow skills={coreTech} direction="left" />
+          <SkillRow skills={securityOps} direction="right" className="border-y-2 border-purple-900/50 py-6" />
+          <SkillRow skills={infrastructure} direction="left" />
+          <SkillRow skills={devTools} direction="right" />
         </div>
       </div>
     </section>

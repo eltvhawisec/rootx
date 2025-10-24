@@ -3,52 +3,11 @@
 import { useRef, useLayoutEffect, useState, ComponentPropsWithoutRef, ElementType } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { FiMail, FiGithub, FiLinkedin, FiTwitter } from 'react-icons/fi';
+import { FiMail, FiGithub, FiLinkedin, FiTwitter, FiPhone } from 'react-icons/fi'; // 1. إضافة أيقونة الهاتف
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- مكون العنوان (مع التصحيح) ---
-const SectionTitle = ({ title, subtitle }: { title: string; subtitle: string }) => {
-  const titleRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    // ----- 1. الإصلاح الرئيسي هنا -----
-    const titleElement = titleRef.current;
-    
-    // تأكد من أن العنصر موجود قبل إنشاء التحريك
-    if (!titleElement) return;
-
-    // استخدام gsap.context لتنظيف التحريكات بشكل آمن
-    const ctx = gsap.context(() => {
-      // الآن نحن متأكدون أن titleElement.children موجود
-      gsap.from(titleElement.children, {
-        opacity: 0,
-        y: 40,
-        duration: 1,
-        ease: 'power3.out',
-        stagger: 0.1,
-        scrollTrigger: {
-          trigger: titleElement, // يمكن استخدام المتغير الآمن هنا أيضًا
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        },
-      });
-    }, titleRef); // ربط السياق بالعنصر الرئيسي
-
-    // دالة التنظيف
-    return () => ctx.revert();
-    // ---------------------------------
-  }, []);
-
-  return (
-    <div ref={titleRef} className="relative z-10 mb-16 text-center">
-      <h2 className="font-custom-pencerio text-6xl font-bold tracking-wider text-white md:text-7xl">{title}</h2>
-      <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-400">{subtitle}</p>
-    </div>
-  );
-};
-
-// --- مكون حقل الإدخال (لا تغيير هنا) ---
+// --- مكون حقل الإدخال (بتصميم محدث) ---
 type FormInputProps = {
   id: string;
   name: string;
@@ -63,41 +22,50 @@ const FormInput = ({ id, name, type = 'text', label, placeholder, required = fal
   const props: ComponentPropsWithoutRef<typeof InputComponent> = {
     id, name, required, placeholder,
     type: InputComponent === 'textarea' ? undefined : type,
-    rows: InputComponent === 'textarea' ? 5 : undefined,
-    className: "w-full rounded-md border-2 border-gray-800 bg-transparent px-4 py-3 text-white transition-colors duration-300 focus:border-purple-500 focus:outline-none",
+    rows: InputComponent === 'textarea' ? 4 : undefined, // تقليل عدد الصفوف
+    className: "w-full rounded-md border border-gray-700 bg-gray-900/50 px-4 py-3 text-white transition-colors duration-300 focus:border-purple-500 focus:outline-none",
   };
   return (
     <div className="relative">
-      <label htmlFor={id} className="absolute -top-2 left-3 bg-black px-1 text-xs font-medium text-gray-400">{label}</label>
-      <InputComponent {...props} />
+      <label htmlFor={id} className="text-sm font-medium text-gray-400">{label}</label>
+      <div className="mt-1">
+        <InputComponent {...props} />
+      </div>
     </div>
   );
 };
 
-// --- بقية المكون (لا تغيير هنا) ---
+// --- المكون الرئيسي لقسم اتصل بنا (بتصميم جديد كليًا) ---
 export default function ContactSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
+  const leftPanelRef = useRef<HTMLDivElement>(null);
+  const rightPanelRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{ success: boolean; message: string } | null>(null);
 
   useLayoutEffect(() => {
-    const formElement = formRef.current;
-    if (!formElement) return;
+    const section = sectionRef.current;
+    if (!section) return;
 
     const ctx = gsap.context(() => {
-      gsap.from(formElement, {
+      // حركة ظهور اللوحة اليسرى
+      gsap.from(leftPanelRef.current, {
         opacity: 0,
-        y: 80,
-        duration: 1.5,
-        ease: 'expo.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 70%',
-          toggleActions: 'play none none none',
-        },
+        x: -100,
+        duration: 1.2,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: section, start: 'top 70%', toggleActions: 'play none none none' },
+      });
+      // حركة ظهور اللوحة اليمنى (النموذج)
+      gsap.from(rightPanelRef.current, {
+        opacity: 0,
+        x: 100,
+        duration: 1.2,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: section, start: 'top 70%', toggleActions: 'play none none none' },
       });
     }, sectionRef);
+
     return () => ctx.revert();
   }, []);
 
@@ -116,10 +84,10 @@ export default function ContactSection() {
       });
       if (response.ok) {
         setSubmitStatus({ success: true, message: 'Transmission complete. We will be in touch.' });
-        formRef.current?.reset();
+        rightPanelRef.current?.reset();
       } else {
         const result = await response.json();
-        setSubmitStatus({ success: false, message: result.message || 'Transmission failed. Please try again.' });
+        setSubmitStatus({ success: false, message: result.message || 'Transmission failed.' });
       }
     } catch (e) {
       setSubmitStatus({ success: false, message: 'Error: Connection to server failed.' });
@@ -130,45 +98,58 @@ export default function ContactSection() {
 
   return (
     <section ref={sectionRef} id="contact" className="relative w-full overflow-hidden bg-black py-24 md:py-32">
-      <div className="pointer-events-none absolute inset-0 z-0 opacity-10" style={{ backgroundImage: 'url(/grid.svg)', backgroundSize: '40px 40px' }}></div>
-      <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-t from-black via-black/80 to-black"></div>
-      <div className="relative z-10 mx-auto max-w-4xl px-6">
-        <SectionTitle 
-          title="Initiate Contact"
-          subtitle="Open a secure channel. Whether it's a project proposal or a strategic inquiry, your transmission will be received."
-        />
-        <form ref={formRef} onSubmit={handleSubmit} className="rounded-lg border border-gray-800 bg-black/50 p-6 backdrop-blur-md sm:p-8">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <FormInput id="name" name="name" label="Your Name / Alias" placeholder="John Doe" required />
-            <FormInput id="email" name="email" type="email" label="Secure Email" placeholder="you@domain.com" required />
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-16 px-6 md:grid-cols-2">
+        
+        {/* --- 2. الجزء الأيسر: المعلومات المباشرة --- */}
+        <div ref={leftPanelRef} className="flex flex-col justify-center">
+          <h2 className="font-custom-pencerio text-5xl font-bold tracking-wider text-white md:text-6xl">
+            Open a Secure Channel
+          </h2>
+          <p className="mt-4 max-w-lg text-lg text-gray-400">
+            Have a project, a question, or a critical vulnerability to report? Reach out directly or use the secure form. Your communication is confidential.
+          </p>
+          
+          <div className="mt-12 space-y-6">
+            {/* --- 3. إضافة رقم الهاتف --- */}
+            <a href="tel:+96639231414" className="group flex items-center gap-4">
+              <FiPhone className="h-7 w-7 text-gray-500 transition-colors group-hover:text-purple-400" />
+              <span className="text-xl font-medium text-gray-300 group-hover:text-white">+974 3923 1414</span>
+            </a>
+            <a href="mailto:contact@rootx.sec" className="group flex items-center gap-4">
+              <FiMail className="h-7 w-7 text-gray-500 transition-colors group-hover:text-purple-400" />
+              <span className="text-xl font-medium text-gray-300 group-hover:text-white">contact@rootx.sec</span>
+            </a>
           </div>
-          <div className="mt-6">
-            <FormInput id="subject" name="subject" label="Subject" placeholder="Project Inquiry: Secure Web App" required />
+
+          <div className="mt-12 border-t border-gray-800 pt-8">
+            <h3 className="text-base font-semibold text-gray-400">Follow our operations:</h3>
+            <div className="mt-4 flex items-center gap-6">
+              <a href="https://github.com/rootx" target="_blank" rel="noopener noreferrer" className="text-gray-500 transition-colors hover:text-white"><FiGithub className="h-6 w-6" /></a>
+              <a href="https://linkedin.com/company/rootx" target="_blank" rel="noopener noreferrer" className="text-gray-500 transition-colors hover:text-white"><FiLinkedin className="h-6 w-6" /></a>
+              <a href="https://twitter.com/rootx" target="_blank" rel="noopener noreferrer" className="text-gray-500 transition-colors hover:text-white"><FiTwitter className="h-6 w-6" /></a>
+            </div>
           </div>
-          <div className="mt-6">
-            <FormInput as="textarea" id="message" name="message" label="Message Briefing" placeholder="Describe your mission..." required />
-          </div>
-          <div className="mt-8 text-center">
-            <button type="submit" disabled={isSubmitting} className="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-purple-600 px-12 py-3 font-bold text-white transition-all duration-300 hover:bg-purple-700 disabled:cursor-not-allowed disabled:bg-gray-600">
-              <span className="relative z-10">{isSubmitting ? 'Transmitting...' : 'Send Securely'}</span>
+        </div>
+
+        {/* --- 4. الجزء الأيمن: نموذج الاتصال --- */}
+        <form ref={rightPanelRef} onSubmit={handleSubmit} className="w-full space-y-5 rounded-lg border border-gray-800 bg-gray-900/30 p-8 backdrop-blur-sm">
+          <FormInput id="name" name="name" label="Name / Alias" placeholder="John Doe" required />
+          <FormInput id="email" name="email" type="email" label="Secure Email" placeholder="you@domain.com" required />
+          <FormInput id="subject" name="subject" label="Subject" placeholder="Project Inquiry" required />
+          <FormInput as="textarea" id="message" name="message" label="Message Briefing" placeholder="Describe your mission..." required />
+          
+          <div>
+            <button type="submit" disabled={isSubmitting} className="w-full rounded-md bg-purple-600 px-8 py-3 font-bold text-white transition-all duration-300 hover:bg-purple-700 disabled:cursor-not-allowed disabled:bg-gray-600">
+              {isSubmitting ? 'Transmitting...' : 'Send Securely'}
             </button>
           </div>
           {submitStatus && (
-            <p className={`mt-4 text-center text-sm ${submitStatus.success ? 'text-green-400' : 'text-red-400'}`}>
+            <p className={`text-center text-sm ${submitStatus.success ? 'text-green-400' : 'text-red-400'}`}>
               {submitStatus.message}
             </p>
-          )}
+           )}
         </form>
-        <div className="mt-20 text-center">
-          <h3 className="mb-6 text-lg font-semibold text-gray-400">Or connect via other channels:</h3>
-          <div className="flex items-center justify-center gap-8">
-            <a href="mailto:contact@rootx.sec" className="text-gray-500 transition-colors hover:text-purple-400"><FiMail className="h-7 w-7" /></a>
-            <a href="https://github.com/rootx" target="_blank" rel="noopener noreferrer" className="text-gray-500 transition-colors hover:text-purple-400"><FiGithub className="h-7 w-7" /></a>
-            <a href="https://linkedin.com/company/rootx" target="_blank" rel="noopener noreferrer" className="text-gray-500 transition-colors hover:text-purple-400"><FiLinkedin className="h-7 w-7" /></a>
-            <a href="https://twitter.com/rootx" target="_blank" rel="noopener noreferrer" className="text-gray-500 transition-colors hover:text-purple-400"><FiTwitter className="h-7 w-7" /></a>
-          </div>
-        </div>
       </div>
     </section>
-   );
+  );
 }
