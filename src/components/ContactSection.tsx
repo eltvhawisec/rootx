@@ -1,13 +1,14 @@
 'use client';
 
-import { useRef, useLayoutEffect, useState } from 'react';
+import { useRef, useLayoutEffect, useState, ComponentPropsWithoutRef, ElementType } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { FiMail, FiMapPin, FiGithub, FiLinkedin, FiTwitter } from 'react-icons/fi';
+// 1. تم حذف 'FiMapPin' لأنه غير مستخدم.
+import { FiMail, FiGithub, FiLinkedin, FiTwitter } from 'react-icons/fi';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- مكون العنوان (بتصميم جديد) ---
+// --- مكون العنوان (لا تغيير هنا) ---
 const SectionTitle = ({ title, subtitle }: { title: string; subtitle: string }) => {
   const titleRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
@@ -24,26 +25,42 @@ const SectionTitle = ({ title, subtitle }: { title: string; subtitle: string }) 
   );
 };
 
-// --- مكون حقل الإدخال (بتصميم جديد) ---
-const FormInput = ({ id, name, type = 'text', label, placeholder, required = false, as = 'input' }: any) => {
-  const InputComponent = as;
+// --- 2. تصحيح نوع 'any' في مكون حقل الإدخال ---
+// تعريف نوع الخصائص (Props) بشكل صريح
+type FormInputProps = {
+  id: string;
+  name: string;
+  label: string;
+  placeholder: string;
+  type?: string;
+  required?: boolean;
+  as?: ElementType; // 'as' يمكن أن يكون 'input' أو 'textarea'
+};
+
+const FormInput = ({ id, name, type = 'text', label, placeholder, required = false, as: InputComponent = 'input' }: FormInputProps) => {
+  // لا حاجة لـ: const InputComponent = as;
+  
+  // تحديد الخصائص التي سيتم تمريرها للعنصر
+  const props: ComponentPropsWithoutRef<typeof InputComponent> = {
+    id,
+    name,
+    required,
+    placeholder,
+    type: InputComponent === 'textarea' ? undefined : type, // النوع فقط لـ <input>
+    rows: InputComponent === 'textarea' ? 5 : undefined, // الصفوف فقط لـ <textarea>
+    className: "w-full rounded-md border-2 border-gray-800 bg-transparent px-4 py-3 text-white transition-colors duration-300 focus:border-purple-500 focus:outline-none",
+  };
+
   return (
     <div className="relative">
       <label htmlFor={id} className="absolute -top-2 left-3 bg-black px-1 text-xs font-medium text-gray-400">
         {label}
       </label>
-      <InputComponent
-        required={required}
-        type={type}
-        id={id}
-        name={name}
-        rows={as === 'textarea' ? 5 : undefined}
-        className="w-full rounded-md border-2 border-gray-800 bg-transparent px-4 py-3 text-white transition-colors duration-300 focus:border-purple-500 focus:outline-none"
-        placeholder={placeholder}
-      />
+      <InputComponent {...props} />
     </div>
   );
 };
+
 
 export default function ContactSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -76,7 +93,6 @@ export default function ContactSection() {
     const data = Object.fromEntries(formData.entries());
 
     try {
-      // استبدل هذا بنقطة النهاية الخاصة بك
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -89,7 +105,9 @@ export default function ContactSection() {
         const result = await response.json();
         setSubmitStatus({ success: false, message: result.message || 'Transmission failed. Please try again.' });
       }
-    } catch (error) {
+    } catch (e) { // 3. تم تغيير اسم المتغير 'error' إلى 'e' واستخدامه (أو يمكن حذفه إذا لم يتم استخدامه)
+      // يمكنك تسجيل الخطأ هنا إذا أردت
+      // console.error(e); 
       setSubmitStatus({ success: false, message: 'Error: Connection to server failed.' });
     } finally {
       setIsSubmitting(false);
@@ -98,7 +116,6 @@ export default function ContactSection() {
 
   return (
     <section ref={sectionRef} id="contact" className="relative w-full overflow-hidden bg-black py-24 md:py-32">
-      {/* تأثير الشبكة في الخلفية */}
       <div className="pointer-events-none absolute inset-0 z-0 opacity-10" style={{ backgroundImage: 'url(/grid.svg)', backgroundSize: '40px 40px' }}></div>
       <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-t from-black via-black/80 to-black"></div>
 
@@ -142,5 +159,5 @@ export default function ContactSection() {
         </div>
       </div>
     </section>
-   );
+    );
 }

@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- مكون العنوان (مع تعديل ليعكس الهوية الجديدة) ---
+// --- مكون العنوان (لا تغيير هنا) ---
 const SectionTitle = ({ title }: { title: string }) => {
   const titleRef = useRef<HTMLHeadingElement>(null);
 
@@ -30,11 +30,10 @@ const SectionTitle = ({ title }: { title: string }) => {
 
   return (
     <div className="relative">
-      {/* تم تغيير الخط واللون ليتناسب مع هوية rootx */}
       <h2 
         ref={titleRef} 
         className="font-custom-pencerio text-5xl font-bold tracking-wider md:text-6xl"
-        style={{ color: '#E029F5' }} // لون أرجواني مميز
+        style={{ color: '#E029F5' }}
       >
         {title}
       </h2>
@@ -42,7 +41,7 @@ const SectionTitle = ({ title }: { title: string }) => {
   );
 };
 
-// --- المكون الرئيسي للقسم (مع محتوى متخصص في الأمن السيبراني) ---
+// --- المكون الرئيسي للقسم (مع التصحيح) ---
 export default function MissionSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const textElementsRef = useRef<(HTMLParagraphElement | null)[]>([]);
@@ -52,7 +51,6 @@ export default function MissionSection() {
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      // حركة ظهور العناصر النصية بشكل متتابع
       textElementsRef.current.forEach((el) => {
         if (!el) return;
         gsap.from(el, {
@@ -81,15 +79,17 @@ export default function MissionSection() {
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-start gap-16 md:grid-cols-3">
         
         <div className="sticky top-24 md:col-span-1">
-          <SectionTitle title="Our Mandate" /> {/* تغيير العنوان ليعكس الجدية */}
+          <SectionTitle title="Our Mandate" />
         </div>
 
         <div className="md:col-span-2">
           <div className="flex flex-col gap-10 text-xl font-light leading-relaxed text-gray-300 md:text-2xl">
             
+            {/* ----- تم التصحيح هنا ----- */}
             <p ref={(el) => (textElementsRef.current[0] = el)}>
-              In a world of escalating digital threats, our mandate is absolute: to engineer <strong className="font-semibold text-purple-400">impenetrable digital fortresses</strong>. We don't just build applications; we forge shields in the digital realm.
+              In a world of escalating digital threats, our mandate is absolute: to engineer <strong className="font-semibold text-purple-400">impenetrable digital fortresses</strong>. We don&apos;t just build applications; we forge shields in the digital realm.
             </p>
+            {/* ------------------------- */}
             
             <p ref={(el) => (textElementsRef.current[1] = el)}>
               Our approach is a synthesis of <strong className="font-semibold text-white">proactive threat intelligence</strong> and bespoke security architecture. We anticipate vulnerabilities before they are exploited, transforming your digital presence from a potential liability into a resilient, secure asset.
