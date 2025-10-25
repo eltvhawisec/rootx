@@ -10,8 +10,6 @@ export default function AboutSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const imageWrapperRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  
-  // 1. تصحيح النوع: المرجع يجب أن يكون لعناصر <div> وليس <p>
   const paragraphsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useLayoutEffect(() => {
@@ -47,17 +45,15 @@ export default function AboutSection() {
         },
       });
 
-      // 2. تصحيح النوع: GSAP يستهدف الفقرة داخل الـ div
       paragraphsRef.current.forEach((div, index) => {
         if (!div) return;
-        // استهداف العنصر بـ .text-content داخل الـ div المرجعي
         gsap.from(div.querySelector('.text-content'), {
           yPercent: 100,
           duration: 1,
           ease: 'expo.out',
           delay: 0.3 + index * 0.1,
           scrollTrigger: {
-            trigger: div, // المشغل هو الـ div نفسه
+            trigger: div,
             start: 'top 85%',
             toggleActions: 'play none none none',
           },
@@ -77,26 +73,27 @@ export default function AboutSection() {
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-6 md:grid-cols-2 md:px-8">
         
         <div className="z-10 flex flex-col justify-center">
+          {/* --- 1. تم تعديل العنوان ليعكس الهوية الفردية --- */}
           <h2 
             ref={titleRef} 
             className="font-custom-pencerio text-6xl font-bold leading-tight text-white md:text-7xl lg:text-8xl"
           >
-            The Digital Vanguard.
+            About.
           </h2>
           <div className="mt-8 space-y-6 text-lg leading-relaxed text-gray-400 md:text-xl">
             
-            {/* ----- 3. تم التصحيح هنا: إضافة الأقواس المعقوفة {} ----- */}
+            {/* --- 2. تم تعديل النصوص لتتحدث بصيغة المفرد --- */}
             <div ref={(el) => { paragraphsRef.current[0] = el; }} className="overflow-hidden">
               <p className="text-content">
-                <strong className="text-purple-400">rootx</strong> is not merely a company; we are a doctrine. Born from the crucible of digital warfare, we are a collective of elite cybersecurity architects and ethical hackers dedicated to one singular purpose: forging digital invulnerability.
+                My work isn&apos;t just a profession; it&apos;s a doctrine. Forged in the crucible of digital warfare, I operate as an elite cybersecurity architect and ethical hacker, dedicated to a singular purpose: achieving digital invulnerability.
               </p>
             </div>
             <div ref={(el) => { paragraphsRef.current[1] = el; }} className="overflow-hidden">
               <p className="text-content">
-                We dissect threats before they materialize, reverse-engineer adversary tactics, and construct multi-layered defensive systems. Our methodology transforms your digital assets from passive targets into <strong className="font-semibold text-white">proactive, self-defending fortresses</strong>.
+                I dissect threats before they materialize, reverse-engineer adversary tactics, and construct multi-layered defensive systems. My methodology transforms your digital assets from passive targets into <strong className="font-semibold text-white">proactive, self-defending fortresses</strong>.
               </p>
             </div>
-            {/* -------------------------------------------------------- */}
+            {/* -------------------------------------------------- */}
 
           </div>
         </div>
@@ -109,8 +106,8 @@ export default function AboutSection() {
             className="h-full w-full"
           >
             <img
-              src="/rootx.jpg"
-              alt="Digital fortress abstract visualization"
+              src="/rootx.jpg" // يمكنك تغيير هذه الصورة إلى صورة شخصية إذا أردت
+              alt="Cybersecurity specialist"
               className="h-full w-full object-cover"
             />
           </div>

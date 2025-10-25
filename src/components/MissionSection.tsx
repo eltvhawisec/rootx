@@ -33,7 +33,7 @@ const SectionTitle = ({ title }: { title: string }) => {
       <h2 
         ref={titleRef} 
         className="font-custom-pencerio text-5xl font-bold tracking-wider md:text-6xl"
-        style={{ color: '#E029F5' }}
+        style={{ color: '#E029F5' }} // الحفاظ على لون العنوان الأرجواني
       >
         {title}
       </h2>
@@ -41,7 +41,7 @@ const SectionTitle = ({ title }: { title: string }) => {
   );
 };
 
-// --- المكون الرئيسي للقسم (مع التصحيح النهائي) ---
+// --- المكون الرئيسي للقسم (مع خلفية الصورة) ---
 export default function MissionSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const textElementsRef = useRef<(HTMLParagraphElement | null)[]>([]);
@@ -71,12 +71,25 @@ export default function MissionSection() {
   }, []);
 
   return (
+    // --- 1. تم تعديل هذا العنصر لاستخدام الصورة كخلفية ---
     <section 
       ref={sectionRef} 
       id="mission" 
-      className="w-full overflow-hidden bg-black py-24 px-6 md:py-32 lg:px-24"
+      className="relative w-full overflow-hidden bg-black py-24 px-6 md:py-32 lg:px-24"
     >
-      <div className="mx-auto grid max-w-7xl grid-cols-1 items-start gap-16 md:grid-cols-3">
+      {/* --- 2. إضافة حاوية للصورة وطبقة التعتيم --- */}
+      <div className="absolute inset-0 z-0">
+        {/* الصورة نفسها */}
+        <div 
+          className="h-full w-full bg-cover bg-bottom bg-no-repeat"
+          style={{ backgroundImage: "url('/wave-haikei.png')" }} // **تأكد من صحة مسار الصورة**
+        ></div>
+        {/* طبقة تدرج لوني لضمان وضوح النص */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black"></div>
+      </div>
+
+      {/* --- 3. المحتوى يوضع فوق الخلفية (مع z-10) --- */}
+      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-start gap-16 md:grid-cols-3">
         
         <div className="sticky top-24 md:col-span-1">
           <SectionTitle title="Our Mandate" />
@@ -85,7 +98,6 @@ export default function MissionSection() {
         <div className="md:col-span-2">
           <div className="flex flex-col gap-10 text-xl font-light leading-relaxed text-gray-300 md:text-2xl">
             
-            {/* ----- تم التصحيح هنا: إضافة الأقواس المعقوفة {} ----- */}
             <p ref={(el) => { textElementsRef.current[0] = el; }}>
               In a world of escalating digital threats, our mandate is absolute: to engineer <strong className="font-semibold text-purple-400">impenetrable digital fortresses</strong>. We don&apos;t just build applications; we forge shields in the digital realm.
             </p>
@@ -97,7 +109,6 @@ export default function MissionSection() {
             <p ref={(el) => { textElementsRef.current[2] = el; }}>
               We empower our clients to operate with confidence, knowing their digital infrastructure is not only innovative and performant, but <strong className="font-semibold text-purple-400">uncompromisingly secure</strong>.
             </p>
-            {/* -------------------------------------------------------- */}
 
           </div>
         </div>

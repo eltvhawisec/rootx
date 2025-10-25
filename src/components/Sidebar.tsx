@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import { X } from 'lucide-react'; // استيراد أيقونة الإغلاق
+import { X } from 'lucide-react';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -10,17 +10,19 @@ interface SidebarProps {
   onNavigate: (sectionId: string) => void;
 }
 
-// --- مكون عنصر القائمة (بتصميم جديد) ---
-const NavItem = ({ label, sectionId, onNavigate }: { label: string; sectionId: string; onNavigate: (id: string) => void; }) => (
+// --- مكون عنصر القائمة (بتصميم وتفاعل مطور) ---
+const NavItem = ({ label, sectionId, onNavigate, index }: { label: string; sectionId: string; onNavigate: (id: string) => void; index: number }) => (
   <button
     onClick={() => onNavigate(sectionId)}
-    className="nav-item group relative w-full text-left"
+    className="nav-item group relative w-full py-2 text-left"
   >
-    <span className="block text-2xl font-light tracking-wider text-gray-400 transition-colors duration-300 group-hover:text-white">
+    {/* 1. إضافة رقم تسلسلي كعنصر تصميمي */}
+    <span className="absolute left-0 top-1/2 -translate-y-1/2 text-xs font-mono text-gray-700 transition-colors duration-300 group-hover:text-purple-400">
+      0{index + 1}
+    </span>
+    <span className="ml-10 block text-3xl font-light tracking-wider text-gray-500 transition-colors duration-300 group-hover:text-white">
       {label}
     </span>
-    {/* خط يظهر عند المرور */}
-    <div className="absolute -bottom-1 left-0 h-px w-0 bg-purple-500 transition-all duration-300 group-hover:w-full"></div>
   </button>
 );
 
@@ -36,23 +38,23 @@ export default function Sidebar({ isOpen, onClose, onNavigate }: SidebarProps) {
       tl.current = gsap.timeline({
         paused: true,
         onReverseComplete: () => {
-          gsap.set(sidebar, { display: 'none' }); // إخفاء العنصر بعد اكتمال حركة الخروج
+          gsap.set(sidebar, { display: 'none' });
         },
       });
 
-      // حركة الدخول الجديدة
+      // --- 2. حركة دخول محسّنة (Clip-path) ---
       tl.current
         .set(sidebar, { display: 'block' })
         .fromTo(
           sidebar,
-          { x: '100%' }, // يبدأ من خارج الشاشة على اليمين
-          { x: '0%', duration: 0.7, ease: 'expo.inOut' }
+          { clipPath: 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)' }, // يبدأ من خط عمودي على اليمين
+          { clipPath: 'polygon(0% 0, 100% 0, 100% 100%, 0% 100%)', duration: 0.8, ease: 'expo.inOut' } // يمتد ليغطي المساحة
         )
         .fromTo(
-          '.sidebar-content > *', // تحريك العناصر الداخلية
-          { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, duration: 0.6, stagger: 0.07, ease: 'power2.out' },
-          '-=0.4' // ابدأ هذه الحركة قبل انتهاء الحركة السابقة بقليل
+          '.sidebar-content', // استهداف الحاويات الرئيسية
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out' },
+          '-=0.5'
         );
     }, sidebarRef);
 
@@ -69,48 +71,45 @@ export default function Sidebar({ isOpen, onClose, onNavigate }: SidebarProps) {
 
   return (
     <>
-      {/* طبقة الخلفية المعتمة */}
       <div
-        className={`fixed inset-0 bg-black/30 backdrop-blur-sm z-40 transition-opacity duration-500 ${
+        className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity duration-700 ${
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         onClick={onClose}
       />
       
-      {/* الشريط الجانبي نفسه */}
       <div
         ref={sidebarRef}
-        className="hidden fixed top-0 right-0 h-full w-full max-w-sm z-50"
+        className="hidden fixed top-0 right-0 h-full w-full max-w-md z-50" // زيادة العرض قليلاً
       >
-        <div className="flex h-full flex-col border-l border-gray-800 bg-black p-8 shadow-2xl shadow-purple-900/20">
-          {/* ----- الجزء العلوي: الشعار وزر الإغلاق ----- */}
-          <div className="sidebar-content flex items-center justify-between pb-8">
+        <div className="flex h-full flex-col border-l border-gray-800 bg-black p-10 shadow-2xl shadow-purple-900/20">
+          <div className="sidebar-content flex items-center justify-between pb-10">
             <h2 className="text-2xl font-bold text-white">
               rootx<span className="text-purple-500">.</span>
             </h2>
             <button
               onClick={onClose}
-              className="rounded-full p-2 text-gray-500 transition-colors duration-300 hover:bg-gray-800 hover:text-white"
+              className="rounded-full p-2 text-gray-500 transition-all duration-300 hover:bg-gray-800 hover:text-white hover:rotate-90"
               aria-label="Close menu"
             >
               <X size={24} />
             </button>
           </div>
 
-          {/* ----- الجزء الأوسط: روابط التنقل ----- */}
+          {/* --- 3. تحسين التخطيط والمسافات --- */}
           <nav className="sidebar-content flex-grow">
-            <div className="flex h-full flex-col justify-center gap-8">
-              <NavItem label="Mission" sectionId="mission" onNavigate={onNavigate} />
-              <NavItem label="About" sectionId="about" onNavigate={onNavigate} />
-              <NavItem label="Capabilities" sectionId="skills" onNavigate={onNavigate} />
-              <NavItem label="Contact" sectionId="contact" onNavigate={onNavigate} />
+            <div className="flex h-full flex-col justify-center gap-6">
+              <NavItem label="Mission" sectionId="mission" onNavigate={onNavigate} index={0} />
+              <NavItem label="About" sectionId="about" onNavigate={onNavigate} index={1} />
+              <NavItem label="Capabilities" sectionId="skills" onNavigate={onNavigate} index={2} />
+              <NavItem label="Credentials" sectionId="certifications" onNavigate={onNavigate} index={3} />
+              <NavItem label="Contact" sectionId="contact" onNavigate={onNavigate} index={4} />
             </div>
           </nav>
 
-          {/* ----- الجزء السفلي: رسالة قصيرة ----- */}
-          <div className="sidebar-content pt-8 text-center">
+          <div className="sidebar-content pt-10 text-center">
             <p className="text-sm text-gray-600">
-              Navigating Digital Frontiers.
+              Designed & Developed by eltvhawi.
             </p>
           </div>
         </div>

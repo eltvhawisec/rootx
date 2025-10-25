@@ -124,25 +124,19 @@ const SkillRow = ({
 // --- المكون الرئيسي للقسم (بتصميم جديد) ---
 export default function SkillsSection() {
   // تم إعادة تنظيم المهارات لتكون أكثر تركيزًا
-  const coreTech = ['React', 'Next.js', 'TypeScript', 'Node.js', 'PostgreSQL', 'Tailwind CSS', 'GSAP'];
   const securityOps = ['Ethical Hacking', 'Penetration Testing', 'Threat Modeling', 'Network Security', 'Vulnerability Assessment'];
-  const infrastructure = ['Docker', 'Kubernetes', 'AWS', 'Vercel', 'Git', 'CI/CD', 'Prisma'];
-  const devTools = ['GraphQL', 'REST APIs', 'Firebase', 'MongoDB', 'Supabase', 'NextAuth.js'];
 
   return (
     <section id="skills" className="w-full overflow-hidden bg-black py-24 md:py-32">
       <div className="mx-auto max-w-screen-2xl">
-        <SectionTitle title="Arsenal" /> {/* تغيير العنوان ليعكس القوة */}
+        <SectionTitle title="Skills" /> {/* تغيير العنوان ليعكس القوة */}
 
         <div className="relative flex flex-col gap-6">
           {/* طبقة التدرج اللوني لإخفاء الحواف */}
           <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-1/4 bg-gradient-to-r from-black to-transparent"></div>
           <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-1/4 bg-gradient-to-l from-black to-transparent"></div>
 
-          <SkillRow skills={coreTech} direction="left" />
           <SkillRow skills={securityOps} direction="right" className="border-y-2 border-purple-900/50 py-6" />
-          <SkillRow skills={infrastructure} direction="left" />
-          <SkillRow skills={devTools} direction="right" />
         </div>
       </div>
     </section>
