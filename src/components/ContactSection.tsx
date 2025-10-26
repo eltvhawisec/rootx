@@ -3,11 +3,11 @@
 import { useRef, useLayoutEffect, useState, ComponentPropsWithoutRef, ElementType } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { FiMail, FiGithub, FiLinkedin, FiTwitter, FiPhone } from 'react-icons/fi'; // 1. إضافة أيقونة الهاتف
+import { FiMail, FiGithub, FiLinkedin, FiTwitter, FiPhone } from 'react-icons/fi';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- مكون حقل الإدخال (بتصميم محدث) ---
+// --- مكون حقل الإدخال (لا تغيير) ---
 type FormInputProps = {
   id: string;
   name: string;
@@ -22,7 +22,7 @@ const FormInput = ({ id, name, type = 'text', label, placeholder, required = fal
   const props: ComponentPropsWithoutRef<typeof InputComponent> = {
     id, name, required, placeholder,
     type: InputComponent === 'textarea' ? undefined : type,
-    rows: InputComponent === 'textarea' ? 4 : undefined, // تقليل عدد الصفوف
+    rows: InputComponent === 'textarea' ? 4 : undefined,
     className: "w-full rounded-md border border-gray-700 bg-gray-900/50 px-4 py-3 text-white transition-colors duration-300 focus:border-purple-500 focus:outline-none",
   };
   return (
@@ -35,11 +35,11 @@ const FormInput = ({ id, name, type = 'text', label, placeholder, required = fal
   );
 };
 
-// --- المكون الرئيسي لقسم اتصل بنا (بتصميم جديد كليًا) ---
+
+// --- المكون الرئيسي لقسم اتصل بنا (بالتصميم الجديد) ---
 export default function ContactSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const leftPanelRef = useRef<HTMLDivElement>(null);
-  const rightPanelRef = useRef<HTMLFormElement>(null);
+  const contentWrapperRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{ success: boolean; message: string } | null>(null);
 
@@ -48,21 +48,17 @@ export default function ContactSection() {
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      // حركة ظهور اللوحة اليسرى
-      gsap.from(leftPanelRef.current, {
+      // حركة ظهور المحتوى بالكامل كوحدة واحدة
+      gsap.from(contentWrapperRef.current, {
         opacity: 0,
-        x: -100,
-        duration: 1.2,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: section, start: 'top 70%', toggleActions: 'play none none none' },
-      });
-      // حركة ظهور اللوحة اليمنى (النموذج)
-      gsap.from(rightPanelRef.current, {
-        opacity: 0,
-        x: 100,
-        duration: 1.2,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: section, start: 'top 70%', toggleActions: 'play none none none' },
+        y: 100, // يبدأ من الأسفل قليلاً
+        duration: 1.5,
+        ease: 'expo.out',
+        scrollTrigger: { 
+          trigger: section, 
+          start: 'top 75%', 
+          toggleActions: 'play none none none' 
+        },
       });
     }, sectionRef);
 
@@ -84,7 +80,7 @@ export default function ContactSection() {
       });
       if (response.ok) {
         setSubmitStatus({ success: true, message: 'Transmission complete. We will be in touch.' });
-        rightPanelRef.current?.reset();
+        (event.target as HTMLFormElement).reset();
       } else {
         const result = await response.json();
         setSubmitStatus({ success: false, message: result.message || 'Transmission failed.' });
@@ -97,21 +93,33 @@ export default function ContactSection() {
   };
 
   return (
-    <section ref={sectionRef} id="contact" className="relative w-full overflow-hidden bg-black py-24 md:py-32">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-16 px-6 md:grid-cols-2">
+    <section ref={sectionRef} id="contact" className="relative w-full overflow-hidden py-24 md:py-32">
+      
+      {/* --- 1. الخلفية المتحركة --- */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/blob-scene-haikei.png" // <-- ضع الصورة المتحركة في مجلد 'public' بهذا الاسم
+          alt="Abstract wave animation"
+          className="h-full w-full object-cover"
+        />
+        {/* طبقة لونية داكنة فوق الخلفية لزيادة وضوح النص */}
+        <div className="absolute inset-0 bg-black/70"></div>
+      </div>
+
+      {/* --- 2. حاوية المحتوى (للحركة والوضوح) --- */}
+      <div ref={contentWrapperRef} className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 gap-16 px-6 md:grid-cols-2">
         
-        {/* --- 2. الجزء الأيسر: المعلومات المباشرة --- */}
-        <div ref={leftPanelRef} className="flex flex-col justify-center">
+        {/* الجزء الأيسر: المعلومات */}
+        <div className="flex flex-col justify-center">
           <h2 className="font-custom-pencerio text-5xl font-bold tracking-wider text-white md:text-6xl">
             Open a Secure Channel
           </h2>
-          <p className="mt-4 max-w-lg text-lg text-gray-400">
+          <p className="mt-4 max-w-lg text-lg text-gray-300">
             Have a project, a question, or a critical vulnerability to report? Reach out directly or use the secure form. Your communication is confidential.
           </p>
           
           <div className="mt-12 space-y-6">
-            {/* --- 3. إضافة رقم الهاتف --- */}
-            <a href="tel:+96639231414" className="group flex items-center gap-4">
+            <a href="tel:+97439231414" className="group flex items-center gap-4">
               <FiPhone className="h-7 w-7 text-gray-500 transition-colors group-hover:text-purple-400" />
               <span className="text-xl font-medium text-gray-300 group-hover:text-white">+974 3923 1414</span>
             </a>
@@ -131,8 +139,8 @@ export default function ContactSection() {
           </div>
         </div>
 
-        {/* --- 4. الجزء الأيمن: نموذج الاتصال --- */}
-        <form ref={rightPanelRef} onSubmit={handleSubmit} className="w-full space-y-5 rounded-lg border border-gray-800 bg-gray-900/30 p-8 backdrop-blur-sm">
+        {/* الجزء الأيمن: نموذج الاتصال */}
+        <form onSubmit={handleSubmit} className="w-full space-y-5 rounded-lg border border-gray-800 bg-gray-900/50 p-8 backdrop-blur-sm">
           <FormInput id="name" name="name" label="Name / Alias" placeholder="John Doe" required />
           <FormInput id="email" name="email" type="email" label="Secure Email" placeholder="you@domain.com" required />
           <FormInput id="subject" name="subject" label="Subject" placeholder="Project Inquiry" required />
@@ -147,7 +155,7 @@ export default function ContactSection() {
             <p className={`text-center text-sm ${submitStatus.success ? 'text-green-400' : 'text-red-400'}`}>
               {submitStatus.message}
             </p>
-           )}
+            )}
         </form>
       </div>
     </section>

@@ -2,9 +2,9 @@
 
 import { useState, useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import Sidebar from '@/components/Sidebar'; // افترض أن هذا المكون موجود ومصمم ليعمل مع الخلفية الداكنة
+import Sidebar from '@/components/Sidebar';
 
-// --- 1. مكون أيقونة القائمة (بتصميم جديد) ---
+// --- مكون أيقونة القائمة (كما كان في التصميم الأصلي) ---
 const MenuIcon = ({ onClick }: { onClick: () => void }) => {
   return (
     <button
@@ -20,17 +20,17 @@ const MenuIcon = ({ onClick }: { onClick: () => void }) => {
   );
 };
 
-// --- 2. المكون الرئيسي Hero (بتصميم وحركة جديدين) ---
+// --- المكون الرئيسي Hero (بالتصميم الأصلي وحركة افتتاحية جديدة) ---
 export default function Hero() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
 
-  // --- الحركة الافتتاحية الجديدة ---
+  // --- الحركة الافتتاحية السينمائية ---
   useLayoutEffect(() => {
     const heroElement = heroRef.current;
     if (!heroElement) return;
 
-    // تحديد العناصر التي ستتحرك
+    // --- 1. تحديد جميع العناصر التي ستتحرك ---
     const imageMask = heroElement.querySelector('.image-mask');
     const image = heroElement.querySelector('.hero-image');
     const mainTitle = heroElement.querySelector('.main-title');
@@ -38,30 +38,58 @@ export default function Hero() {
     const menuIcon = heroElement.querySelector('.menu-icon-container');
     const decorativeLines = heroElement.querySelectorAll('.decorative-line');
 
-    // إخفاء العناصر في البداية
-    gsap.set(imageMask, { clipPath: 'inset(0% 100% 0% 0%)' }); // قناع الصورة يبدأ مغلقاً
-    gsap.set(image, { scale: 1.2, opacity: 0 });
+    // --- 2. إعداد الحالة الأولية (إخفاء كل شيء) ---
+    // القناع مغلق تمامًا
+    gsap.set(imageMask, { clipPath: 'inset(0% 100% 0% 0%)' });
+    // الصورة داخل القناع مكبرة قليلاً لعمل تأثير Parallax
+    gsap.set(image, { scale: 1.2, opacity: 1 });
+    // النصوص مخفية في الأسفل
     gsap.set([mainTitle, subTitle], { y: 50, opacity: 0 });
+    // أيقونة القائمة مخفية في الأعلى
     gsap.set(menuIcon, { y: -30, opacity: 0 });
+    // الخطوط الزخرفية مخفية (مقياسها 0)
     gsap.set(decorativeLines, { scaleX: 0 });
 
-    // إنشاء التسلسل الحركي (Timeline)
+    // --- 3. إنشاء التسلسل الحركي (Timeline) ---
     const tl = gsap.timeline({
-      delay: 0.3,
+      delay: 0.5, // تأخير بسيط قبل بدء الحركة
       defaults: { duration: 1.2, ease: 'expo.out' },
     });
 
     tl
-      // 1. إظهار الصورة عبر القناع وتكبيرها قليلاً
-      .to(imageMask, { clipPath: 'inset(0% 0% 0% 0%)' })
-      .to(image, { scale: 1, opacity: 1 }, '<0.2') // تبدأ بعد 0.2 ثانية من بداية الحركة السابقة
+      // الخطوة 1: كشف الصورة عبر القناع
+      .to(imageMask, { 
+        clipPath: 'inset(0% 0% 0% 0%)',
+        duration: 1.5,
+      })
+      // حركة Parallax للصورة داخل القناع أثناء كشفها
+      .to(image, { 
+        scale: 1, 
+        duration: 2, 
+        ease: 'power2.out' 
+      }, "<") // تبدأ مع الحركة السابقة
 
-      // 2. إظهار النصوص من الأسفل
-      .to([mainTitle, subTitle], { y: 0, opacity: 1, stagger: 0.15 }, '-=0.8')
+      // الخطوة 2: انطلاق الخطوط الزخرفية
+      .to(decorativeLines, { 
+        scaleX: 1, 
+        stagger: 0.1, 
+        duration: 1, 
+        ease: 'power3.out' 
+      }, "-=1.2") // تبدأ قبل نهاية حركة القناع
 
-      // 3. إظهار أيقونة القائمة والخطوط الزخرفية
-      .to(menuIcon, { y: 0, opacity: 1, duration: 0.8 }, '-=0.6')
-      .to(decorativeLines, { scaleX: 1, stagger: 0.1, duration: 1, ease: 'power3.out' }, '<');
+      // الخطوة 3: ظهور النصوص من الأسفل
+      .to([mainTitle, subTitle], { 
+        y: 0, 
+        opacity: 1, 
+        stagger: 0.15 
+      }, "-=0.8")
+
+      // الخطوة 4: ظهور أيقونة القائمة من الأعلى
+      .to(menuIcon, { 
+        y: 0, 
+        opacity: 1, 
+        duration: 0.8 
+      }, "<");
 
     const ctx = gsap.context(() => {}, heroRef);
     return () => ctx.revert();
@@ -97,7 +125,7 @@ export default function Hero() {
           }}
         ></div>
 
-        {/* حاوية المحتوى الرئيسي */}
+        {/* --- هنا التصميم الأصلي الذي لم يتغير --- */}
         <div className="relative z-10 grid w-full max-w-6xl grid-cols-1 items-center gap-8 text-center md:grid-cols-2 md:text-left">
           
           {/* القسم النصي */}
@@ -120,7 +148,7 @@ export default function Hero() {
           {/* قسم الصورة مع تأثير القناع */}
           <div className="image-mask relative flex h-64 items-center justify-center md:h-96">
             <img 
-              src="/rootx.jpg" // تأكد من وجود الصورة بهذا المسار
+              src="/rootx.jpg"
               alt="rootx logo" 
               className="hero-image h-full w-full rounded-2xl object-cover shadow-2xl shadow-purple-900/20"
             />

@@ -33,7 +33,7 @@ const SectionTitle = ({ title }: { title: string }) => {
       <h2 
         ref={titleRef} 
         className="font-custom-pencerio text-5xl font-bold tracking-wider md:text-6xl"
-        style={{ color: '#E029F5' }} // الحفاظ على لون العنوان الأرجواني
+        style={{ color: '#ffffffff' }} // الحفاظ على لون العنوان الأرجواني
       >
         {title}
       </h2>
