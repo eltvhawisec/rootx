@@ -10,13 +10,11 @@ interface SidebarProps {
   onNavigate: (sectionId: string) => void;
 }
 
-// --- مكون عنصر القائمة (بتصميم وتفاعل مطور) ---
 const NavItem = ({ label, sectionId, onNavigate, index }: { label: string; sectionId: string; onNavigate: (id: string) => void; index: number }) => (
   <button
     onClick={() => onNavigate(sectionId)}
     className="nav-item group relative w-full py-2 text-left"
   >
-    {/* 1. إضافة رقم تسلسلي كعنصر تصميمي */}
     <span className="absolute left-0 top-1/2 -translate-y-1/2 text-xs font-mono text-gray-700 transition-colors duration-300 group-hover:text-purple-400">
       0{index + 1}
     </span>
@@ -42,16 +40,15 @@ export default function Sidebar({ isOpen, onClose, onNavigate }: SidebarProps) {
         },
       });
 
-      // --- 2. حركة دخول محسّنة (Clip-path) ---
       tl.current
         .set(sidebar, { display: 'block' })
         .fromTo(
           sidebar,
-          { clipPath: 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)' }, // يبدأ من خط عمودي على اليمين
-          { clipPath: 'polygon(0% 0, 100% 0, 100% 100%, 0% 100%)', duration: 0.8, ease: 'expo.inOut' } // يمتد ليغطي المساحة
+          { clipPath: 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)' }, 
+          { clipPath: 'polygon(0% 0, 100% 0, 100% 100%, 0% 100%)', duration: 0.8, ease: 'expo.inOut' } 
         )
         .fromTo(
-          '.sidebar-content', // استهداف الحاويات الرئيسية
+          '.sidebar-content', 
           { opacity: 0, y: 20 },
           { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out' },
           '-=0.5'
@@ -80,7 +77,7 @@ export default function Sidebar({ isOpen, onClose, onNavigate }: SidebarProps) {
       
       <div
         ref={sidebarRef}
-        className="hidden fixed top-0 right-0 h-full w-full max-w-md z-50" // زيادة العرض قليلاً
+        className="hidden fixed top-0 right-0 h-full w-full max-w-md z-50" 
       >
         <div className="flex h-full flex-col border-l border-gray-800 bg-black p-10 shadow-2xl shadow-purple-900/20">
           <div className="sidebar-content flex items-center justify-between pb-10">
@@ -96,13 +93,11 @@ export default function Sidebar({ isOpen, onClose, onNavigate }: SidebarProps) {
             </button>
           </div>
 
-          {/* --- 3. تحسين التخطيط والمسافات --- */}
           <nav className="sidebar-content flex-grow">
             <div className="flex h-full flex-col justify-center gap-6">
               <NavItem label="Mission" sectionId="mission" onNavigate={onNavigate} index={0} />
               <NavItem label="About" sectionId="about" onNavigate={onNavigate} index={1} />
               <NavItem label="Capabilities" sectionId="skills" onNavigate={onNavigate} index={2} />
-              <NavItem label="Credentials" sectionId="certifications" onNavigate={onNavigate} index={3} />
               <NavItem label="Contact" sectionId="contact" onNavigate={onNavigate} index={4} />
             </div>
           </nav>

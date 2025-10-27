@@ -73,7 +73,6 @@ export default function AboutSection() {
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-6 md:grid-cols-2 md:px-8">
         
         <div className="z-10 flex flex-col justify-center">
-          {/* --- 1. تم تعديل العنوان ليعكس الهوية الفردية --- */}
           <h2 
             ref={titleRef} 
             className="font-custom-pencerio text-6xl font-bold leading-tight text-white md:text-7xl lg:text-8xl"
@@ -82,7 +81,6 @@ export default function AboutSection() {
           </h2>
           <div className="mt-8 space-y-6 text-lg leading-relaxed text-gray-400 md:text-xl">
             
-            {/* --- 2. تم تعديل النصوص لتتحدث بصيغة المفرد --- */}
             <div ref={(el) => { paragraphsRef.current[0] = el; }} className="overflow-hidden">
               <p className="text-content">
                 My work isn&apos;t just a profession; it&apos;s a doctrine. Forged in the crucible of digital warfare, I operate as an elite cybersecurity architect and ethical hacker, dedicated to a singular purpose: achieving digital invulnerability.
@@ -93,7 +91,6 @@ export default function AboutSection() {
                 I dissect threats before they materialize, reverse-engineer adversary tactics, and construct multi-layered defensive systems. My methodology transforms your digital assets from passive targets into <strong className="font-semibold text-white">proactive, self-defending fortresses</strong>.
               </p>
             </div>
-            {/* -------------------------------------------------- */}
 
           </div>
         </div>
@@ -106,7 +103,7 @@ export default function AboutSection() {
             className="h-full w-full"
           >
             <img
-              src="/rootx.jpg" // يمكنك تغيير هذه الصورة إلى صورة شخصية إذا أردت
+              src="/rootx.jpg"
               alt="Cybersecurity specialist"
               className="h-full w-full object-cover"
             />

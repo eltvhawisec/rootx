@@ -6,7 +6,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- مكون العنوان (لا تغيير) ---
 const SectionTitle = ({ title }: { title: string }) => {
   const titleRef = useRef<HTMLHeadingElement>(null);
 
@@ -40,7 +39,6 @@ const SectionTitle = ({ title }: { title: string }) => {
   );
 };
 
-// --- مكون شريط المهارات (لا تغيير في المنطق) ---
 const SkillRow = ({
   skills,
   direction = 'left',
@@ -71,7 +69,7 @@ const SkillRow = ({
 
       const tl = gsap.to(content, {
         x: distance,
-        duration: 40, // تعديل السرعة حسب الحاجة
+        duration: 40,
         ease: 'none',
         repeat: -1,
       });
@@ -91,7 +89,7 @@ const SkillRow = ({
     }, marqueeRef);
 
     return () => ctx.revert();
-  }, [direction, skills]); // إضافة skills إلى مصفوفة الاعتماديات
+  }, [direction, skills]); 
 
   return (
     <div ref={marqueeRef} className={`w-full overflow-hidden ${className}`}>
@@ -118,9 +116,7 @@ const SkillRow = ({
   );
 };
 
-// --- المكون الرئيسي للقسم (مع المهارات المحدثة) ---
 export default function SkillsSection() {
-  // --- 1. تحديث المهارات حسب طلبك ---
   const cyberSecuritySkills = ['Web Pentesting', 'Digital Forensics', 'OSINT', 'Network Scanning'];
   const webDevelopmentSkills = ['HTML', 'CSS', 'JavaScript'];
 
@@ -129,16 +125,12 @@ export default function SkillsSection() {
       <div className="mx-auto max-w-screen-2xl">
         <SectionTitle title="Core Capabilities" />
 
-        {/* --- 2. استخدام شريطين للمهارات --- */}
         <div className="relative flex flex-col gap-8">
-          {/* طبقة التدرج اللوني (لا تغيير) */}
           <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-1/4 bg-gradient-to-r from-black to-transparent"></div>
           <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-1/4 bg-gradient-to-l from-black to-transparent"></div>
 
-          {/* الشريط الأول: مهارات الأمن السيبراني */}
           <SkillRow skills={cyberSecuritySkills} direction="left" className="border-y border-gray-800 py-8" />
           
-          {/* الشريط الثاني: مهارات تطوير الويب */}
           <SkillRow skills={webDevelopmentSkills} direction="right" className="border-b border-gray-800 pb-8" />
         </div>
       </div>

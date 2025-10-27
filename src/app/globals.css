@@ -1,8 +1,5 @@
 /* src/app/globals.css */
 
-/* ================================================================== */
-/* الخطوة 1: تعريف الخطوط أولاً وقبل أي شيء آخر                   */
-/* ================================================================== */
 @font-face {
   font-family: 'HeadingFont';
   src: url('/fonts/Oswald-Bold.ttf') format('truetype');
@@ -14,7 +11,7 @@
 @font-face {
   font-family: 'BodyFont';
   src: url('/fonts/Oswald-Medium.ttf') format('truetype');
-  font-weight: normal; /* يمكنك استخدام 200 إذا كان الخط يدعمها */
+  font-weight: normal; 
   font-style: normal;
   font-display: swap;
 }
@@ -27,18 +24,10 @@
   font-display: swap;
 }
 
-/* ================================================================== */
-/* الخطوة 2: استيراد Tailwind CSS بعد تعريف الخطوط                  */
-/* ================================================================== */
 @import  "tailwindcss";
 
 
-/* ================================================================== */
-/* الخطوة 3: إضافة الأنماط المخصصة والفئات باستخدام @layer         */
-/* هذه هي الطريقة الموصى بها للتوافق مع Tailwind                  */
-/* ================================================================== */
 @layer base {
-  /* تطبيق الخط الأساسي على body */
   body {
     font-family: 'BodyFont', Arial, Helvetica, sans-serif;
     color: #ffffff;
@@ -51,14 +40,12 @@
     min-height: 100vh;
   }
 
-  /* انتقال سلس لجميع العناصر */
   * {
     transition: all 0.3s ease;
   }
 }
 
 @layer utilities {
-  /* إنشاء فئات مساعدة للخطوط */
   .font-custom-heading {
     font-family: 'HeadingFont', sans-serif;
   }
@@ -73,7 +60,6 @@
 }
 
 @layer components {
-  /* أنماط مخصصة لمكونات معينة */
   .video-container {
     border-radius: 12px;
     overflow: hidden;
@@ -82,9 +68,6 @@
 }
 
 
-/* ================================================================== */
-/* الخطوة 4: أنماط شريط التمرير (Scrollbar) - تبقى كما هي         */
-/* ================================================================== */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -112,5 +95,5 @@
 }
 
 .animate-spin-slow {
-  animation: spin-slow 10s linear infinite; /* 15 ثانية للدورة الواحدة، دوران خطي، تكرار لا نهائي */
+  animation: spin-slow 10s linear infinite; 
 }

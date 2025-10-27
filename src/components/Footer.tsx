@@ -2,7 +2,6 @@
 
 'use client';
 
-// تم حذف كل شيء يتعلق بـ GSAP و useLayoutEffect
 
 import { FiGithub, FiLinkedin, FiTwitter } from 'react-icons/fi';
 
@@ -20,14 +19,11 @@ const SocialLink = ({ href, icon: Icon, name }: { href: string; icon: React.Elem
 );
 
 export default function Footer() {
-  // تم حذف كل شيء يتعلق بـ useRef و useLayoutEffect
 
   return (
-    // تم حذف ref من هنا
     <footer className="w-full overflow-hidden bg-black px-6 py-16 md:px-12">
       <div className="mx-auto flex max-w-7xl flex-col items-center text-center">
         
-        {/* تم حذف كلاس 'footer-item' */}
         <h2 className="font-custom-pencerio text-5xl font-bold leading-tight text-white md:text-6xl">
           Secure. Resilient. Ready.
         </h2>

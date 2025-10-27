@@ -7,7 +7,6 @@ import { FiMail, FiGithub, FiLinkedin, FiTwitter, FiPhone } from 'react-icons/fi
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- مكون حقل الإدخال (لا تغيير) ---
 type FormInputProps = {
   id: string;
   name: string;
@@ -36,7 +35,6 @@ const FormInput = ({ id, name, type = 'text', label, placeholder, required = fal
 };
 
 
-// --- المكون الرئيسي لقسم اتصل بنا (بالتصميم الجديد) ---
 export default function ContactSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const contentWrapperRef = useRef<HTMLDivElement>(null);
@@ -48,10 +46,9 @@ export default function ContactSection() {
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      // حركة ظهور المحتوى بالكامل كوحدة واحدة
       gsap.from(contentWrapperRef.current, {
         opacity: 0,
-        y: 100, // يبدأ من الأسفل قليلاً
+        y: 100, 
         duration: 1.5,
         ease: 'expo.out',
         scrollTrigger: { 
@@ -95,21 +92,17 @@ export default function ContactSection() {
   return (
     <section ref={sectionRef} id="contact" className="relative w-full overflow-hidden py-24 md:py-32">
       
-      {/* --- 1. الخلفية المتحركة --- */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/blob-scene-haikei.png" // <-- ضع الصورة المتحركة في مجلد 'public' بهذا الاسم
+          src="/blob-scene-haikei.png" 
           alt="Abstract wave animation"
           className="h-full w-full object-cover"
         />
-        {/* طبقة لونية داكنة فوق الخلفية لزيادة وضوح النص */}
         <div className="absolute inset-0 bg-black/70"></div>
       </div>
 
-      {/* --- 2. حاوية المحتوى (للحركة والوضوح) --- */}
       <div ref={contentWrapperRef} className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 gap-16 px-6 md:grid-cols-2">
         
-        {/* الجزء الأيسر: المعلومات */}
         <div className="flex flex-col justify-center">
           <h2 className="font-custom-pencerio text-5xl font-bold tracking-wider text-white md:text-6xl">
             Open a Secure Channel
@@ -139,7 +132,6 @@ export default function ContactSection() {
           </div>
         </div>
 
-        {/* الجزء الأيمن: نموذج الاتصال */}
         <form onSubmit={handleSubmit} className="w-full space-y-5 rounded-lg border border-gray-800 bg-gray-900/50 p-8 backdrop-blur-sm">
           <FormInput id="name" name="name" label="Name / Alias" placeholder="John Doe" required />
           <FormInput id="email" name="email" type="email" label="Secure Email" placeholder="you@domain.com" required />
