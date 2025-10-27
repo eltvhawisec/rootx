@@ -8,13 +8,12 @@ import { useTranslation } from 'react-i18next';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function AboutSection() {
-  const { t, i18n } = useTranslation(); // <-- احصل على t و i18n
+  const { t, i18n } = useTranslation(); 
   const sectionRef = useRef<HTMLDivElement>(null);
   const imageWrapperRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const paragraphsRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  // ... (useLayoutEffect hook يبقى كما هو بدون تغيير)
   useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -75,8 +74,6 @@ export default function AboutSection() {
     >
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-6 md:grid-cols-2 md:px-8">
         
-        {/* --- قسم النص --- */}
-        {/* تعديل هنا: أضفنا كلاسات المحاذاة والترتيب */}
         <div className={`z-10 flex flex-col justify-center ${
           i18n.language === 'ar' ? 'md:text-right md:order-last' : 'md:text-left'
         }`}>
@@ -95,15 +92,12 @@ export default function AboutSection() {
             </div>
             <div ref={(el) => { paragraphsRef.current[1] = el; }} className="overflow-hidden">
               <p className="text-content">
-                {/* يمكنك إضافة نص آخر هنا بنفس الطريقة */}
               </p>
             </div>
 
           </div>
         </div>
         
-        {/* --- قسم الصورة --- */}
-        {/* تعديل هنا: غيرنا موقع الصورة وتدرج الخلفية بناءً على اللغة */}
         <div className={`relative h-[60vh] md:h-screen md:absolute md:top-0 md:w-1/2 ${
           i18n.language === 'ar' ? 'md:left-0' : 'md:right-0'
         }`}>

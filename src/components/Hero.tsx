@@ -4,7 +4,7 @@ import { useState, useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import Sidebar from '@/components/Sidebar';
 import { useTranslation } from 'react-i18next';
-import '../lib/i18n'; // استيراد ملف الإعداد لتشغيله
+import '../lib/i18n';
 
 const MenuIcon = ({ onClick, label }: { onClick: () => void; label: string }) => {
   return (
@@ -21,14 +21,12 @@ const MenuIcon = ({ onClick, label }: { onClick: () => void; label: string }) =>
   );
 };
 
-// زر جديد لتبديل اللغة
 const LanguageSwitcher = () => {
   const { i18n, t } = useTranslation();
 
   const toggleLanguage = () => {
     const newLang = i18n.language === 'ar' ? 'en' : 'ar';
     i18n.changeLanguage(newLang);
-    // تحديث اتجاه الصفحة بناءً على اللغة الجديدة
     document.documentElement.dir = newLang === 'ar' ? 'rtl' : 'ltr';
   };
 
@@ -47,7 +45,6 @@ export default function Hero() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
 
-  // ... (useLayoutEffect hook يبقى كما هو بدون تغيير)
   useLayoutEffect(() => {
     const heroElement = heroRef.current;
     if (!heroElement) return;
@@ -142,7 +139,7 @@ export default function Hero() {
               rootx<span style={{ color: '#E029F5' }}>.</span>
             </h1>
             <p className="sub-title mt-4 text-lg text-gray-400 md:text-xl">
-              {t('heroSubtitle')} {/* <-- النص المترجم هنا */}
+              {t('heroSubtitle')}
             </p>
             <div className="mt-6 space-y-2">
                 <div className="decorative-line h-0.5 w-24 origin-left bg-purple-500"></div>
@@ -159,10 +156,9 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* حاوية الأزرار في الأعلى */}
         <div className="menu-icon-container absolute top-6 right-6 flex items-center gap-4 md:top-8 md:right-8">
-          <LanguageSwitcher /> {/* <-- زر تبديل اللغة */}
-          <MenuIcon onClick={() => setSidebarOpen(true)} label={t('menuAriaLabel')} /> {/* <-- تمرير النص المترجم */}
+          <LanguageSwitcher /> 
+          <MenuIcon onClick={() => setSidebarOpen(true)} label={t('menuAriaLabel')} /> 
         </div>
       </section>
     </>

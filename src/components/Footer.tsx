@@ -3,7 +3,7 @@
 import { useRef, useLayoutEffect, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useTranslation } from 'react-i18next'; // <-- استيراد Hook الترجمة
+import { useTranslation } from 'react-i18next';
 import {
   FiGithub,
   FiLinkedin,
@@ -30,7 +30,7 @@ const SocialIcon = ({ href, icon: Icon, 'aria-label': ariaLabel }: { href: strin
 );
 
 export default function ContactFooterSection() {
-  const { t } = useTranslation(); // <-- استخدام Hook الترجمة
+  const { t } = useTranslation(); 
   const sectionRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [isCopied, setIsCopied] = useState(false);
@@ -44,7 +44,6 @@ export default function ContactFooterSection() {
     });
   };
 
-  // ... (useLayoutEffect hook يبقى كما هو)
   useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section) return;

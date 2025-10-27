@@ -34,7 +34,7 @@ const SectionTitle = ({ title }: { title: string }) => {
         ref={titleRef} 
         className="font-custom-pencerio text-5xl font-bold tracking-wider md:text-6xl"
         style={{ color: '#ffffffff' }} 
-        suppressHydrationWarning // لمنع أخطاء الترطيب المحتملة للعنوان
+        suppressHydrationWarning 
       >
         {title}
       </h2>
@@ -47,7 +47,6 @@ export default function MissionSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const textElementsRef = useRef<(HTMLParagraphElement | null)[]>([]);
 
-  // حالة للتأكد من أننا على العميل (لتجنب أخطاء الترطيب)
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
     setIsClient(true);
@@ -107,7 +106,6 @@ export default function MissionSection() {
             <p ref={(el) => { textElementsRef.current[0] = el; }} suppressHydrationWarning>
               <Trans
                 i18nKey="missionText1"
-                // [الحل] إضافة خاصية key الفريدة
                 components={[<strong key="mission1-strong" className="font-semibold text-purple-400" />]}
               />
             </p>
@@ -115,7 +113,6 @@ export default function MissionSection() {
             <p ref={(el) => { textElementsRef.current[1] = el; }} suppressHydrationWarning>
               <Trans
                 i18nKey="missionText2"
-                // [الحل] إضافة خاصية key الفريدة
                 components={[<strong key="mission2-strong" className="font-semibold text-white" />]}
               />
             </p>
@@ -123,7 +120,6 @@ export default function MissionSection() {
             <p ref={(el) => { textElementsRef.current[2] = el; }} suppressHydrationWarning>
               <Trans
                 i18nKey="missionText3"
-                // [الحل] إضافة خاصية key الفريدة
                 components={[<strong key="mission3-strong" className="font-semibold text-purple-400" />]}
               />
             </p>

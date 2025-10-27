@@ -3,13 +3,11 @@
 import { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useTranslation } from 'react-i18next'; // <-- استيراد Hook الترجمة
+import { useTranslation } from 'react-i18next';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// لا حاجة لتعديل هذا المكون الفرعي
 const SectionTitle = ({ title }: { title: string }) => {
-  // ... الكود هنا يبقى كما هو
   const titleRef = useRef<HTMLHeadingElement>(null);
 
   useLayoutEffect(() => {
@@ -42,7 +40,6 @@ const SectionTitle = ({ title }: { title: string }) => {
   );
 };
 
-// لا حاجة لتعديل هذا المكون الفرعي أيضًا
 const SkillRow = ({
   skills,
   direction = 'left',
@@ -52,7 +49,6 @@ const SkillRow = ({
   direction?: 'left' | 'right';
   className?: string;
 }) => {
-  // ... الكود هنا يبقى كما هو
   const marqueeRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -61,9 +57,8 @@ const SkillRow = ({
     const content = marqueeRef.current.querySelector('.marquee-content') as HTMLElement;
     if (!content) return;
 
-    // إعادة بناء المحتوى عند تغيير المهارات لضمان تحديث الشريط
     const skillElements = skills.map(skill => {
-        const key = Math.random(); // مفتاح فريد بسيط
+        const key = Math.random(); 
         return `<div key="${key}" class="flex items-center">
                   <span class="mx-8 text-3xl font-light text-gray-300 md:text-5xl">${skill}</span>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-current text-purple-500">
@@ -72,7 +67,7 @@ const SkillRow = ({
                 </div>`;
     } ).join('');
 
-    content.innerHTML = skillElements + skillElements; // مضاعفة المحتوى للحركة المستمرة
+    content.innerHTML = skillElements + skillElements;
 
     const ctx = gsap.context(() => {
       let distance = -content.offsetWidth / 2;
@@ -109,7 +104,6 @@ const SkillRow = ({
   return (
     <div ref={marqueeRef} className={`w-full overflow-hidden ${className}`}>
       <div className="marquee-content flex items-center whitespace-nowrap">
-        {/* سيتم ملء المحتوى ديناميكيًا عبر useLayoutEffect */}
       </div>
     </div>
   );
@@ -118,24 +112,21 @@ const SkillRow = ({
 export default function SkillsSection() {
   const { t } = useTranslation();
 
-  // جلب قوائم المهارات المترجمة ككائنات
   const cyberSecuritySkillsObj = t('cyberSecuritySkills', { returnObjects: true }) as Record<string, string>;
   const webDevelopmentSkillsObj = t('webDevelopmentSkills', { returnObjects: true }) as Record<string, string>;
 
-  // تحويل الكائنات إلى مصفوفات من النصوص
   const cyberSecuritySkills = Object.values(cyberSecuritySkillsObj);
   const webDevelopmentSkills = Object.values(webDevelopmentSkillsObj);
 
   return (
     <section id="skills" className="w-full overflow-hidden bg-black py-24 md:py-32">
       <div className="mx-auto max-w-screen-2xl">
-        <SectionTitle title={t('skillsTitle')} /> {/* <-- ترجمة العنوان */}
+        <SectionTitle title={t('skillsTitle')} /> 
 
         <div className="relative flex flex-col gap-8">
           <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-1/4 bg-gradient-to-r from-black to-transparent"></div>
           <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-1/4 bg-gradient-to-l from-black to-transparent"></div>
 
-          {/* تمرير قوائم المهارات المترجمة */}
           <SkillRow skills={cyberSecuritySkills} direction="left" className="border-y border-gray-800 py-8" />
           
           <SkillRow skills={webDevelopmentSkills} direction="right" className="border-b border-gray-800 pb-8" />
