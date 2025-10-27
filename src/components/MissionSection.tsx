@@ -1,9 +1,9 @@
 'use client';
 
-import { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useTranslation, Trans } from 'react-i18next'; // استيراد useTranslation و Trans
+import { useTranslation, Trans } from 'react-i18next';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,7 +11,6 @@ const SectionTitle = ({ title }: { title: string }) => {
   const titleRef = useRef<HTMLHeadingElement>(null);
 
   useLayoutEffect(() => {
-    // ... (الكود هنا يبقى كما هو)
     if (!titleRef.current) return;
     const ctx = gsap.context(() => {
       gsap.from(titleRef.current, {
@@ -35,6 +34,7 @@ const SectionTitle = ({ title }: { title: string }) => {
         ref={titleRef} 
         className="font-custom-pencerio text-5xl font-bold tracking-wider md:text-6xl"
         style={{ color: '#ffffffff' }} 
+        suppressHydrationWarning // لمنع أخطاء الترطيب المحتملة للعنوان
       >
         {title}
       </h2>
@@ -43,11 +43,16 @@ const SectionTitle = ({ title }: { title: string }) => {
 };
 
 export default function MissionSection() {
-  const { t } = useTranslation(); // <-- استخدام Hook الترجمة
+  const { t, i18n } = useTranslation();
   const sectionRef = useRef<HTMLDivElement>(null);
   const textElementsRef = useRef<(HTMLParagraphElement | null)[]>([]);
 
-  // ... (useLayoutEffect hook يبقى كما هو)
+  // حالة للتأكد من أننا على العميل (لتجنب أخطاء الترطيب)
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -86,33 +91,40 @@ export default function MissionSection() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black"></div>
       </div>
 
-      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-start gap-16 md:grid-cols-3">
+      <div className={`relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-start gap-16 ${
+        isClient && i18n.language === 'ar' ? 'md:direction-rtl' : ''
+      } md:grid-cols-3`}>
         
         <div className="sticky top-24 md:col-span-1">
-          <SectionTitle title={t('missionTitle')} /> {/* <-- استخدام النص المترجم للعنوان */}
+          <SectionTitle title={t('missionTitle')} />
         </div>
 
         <div className="md:col-span-2">
-          <div className="flex flex-col gap-10 text-xl font-light leading-relaxed text-gray-300 md:text-2xl">
+          <div className={`flex flex-col gap-10 text-xl font-light leading-relaxed text-gray-300 md:text-2xl ${
+            isClient && i18n.language === 'ar' ? 'md:text-right' : 'md:text-left'
+          }`}>
             
-            <p ref={(el) => { textElementsRef.current[0] = el; }}>
+            <p ref={(el) => { textElementsRef.current[0] = el; }} suppressHydrationWarning>
               <Trans
-                i18nKey="missionText1" // مفتاح الترجمة
-                components={[<strong className="font-semibold text-purple-400" />]} // المكون الذي سيحل محل <1>
+                i18nKey="missionText1"
+                // [الحل] إضافة خاصية key الفريدة
+                components={[<strong key="mission1-strong" className="font-semibold text-purple-400" />]}
               />
             </p>
             
-            <p ref={(el) => { textElementsRef.current[1] = el; }}>
+            <p ref={(el) => { textElementsRef.current[1] = el; }} suppressHydrationWarning>
               <Trans
                 i18nKey="missionText2"
-                components={[<strong className="font-semibold text-white" />]} // يمكن تخصيص المكون لكل نص
+                // [الحل] إضافة خاصية key الفريدة
+                components={[<strong key="mission2-strong" className="font-semibold text-white" />]}
               />
             </p>
 
-            <p ref={(el) => { textElementsRef.current[2] = el; }}>
+            <p ref={(el) => { textElementsRef.current[2] = el; }} suppressHydrationWarning>
               <Trans
                 i18nKey="missionText3"
-                components={[<strong className="font-semibold text-purple-400" />]}
+                // [الحل] إضافة خاصية key الفريدة
+                components={[<strong key="mission3-strong" className="font-semibold text-purple-400" />]}
               />
             </p>
 
