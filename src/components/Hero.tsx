@@ -3,13 +3,15 @@
 import { useState, useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import Sidebar from '@/components/Sidebar';
+import { useTranslation } from 'react-i18next';
+import '../lib/i18n'; // استيراد ملف الإعداد لتشغيله
 
-const MenuIcon = ({ onClick }: { onClick: () => void }) => {
+const MenuIcon = ({ onClick, label }: { onClick: () => void; label: string }) => {
   return (
     <button
       onClick={onClick}
       className="group relative z-50 flex h-12 w-12 items-center justify-center rounded-full bg-white/5 p-2 transition-all duration-300 hover:bg-white/10"
-      aria-label="Open Menu"
+      aria-label={label}
     >
       <div className="space-y-2">
         <span className="block h-0.5 w-6 origin-center rounded-full bg-purple-400 transition-transform duration-300 ease-in-out group-hover:w-8"></span>
@@ -19,10 +21,33 @@ const MenuIcon = ({ onClick }: { onClick: () => void }) => {
   );
 };
 
+// زر جديد لتبديل اللغة
+const LanguageSwitcher = () => {
+  const { i18n, t } = useTranslation();
+
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'ar' ? 'en' : 'ar';
+    i18n.changeLanguage(newLang);
+    // تحديث اتجاه الصفحة بناءً على اللغة الجديدة
+    document.documentElement.dir = newLang === 'ar' ? 'rtl' : 'ltr';
+  };
+
+  return (
+    <button
+      onClick={toggleLanguage}
+      className="z-50 rounded-full bg-white/5 px-4 py-2 text-sm text-white transition-all duration-300 hover:bg-white/10"
+    >
+      {t('toggleLanguage')}
+    </button>
+  );
+};
+
 export default function Hero() {
+  const { t } = useTranslation();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
 
+  // ... (useLayoutEffect hook يبقى كما هو بدون تغيير)
   useLayoutEffect(() => {
     const heroElement = heroRef.current;
     if (!heroElement) return;
@@ -117,7 +142,7 @@ export default function Hero() {
               rootx<span style={{ color: '#E029F5' }}>.</span>
             </h1>
             <p className="sub-title mt-4 text-lg text-gray-400 md:text-xl">
-              Cybersecurity Solutions & Web Application Penetration Testing
+              {t('heroSubtitle')} {/* <-- النص المترجم هنا */}
             </p>
             <div className="mt-6 space-y-2">
                 <div className="decorative-line h-0.5 w-24 origin-left bg-purple-500"></div>
@@ -134,8 +159,10 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="menu-icon-container absolute top-6 right-6 md:top-8 md:right-8">
-          <MenuIcon onClick={() => setSidebarOpen(true)} />
+        {/* حاوية الأزرار في الأعلى */}
+        <div className="menu-icon-container absolute top-6 right-6 flex items-center gap-4 md:top-8 md:right-8">
+          <LanguageSwitcher /> {/* <-- زر تبديل اللغة */}
+          <MenuIcon onClick={() => setSidebarOpen(true)} label={t('menuAriaLabel')} /> {/* <-- تمرير النص المترجم */}
         </div>
       </section>
     </>

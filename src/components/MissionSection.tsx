@@ -3,6 +3,7 @@
 import { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useTranslation, Trans } from 'react-i18next'; // استيراد useTranslation و Trans
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,6 +11,7 @@ const SectionTitle = ({ title }: { title: string }) => {
   const titleRef = useRef<HTMLHeadingElement>(null);
 
   useLayoutEffect(() => {
+    // ... (الكود هنا يبقى كما هو)
     if (!titleRef.current) return;
     const ctx = gsap.context(() => {
       gsap.from(titleRef.current, {
@@ -41,9 +43,11 @@ const SectionTitle = ({ title }: { title: string }) => {
 };
 
 export default function MissionSection() {
+  const { t } = useTranslation(); // <-- استخدام Hook الترجمة
   const sectionRef = useRef<HTMLDivElement>(null);
   const textElementsRef = useRef<(HTMLParagraphElement | null)[]>([]);
 
+  // ... (useLayoutEffect hook يبقى كما هو)
   useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -85,22 +89,31 @@ export default function MissionSection() {
       <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-start gap-16 md:grid-cols-3">
         
         <div className="sticky top-24 md:col-span-1">
-          <SectionTitle title="Our Mandate" />
+          <SectionTitle title={t('missionTitle')} /> {/* <-- استخدام النص المترجم للعنوان */}
         </div>
 
         <div className="md:col-span-2">
           <div className="flex flex-col gap-10 text-xl font-light leading-relaxed text-gray-300 md:text-2xl">
             
             <p ref={(el) => { textElementsRef.current[0] = el; }}>
-              In a world of escalating digital threats, our mandate is absolute: to engineer <strong className="font-semibold text-purple-400">impenetrable digital fortresses</strong>. We don&apos;t just build applications; we forge shields in the digital realm.
+              <Trans
+                i18nKey="missionText1" // مفتاح الترجمة
+                components={[<strong className="font-semibold text-purple-400" />]} // المكون الذي سيحل محل <1>
+              />
             </p>
             
             <p ref={(el) => { textElementsRef.current[1] = el; }}>
-              Our approach is a synthesis of <strong className="font-semibold text-white">proactive threat intelligence</strong> and bespoke security architecture. We anticipate vulnerabilities before they are exploited, transforming your digital presence from a potential liability into a resilient, secure asset.
+              <Trans
+                i18nKey="missionText2"
+                components={[<strong className="font-semibold text-white" />]} // يمكن تخصيص المكون لكل نص
+              />
             </p>
 
             <p ref={(el) => { textElementsRef.current[2] = el; }}>
-              We empower our clients to operate with confidence, knowing their digital infrastructure is not only innovative and performant, but <strong className="font-semibold text-purple-400">uncompromisingly secure</strong>.
+              <Trans
+                i18nKey="missionText3"
+                components={[<strong className="font-semibold text-purple-400" />]}
+              />
             </p>
 
           </div>
