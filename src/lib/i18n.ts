@@ -9,104 +9,180 @@ i18n
     debug: true,
     fallbackLng: 'en',
     interpolation: {
-      escapeValue: false, 
+      escapeValue: false,
     },
     resources: {
+
+      /* ─────────────────────── ENGLISH ─────────────────────── */
       en: {
         translation: {
-          // ... (النصوص السابقة من Hero)
-          heroSubtitle: 'Cybersecurity & Web Application Penetration Testing',
+
+          /* ── Hero ── */
+          heroSubtitle: 'Your trusted destination for cybersecurity services, technical consulting, and professional insights.',
           menuAriaLabel: 'Open Menu',
           toggleLanguage: 'العربية',
 
-          // النصوص الجديدة لقسم Mission
-          missionTitle: "Our Mandate",
-          missionText1: "In a world of escalating digital threats, our mandate is absolute: to engineer <1>impenetrable digital fortresses</1>. We don't just build applications; we forge shields in the digital realm.",
-          missionText2: "Our approach is a synthesis of <1>proactive threat intelligence</1> and bespoke security architecture. We anticipate vulnerabilities before they are exploited, transforming your digital presence from a potential liability into a resilient, secure asset.",
-          missionText3: "We empower our clients to operate with confidence, knowing their digital infrastructure is not only innovative and performant, but <1>uncompromisingly secure</1>.",
-        
-          aboutTitle: "About.",
-          aboutText1: "I'm a 18 high school student passionate about cybersecurity and computer maintenance. I'm developing my skills through experience and practice, and I'm striving to build a professional future in this field. I hold professional certifications from Microsoft and the Satr educational platform.",
-            
-          skillsTitle: "Core Capabilities",
+          /* ── Mission ── */
+          missionTitle: 'Our Mission',
+          missionText1:
+            'I provide <1>expert cybersecurity solutions</1> and technical consulting designed to enhance digital security and empower individuals and organizations to protect their assets in the digital world.',
+          missionText2:
+            'My approach combines <1>proactive vulnerability analysis</1> and web application penetration testing — identifying security weaknesses before they can be exploited, transforming your digital presence into a resilient and secure asset.',
+          missionText3:
+            'I strive to raise <1>digital awareness</1> through training, presentations, and writing informative articles, helping individuals, employees, and communities understand and respond to modern cybersecurity threats.',
+
+          /* ── About ── */
+          aboutTitle: 'About.',
+          aboutText1:
+            'I work as an intern in the field of cybersecurity and a penetration tester for web applications, where I analyze systems and identify security vulnerabilities to enhance security.',
+          aboutText2:
+            'I provide technical consulting to support the community and individuals, and I strive to raise digital awareness through training, presentations, and writing informative articles.',
+
+          /* ── Skills ── */
+          skillsTitle: 'Core Capabilities',
           cyberSecuritySkills: {
-            "0": "Web Pentesting",
-            "1": "Digital Forensics",
-            "2": "OSINT",
-            "3": "Network Scanning"
+            '0': 'Web App Pentesting',
+            '1': 'Vulnerability Analysis',
+            '2': 'Digital Forensics',
+            '3': 'OSINT',
+            '4': 'Network Scanning',
+            '5': 'Security Consulting',
+            '6': 'Digital Awareness',
+            '7': 'Cybersecurity Training',
           },
           webDevelopmentSkills: {
-            "0": "HTML",
-            "1": "CSS",
-            "2": "JavaScript"
+            '0': 'HTML',
+            '1': 'CSS',
+            '2': 'JavaScript',
+            '3': 'Web Security',
+            '4': 'Technical Writing',
           },
 
-          footerTitle: "Let’s Build the Future, Securely.",
-          footerSubtitle: "Open a channel. Your next mission begins with a single message.",
-          copyEmailLabel: "Copy email",
-          emailCopied: "Email copied to clipboard!",
-          professionalLinks: "PROFESSIONAL",
-          socialLinks: "SOCIAL",
-          linkedinLabel: "LinkedIn",
-          githubLabel: "GitHub",
-          twitterLabel: "Twitter",
-          instagramLabel: "Instagram",
-          youtubeLabel: "YouTube",
-          tiktokLabel: "TikTok",
-          telegramLabel: "Telegram",
-          copyright: "rootx Industries. All Rights Reserved.",
-          developedBy: "Designed & Developed by"
+          /* ── Footer / Contact ── */
+          contactLabel: 'Get in touch',
+          footerTitle: "Let's",
+          footerTitleOutline: 'Connect.',
+          footerSubtitle:
+            'Have a project in mind, need cybersecurity consulting, or just want to say hello? My inbox is always open.',
+          copyEmailLabel: 'Copy email',
+          emailCopied: 'Copied to clipboard!',
+          professionalLinks: 'Professional',
+          socialLinks: 'Social',
+          linkedinLabel: 'LinkedIn',
+          githubLabel: 'GitHub',
+          twitterLabel: 'Twitter / X',
+          instagramLabel: 'Instagram',
+          youtubeLabel: 'YouTube',
+          tiktokLabel: 'TikTok',
+          telegramLabel: 'Telegram',
+          copyright: 'Saleh Boukhder. All rights reserved.',
+          developedBy: 'Built by',
 
-        }
+          /* ── About extras ── */
+          roleTrainer:       'Trainer',
+          rolePentester:     'Penetration Tester',
+          roleAnalyst:       'Security Analyst',
+          statFollowers:     'Followers\nacross platforms',
+          statVisitors:      'Site\nVisitors',
+          statProjects:      'Competitions\n& Projects',
+          tagPentesting:     'Web App Pentesting',
+          tagVuln:           'Vulnerability Analysis',
+          tagConsulting:     'Security Consulting',
+          tagAwareness:      'Digital Awareness',
+          footerTagline:     'security & precision',
+          cardRole:          'Cybersecurity',
+          availableLabel:    'Available for work',
+          serviceWebPentest: 'Web Penetration Testing',
+          serviceTraining:   'Security Training',
+          serviceConsulting: 'Tech Consulting',
+        },
       },
+
+      /* ─────────────────────── ARABIC ─────────────────────── */
       ar: {
         translation: {
-          // ... (النصوص السابقة من Hero)
-          heroSubtitle: 'الأمن السيبراني واختبار اختراق تطبيقات الويب',
+
+          /* ── Hero ── */
+          heroSubtitle: 'وجهتك الموثوقة لخدمات الأمن السيبراني والاستشارات التقنية والرؤى المتخصصة.',
           menuAriaLabel: 'فتح القائمة',
           toggleLanguage: 'English',
-          
-          // النصوص الجديدة لقسم Mission
-          missionTitle: "مهمتنا",
-          missionText1: "في عالم تتصاعد فيه التهديدات الرقمية، مهمتنا مطلقة: بناء <1>حصون رقمية منيعة</1>. نحن لا نكتفي ببناء التطبيقات؛ بل نصنع دروعًا في العالم الرقمي.",
-          missionText2: "نهجنا هو توليفة من <1>استخبارات التهديدات الاستباقية</1> وهندسة الأمان المخصصة. نتوقع الثغرات قبل استغلالها، محولين وجودك الرقمي من مسؤولية محتملة إلى أصل مرن وآمن.",
-          missionText3: "نحن نمكّن عملاءنا من العمل بثقة، مع العلم أن بنيتهم التحتية الرقمية ليست مبتكرة وعالية الأداء فحسب، بل <1>آمنة بشكل لا هوادة فيه</1>.",
-          
-          aboutTitle: "نبذة.",
-          aboutText1: "أنا طالب في المرحلة الثانوية أبلغ من العمر 18 عامًا، شغوف بالأمن السيبراني وصيانة الحواسيب. أعمل على تطوير مهاراتي من خلال الخبرة والممارسة، وأسعى لبناء مستقبل مهني في هذا المجال. أحمل شهادات مهنية من مايكروسوفت ومنصة سطر التعليمية.",
 
-          skillsTitle: "القدرات الأساسية",
+          /* ── Mission ── */
+          missionTitle: 'مهمتنا',
+          missionText1:
+            'أقدم <1>حلول أمن سيبراني متخصصة</1> واستشارات تقنية مصممة لتعزيز الأمن الرقمي وتمكين الأفراد والمؤسسات من حماية أصولهم في العالم الرقمي.',
+          missionText2:
+            'يجمع نهجي بين <1>تحليل الثغرات الاستباقي</1> واختبار اختراق تطبيقات الويب — للكشف عن نقاط الضعف الأمنية قبل استغلالها، وتحويل وجودك الرقمي إلى أصل مرن وآمن.',
+          missionText3:
+            'أسعى إلى رفع مستوى <1>الوعي الرقمي</1> من خلال التدريب والمحاضرات وكتابة المقالات التثقيفية، لمساعدة الأفراد والموظفين والمجتمعات على فهم التهديدات السيبرانية والتصدي لها.',
+
+          /* ── About ── */
+          aboutTitle: 'نبذة.',
+          aboutText1:
+            'أعمل متدرباً في مجال الأمن السيبراني ومختبراً لاختراق تطبيقات الويب، حيث أحلل الأنظمة وأحدد الثغرات الأمنية لتعزيز الحماية.',
+          aboutText2:
+            'أقدم استشارات تقنية لدعم المجتمع والأفراد، وأسعى لرفع الوعي الرقمي من خلال التدريب والمحاضرات وكتابة المقالات التثقيفية.',
+
+          /* ── Skills ── */
+          skillsTitle: 'القدرات الأساسية',
           cyberSecuritySkills: {
-            "0": "اختبار اختراق الويب",
-            "1": "التحقيق الجنائي الرقمي",
-            "2": "المصادر المفتوحة",
-            "3": "فحص الشبكات"
+            '0': 'اختبار اختراق الويب',
+            '1': 'تحليل الثغرات',
+            '2': 'التحقيق الجنائي الرقمي',
+            '3': 'المصادر المفتوحة',
+            '4': 'فحص الشبكات',
+            '5': 'الاستشارات الأمنية',
+            '6': 'الوعي الرقمي',
+            '7': 'تدريب الأمن السيبراني',
           },
           webDevelopmentSkills: {
-            "0": "HTML",
-            "1": "CSS",
-            "2": "JavaScript"
+            '0': 'HTML',
+            '1': 'CSS',
+            '2': 'JavaScript',
+            '3': 'أمن الويب',
+            '4': 'الكتابة التقنية',
           },
-         
-          footerTitle: "لنصنع المستقبل، بأمان.",
-          footerSubtitle: "افتح قناة تواصل. مهمتك التالية تبدأ برسالة واحدة.",
-          copyEmailLabel: "نسخ البريد الإلكتروني",
-          emailCopied: "تم نسخ البريد الإلكتروني!",
-          professionalLinks: "احترافي",
-          socialLinks: "اجتماعي",
-          linkedinLabel: "لينكدإن",
-          githubLabel: "جيت هاب",
-          twitterLabel: "تويتر",
-          instagramLabel: "انستغرام",
-          youtubeLabel: "يوتيوب",
-          tiktokLabel: "تيك توك",
-          telegramLabel: "تيليجرام",
-          copyright: "صناعات rootx. جميع الحقوق محفوظة.",
-          developedBy: "صمم وطور بواسطة"
 
-        }
-      }
-    }
+          /* ── Footer / Contact ── */
+          contactLabel: 'تواصل معي',
+          footerTitle: 'لنبدأ',
+          footerTitleOutline: 'التواصل.',
+          footerSubtitle:
+            'لديك مشروع، أو تحتاج استشارة أمنية، أو فقط تريد التواصل؟ صندوق الوارد مفتوح دائماً.',
+          copyEmailLabel: 'نسخ البريد الإلكتروني',
+          emailCopied: 'تم النسخ!',
+          professionalLinks: 'احترافي',
+          socialLinks: 'اجتماعي',
+          linkedinLabel: 'لينكدإن',
+          githubLabel: 'جيت هاب',
+          twitterLabel: 'تويتر / X',
+          instagramLabel: 'انستغرام',
+          youtubeLabel: 'يوتيوب',
+          tiktokLabel: 'تيك توك',
+          telegramLabel: 'تيليجرام',
+          copyright: 'صالح بوخضر. جميع الحقوق محفوظة.',
+          developedBy: 'تطوير',
+
+          /* ── About extras ── */
+          roleTrainer:       'مدرب',
+          rolePentester:     'مختبر اختراق',
+          roleAnalyst:       'محلل أمني',
+          statFollowers:     'متابع\nعبر المنصات',
+          statVisitors:      'زيارة\nللموقع',
+          statProjects:      'مسابقة\nومشروع',
+          tagPentesting:     'اختبار اختراق الويب',
+          tagVuln:           'تحليل الثغرات',
+          tagConsulting:     'الاستشارات الأمنية',
+          tagAwareness:      'الوعي الرقمي',
+          footerTagline:     'الأمن والدقة',
+          cardRole:          'أمن سيبراني',
+          availableLabel:    'متاح للعمل',
+          serviceWebPentest: 'اختبار اختراق الويب',
+          serviceTraining:   'تدريب أمني',
+          serviceConsulting: 'استشارات تقنية',
+        },
+      },
+    },
   });
 
 export default i18n;
