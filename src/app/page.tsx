@@ -4,6 +4,7 @@ import SkillsSection from '@/components/SkillsSection';
 import Footer from '@/components/Footer';
 import MissionSection from '@/components/MissionSection';
 import Llenis from '@/components/Llenis';
+import FAQSection from '@/components/Faqsection';
 
 export default function Home() {
   return (
@@ -14,7 +15,8 @@ export default function Home() {
       <div id="mission"><MissionSection /></div>
       <div id="about"><AboutSection /></div>
       <div id="skills"><SkillsSection /></div>
-
+      <div id="faq"><FAQSection /></div>
+      
       <Footer />
     </>
   );

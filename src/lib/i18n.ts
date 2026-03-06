@@ -29,7 +29,7 @@ i18n
           missionText2:
             'My approach combines <1>proactive vulnerability analysis</1> and web application penetration testing — identifying security weaknesses before they can be exploited, transforming your digital presence into a resilient and secure asset.',
           missionText3:
-            'I strive to raise <1>digital awareness</1> through training, presentations, and writing informative articles, helping individuals, employees, and communities understand and respond to modern cybersecurity threats.',
+            'Responsible for preparing and designing episode content from concept to production-ready stage — including in-depth research, crafting discussion topics and questions, and coordinating with the team to ensure content quality and accuracy before recording.',
 
           /* ── About ── */
           aboutTitle: 'About.',
@@ -114,7 +114,7 @@ i18n
           missionText2:
             'يجمع نهجي بين <1>تحليل الثغرات الاستباقي</1> واختبار اختراق تطبيقات الويب — للكشف عن نقاط الضعف الأمنية قبل استغلالها، وتحويل وجودك الرقمي إلى أصل مرن وآمن.',
           missionText3:
-            'أسعى إلى رفع مستوى <1>الوعي الرقمي</1> من خلال التدريب والمحاضرات وكتابة المقالات التثقيفية، لمساعدة الأفراد والموظفين والمجتمعات على فهم التهديدات السيبرانية والتصدي لها.',
+            'مسؤول عن إعداد وتصميم محتوى الحلقات من الفكرة حتى جاهزيتها للتنفيذ، والبحث المتعمق في المواضيع، وصياغة محاور الحوار والأسئلة في التنسيق مع فريق العمل لضمان جودة المحتوى ودقته قبل التسجيل.',
 
           /* ── About ── */
           aboutTitle: 'نبذة.',
@@ -122,7 +122,7 @@ i18n
             'أعمل متدرباً في مجال الأمن السيبراني ومختبراً لاختراق تطبيقات الويب، حيث أحلل الأنظمة وأحدد الثغرات الأمنية لتعزيز الحماية.',
           aboutText2:
             'أقدم استشارات تقنية لدعم المجتمع والأفراد، وأسعى لرفع الوعي الرقمي من خلال التدريب والمحاضرات وكتابة المقالات التثقيفية.',
-
+            
           /* ── Skills ── */
           skillsTitle: 'القدرات الأساسية',
           cyberSecuritySkills: {

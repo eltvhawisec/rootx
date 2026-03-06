@@ -98,13 +98,14 @@ export default function Sidebar({ isOpen, onClose, onNavigate }: SidebarProps) {
               <NavItem label="Mission" sectionId="mission" onNavigate={onNavigate} index={0} />
               <NavItem label="About" sectionId="about" onNavigate={onNavigate} index={1} />
               <NavItem label="Capabilities" sectionId="skills" onNavigate={onNavigate} index={2} />
+              <NavItem label="FAQ" sectionId="faq" onNavigate={onNavigate} index={3} />
               <NavItem label="Contact" sectionId="contact" onNavigate={onNavigate} index={4} />
             </div>
           </nav>
 
           <div className="sidebar-content pt-10 text-center">
             <p className="text-sm text-gray-600">
-              Designed & Developed by eltvhawi.
+              Designed & Developed by ababilsec.
             </p>
           </div>
         </div>
